@@ -30,10 +30,10 @@
 
   Machine cannot understand a string (a word) unless it is properly encoded.
   The code shall preserve the meaning of the word. In this section, we seek
-  for the general approach to encode a word by an <math|n>-dimensional vector
-  based on Firth's idea: you shall know a word by the company it keeps.
+  for the general approach to encode a word by <math|n>-dimensional vector
+  based on the Firth's idea: you shall know a word by the company it keeps.
 
-  As preparation, we shall collect a corpus which consists of contexts. A
+  As a preparation, we shall collect a corpus which consists of contexts. A
   context is a list of words in human languages. It can be a sentence, a
   paragraph, or a document. Generally, it is a sequence of words
   <math|<around*|(|w<rsub|1>,w<rsub|2>,\<ldots\>,w<rsub|T>|)>>, where the
@@ -66,25 +66,20 @@
 
   Generally, given a context <math|<around*|(|w<rsub|1>,w<rsub|2>,\<ldots\>,w<rsub|T>|)>>,
   a word <math|w<rsub|t>> keeps company <math|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>>.
-  For indicating that the word to be predicted is in position <math|t>, we
-  employ a placeholder <verbatim|\<less\>?\<gtr\>>, which is a specific word
-  in vocabulary, so that the company of <math|w<rsub|t>> comes to be
-  <math|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>>.
-  Otherwise, just by providing a word and its company in a context, we cannot
-  know the position of the word in the context. We are to build a model for
-  the conditional probability
+  We are to build a model for the conditional probability
 
   <\equation>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>,<label|equation:general
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>,<label|equation:general
     model 0>
   </equation>
 
   for each word <math|w> in vocabulary <math|\<cal-V\>>, such that, at least
-  statistically, <math|w<rsub|t>> has the maximal probability. For example,
+  statistically, <math|w<rsub|t>> has the maximal probability. The parameter
+  <math|t> indicates the position of word <math|w> in context. \ For example,
   for predicting <samp|fox> out of its company, we shall compute
-  <math|p<around*|(|w\|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<verbatim|\<less\>?\<gtr\>>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|the>>,<text|<samp|lazy>>,<text|<samp|dog>>|)>>
+  <math|p<around*|(|w\|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|the>>,<text|<samp|lazy>>,<text|<samp|dog>>;4|)>>
   for each word <math|w> in <math|<around*|(|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<samp|fox>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|lazy>>,<text|<samp|dog>>,\<ldots\>|)>>,
-  and expect that the probability of <samp|fox> is maximum.
+  and expect the probability of <samp|fox> to be maximum.
 
   Since the ultimate goal is to find a vector representation for each word in
   vocabulary, the conditional probability (<reference|equation:general model
@@ -94,15 +89,19 @@
   context-dependent, can be generally expressed by
 
   <\equation>
-    v<rsub|w<rsub|t>>\<assign\>f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;\<theta\>|)>,<label|equation:vector
+    v<rsub|w<rsub|t>>\<assign\>f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t,\<theta\>|)>,<label|equation:vector
     representation>
   </equation>
 
-  where <math|f<around*|(|\<ldots\>;\<theta\>|)>:\<cal-V\><rsup|T>\<rightarrow\>\<bbb-R\><rsup|n>>
+  where <math|f<around*|(|\<ldots\>;t,\<theta\>|)>:\<cal-V\><rsup|T-1>\<rightarrow\>\<bbb-R\><rsup|n>>
   represents a general model parameterized by <math|\<theta\>>, such as a
-  neural network. In machine learning, categorical probability is represented
-  by the output of softmax function. Recall that softmax function is defined
-  by <math|softmax<rsub|\<alpha\>><around*|(|x|)>\<assign\>exp<around*|(|x<rsub|\<alpha\>>|)>/<big|sum><rsub|\<beta\>>exp<around*|(|x<rsub|\<beta\>>|)>>.
+  neural network. Regardless of the explicit form of <math|f>, the point is
+  that the vector representation <math|v<rsub|w<rsub|t>>> shall depend on the
+  company that <math|w<rsub|t>> keeps in the context.
+
+  In machine learning, categorical probability is represented by the output
+  of softmax function. Recall that softmax function is defined by
+  <math|softmax<rsub|\<alpha\>><around*|(|x|)>\<assign\>exp<around*|(|x<rsub|\<alpha\>>|)>/<big|sum><rsub|\<beta\>>exp<around*|(|x<rsub|\<beta\>>|)>>.
   Since softmax is positive definite and <math|<big|sum><rsub|\<alpha\>>softmax<rsub|\<alpha\>><around*|(|x|)>=1>,
   its output is usually interpreted as categorical probability, in which the
   <math|\<alpha\>>-index represents the probability of the word in the
@@ -119,7 +118,7 @@
   trainable <math|<around*|\||\<cal-V\>|\|>\<times\>n> matrix. Thus,
 
   <\equation*>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>=softmax<rsub|w><around*|(|U
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=softmax<rsub|w><around*|(|U
     v<rsub|w<rsub|t>>|)>.
   </equation*>
 
@@ -130,13 +129,14 @@
   \ \<alpha\>>> for <math|\<alpha\>=1,\<ldots\>,n>. This results in
 
   <\equation>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
   </equation>
 
   where, for each <math|w\<in\>\<cal-V\>>,
   <math|u<rsub|w>\<in\>\<bbb-R\><rsup|n>> is a trainable parameter. The
   <math|u<rsub|w>>, for each word <math|w> in vocabulary, can be viewed as a
   context-independent (or \Pabsolute\Q) vector representation of <math|w>.
+
   For <math|w<rsub|t>> can be correctly predicted out of its context, we have
   to maximize this probability. Thus, the loss function shall be<\footnote>
     In practice, when computing the term <math|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
@@ -162,9 +162,9 @@
   real vectors. One is context-dependent (the <math|v<rsub|w>> vector); and
   the other is context-independent or absolute (the <math|u<rsub|w>> vector).
   All that left is determining the explicit form of
-  <math|f<around*|(|\<ldots\>;\<theta\>|)>> in equation
+  <math|f<around*|(|\<ldots\>;t,\<theta\>|)>> in equation
   (<reference|equation:vector representation>). Different researchers propose
-  different forms of <math|f<around*|(|\<ldots\>;\<theta\>|)>>, with
+  different forms of <math|f<around*|(|\<ldots\>;t,\<theta\>|)>>, with
   different complexities, resulting in different performances.
 
   <subsection|Example: Bidirectional Encoder Representations from

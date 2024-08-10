@@ -3,7 +3,7 @@
 <style|book>
 
 <\body>
-  <doc-data|<doc-title|Evolution of Neural Network>>
+  <doc-data|<doc-title|Notes on Neural Network>>
 
   <\table-of-contents|toc>
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|1<space|2spc>From
@@ -183,20 +183,47 @@
     Keeps <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-46>>
 
-    <with|par-left|1tab|4.1.2<space|2spc>The
-    <with|font-family|tt|language|verbatim|word2vec> Algorithm Models the
-    Firth's Idea <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <with|par-left|1tab|4.1.2<space|2spc>Context-Dependent/Independent Vector
+    Representation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-47>>
+
+    <with|par-left|1tab|4.1.3<space|2spc>Example: Bidirectional Encoder
+    Representations from Transformers <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-48>>
+
+    <with|par-left|1tab|4.1.4<space|2spc>Application: Named-Entity
+    Recognition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-49>>
 
     4.2<space|2spc>Representation of Sentences
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-48>
+    <no-break><pageref|auto-50>
 
     4.3<space|2spc>Machine Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-49>
+    <no-break><pageref|auto-51>
 
     4.4<space|2spc>Language Modeling <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-50>
+    <no-break><pageref|auto-52>
+
+    4.5<space|2spc>Drafts <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-53>
+
+    <with|par-left|1tab|4.5.1<space|2spc><with|font-family|tt|language|verbatim|Word2vec>
+    Is a Simple Model that Implements the Firth's Idea
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-54>>
+
+    <with|par-left|1tab|4.5.2<space|2spc><with|font-family|tt|language|verbatim|Word2vec>
+    in Practice <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-55>>
+
+    <with|par-left|1tab|4.5.3<space|2spc>Lost and Found
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-56>>
+
+    4.6<space|2spc>The Second Example: People in a Park
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-57>
   </table-of-contents>
 
   <include|perceptron.tm>
@@ -258,17 +285,27 @@
     <associate|auto-45|<tuple|4.1|21|nlp.tm>>
     <associate|auto-46|<tuple|4.1.1|21|nlp.tm>>
     <associate|auto-47|<tuple|4.1.2|21|nlp.tm>>
-    <associate|auto-48|<tuple|4.2|22|nlp.tm>>
-    <associate|auto-49|<tuple|4.3|22|nlp.tm>>
+    <associate|auto-48|<tuple|4.1.3|22|nlp.tm>>
+    <associate|auto-49|<tuple|4.1.4|23|nlp.tm>>
     <associate|auto-5|<tuple|1.1.2|8|perceptron.tm>>
-    <associate|auto-50|<tuple|4.4|22|nlp.tm>>
+    <associate|auto-50|<tuple|4.2|23|nlp.tm>>
+    <associate|auto-51|<tuple|4.3|23|nlp.tm>>
+    <associate|auto-52|<tuple|4.4|23|nlp.tm>>
+    <associate|auto-53|<tuple|4.5|23|nlp.tm>>
+    <associate|auto-54|<tuple|4.5.1|23|nlp.tm>>
+    <associate|auto-55|<tuple|4.5.2|24|nlp.tm>>
+    <associate|auto-56|<tuple|4.5.3|24|nlp.tm>>
+    <associate|auto-57|<tuple|4.6|24|nlp.tm>>
     <associate|auto-6|<tuple|1.2|9|perceptron.tm>>
     <associate|auto-7|<tuple|1.3|9|perceptron.tm>>
     <associate|auto-8|<tuple|1.4|9|perceptron.tm>>
     <associate|auto-9|<tuple|1.4.1|9|perceptron.tm>>
     <associate|equation:batch normalization|<tuple|3.3|20|depth.tm>>
+    <associate|equation:general model 0|<tuple|4.1|21|nlp.tm>>
     <associate|equation:gradient chain-rule|<tuple|3.2|17|depth.tm>>
     <associate|equation:loss function|<tuple|2.1|11|optimization.tm>>
+    <associate|equation:vector representation|<tuple|4.2|22|nlp.tm>>
+    <associate|equation:word2vec|<tuple|4.5|23|nlp.tm>>
     <associate|figure: gradient direction is not
     optimal|<tuple|2.1|11|optimization.tm>>
     <associate|footnote-1.1|<tuple|1.1|7|perceptron.tm>>
@@ -287,8 +324,10 @@
     <associate|footnote-3.5|<tuple|3.5|20|depth.tm>>
     <associate|footnote-3.6|<tuple|3.6|20|depth.tm>>
     <associate|footnote-4.1|<tuple|4.1|21|nlp.tm>>
-    <associate|footnote-4.2|<tuple|4.2|21|nlp.tm>>
+    <associate|footnote-4.2|<tuple|4.2|22|nlp.tm>>
     <associate|footnote-4.3|<tuple|4.3|22|nlp.tm>>
+    <associate|footnote-4.4|<tuple|4.4|23|nlp.tm>>
+    <associate|footnote-4.5|<tuple|4.5|23|nlp.tm>>
     <associate|footnr-1.1|<tuple|1.1|7|perceptron.tm>>
     <associate|footnr-1.2|<tuple|1.2|9|perceptron.tm>>
     <associate|footnr-1.3|<tuple|1.3|9|perceptron.tm>>
@@ -305,8 +344,10 @@
     <associate|footnr-3.5|<tuple|3.5|20|depth.tm>>
     <associate|footnr-3.6|<tuple|3.6|20|depth.tm>>
     <associate|footnr-4.1|<tuple|4.1|21|nlp.tm>>
-    <associate|footnr-4.2|<tuple|4.2|21|nlp.tm>>
+    <associate|footnr-4.2|<tuple|4.2|22|nlp.tm>>
     <associate|footnr-4.3|<tuple|4.3|22|nlp.tm>>
+    <associate|footnr-4.4|<tuple|4.4|23|nlp.tm>>
+    <associate|footnr-4.5|<tuple|4.5|23|nlp.tm>>
     <associate|part:depth.tm|<tuple|2.6.4|15>>
     <associate|part:nlp.tm|<tuple|3.5.7|21>>
     <associate|part:optimization.tm|<tuple|1.8|11>>
@@ -324,7 +365,7 @@
   <\collection>
     <\associate|figure>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
-        <locus|<id|%1413E558-12BBD2F8--6D4DEDDE>|<link|hyperlink|<id|%1413E558-12BBD2F8--6D4DEDDE>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
+        <locus|<id|%24299C8-4997FD0--6D4DEDDE>|<link|hyperlink|<id|%24299C8-4997FD0--6D4DEDDE>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
         figure> illustrates the shape of a neuron, and how impulses propagate
         from one neuron to another.
       </surround>|<pageref|auto-4>>
@@ -526,20 +567,48 @@
       Company It Keeps <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-46>>
 
-      <with|par-left|<quote|1tab>|4.1.2<space|2spc>The
-      <with|font-family|<quote|tt>|language|<quote|verbatim>|word2vec>
-      Algorithm Models the Firth's Idea <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|4.1.2<space|2spc>Context-Dependent/Independent
+      Vector Representation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-47>>
+
+      <with|par-left|<quote|1tab>|4.1.3<space|2spc>Example: Bidirectional
+      Encoder Representations from Transformers
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-48>>
+
+      <with|par-left|<quote|1tab>|4.1.4<space|2spc>Application: Named-Entity
+      Recognition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-49>>
 
       4.2<space|2spc>Representation of Sentences
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48>
+      <no-break><pageref|auto-50>
 
       4.3<space|2spc>Machine Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49>
+      <no-break><pageref|auto-51>
 
       4.4<space|2spc>Language Modeling <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-50>
+      <no-break><pageref|auto-52>
+
+      4.5<space|2spc>Drafts <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-53>
+
+      <with|par-left|<quote|1tab>|4.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
+      Is a Simple Model that Implements the Firth's Idea
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-54>>
+
+      <with|par-left|<quote|1tab>|4.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
+      in Practice <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-55>>
+
+      <with|par-left|<quote|1tab>|4.5.3<space|2spc>Lost and Found
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-56>>
+
+      4.6<space|2spc>The Second Example: People in a Park
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-57>
     </associate>
   </collection>
 </auxiliary>
