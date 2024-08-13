@@ -5,7 +5,7 @@
 <\body>
   <chapter|Natural Language Processing>
 
-  <section|Vector Representation of Words>
+  <section|Representation of Words>
 
   <subsection|Knowing a Word by the Company It Keeps>
 
@@ -122,21 +122,6 @@
     v<rsub|w<rsub|t>>|)>.
   </equation*>
 
-  We further denote each row-vector of the matrix <math|U> by
-  <math|u<rsub|w>>, where the <math|w> indicates the position of the word
-  <math|w> in vocabulary. Thus, in the previous example, we have
-  <math|<around*|(|u<rsub|<text|<samp|quick>>>|)><rsub|\<alpha\>>\<assign\>U<rsub|2
-  \ \<alpha\>>> for <math|\<alpha\>=1,\<ldots\>,n>. This results in
-
-  <\equation>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
-  </equation>
-
-  where, for each <math|w\<in\>\<cal-V\>>,
-  <math|u<rsub|w>\<in\>\<bbb-R\><rsup|n>> is a trainable parameter. The
-  <math|u<rsub|w>>, for each word <math|w> in vocabulary, can be viewed as a
-  context-independent (or \Pabsolute\Q) vector representation of <math|w>.
-
   For <math|w<rsub|t>> can be correctly predicted out of its context, we have
   to maximize this probability. Thus, the loss function shall be<\footnote>
     In practice, when computing the term <math|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
@@ -147,7 +132,7 @@
 
   <\equation>
     L<around*|(|\<theta\>,U|)>\<assign\>-\<bbb-E\><rsub|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|T>|)>\<sim\>corpus,t\<sim\><around*|(|1,\<ldots\>,T|)>><around*|[|ln
-    <frac|exp<around*|(|u<rsub|w<rsub|t>>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>|]>,
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>|]>,
   </equation>
 
   where we have applied the whole process to all the contexts in the corpus
@@ -157,12 +142,31 @@
   matrix <math|U> for computing probability. This is how to know a word by
   the company it keeps for a machine.
 
-  As a summary, we build a general model for teaching machine to understand
-  the meaning of words, by representing each word by two <math|n>-dimensional
-  real vectors. One is context-dependent (the <math|v<rsub|w>> vector); and
-  the other is context-independent or absolute (the <math|u<rsub|w>> vector).
-  All that left is determining the explicit form of
-  <math|f<around*|(|\<ldots\>;t,\<theta\>|)>> in equation
+  The matrix <math|U> has an intrinsic interpretation. If we denote each
+  row-vector of the matrix <math|U> by <math|u<rsub|w>>, where the <math|w>
+  indicates the position of the word <math|w> in vocabulary. Thus, in the
+  previous example, we have <math|<around*|(|u<rsub|<text|<samp|quick>>>|)><rsub|\<alpha\>>\<assign\>U<rsub|2
+  \ \<alpha\>>> for <math|\<alpha\>=1,\<ldots\>,n>. This results in
+
+  <\equation>
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
+  </equation>
+
+  where, for each <math|w\<in\>\<cal-V\>>,
+  <math|u<rsub|w>\<in\>\<bbb-R\><rsup|n>> is a trainable parameter. The
+  <math|u<rsub|w>>, for each word <math|w> in vocabulary, can be viewed as a
+  context-independent (or \Pabsolute\Q) vector representation of <math|w>.
+  Indeed, a word <math|w> has different context-dependent vectors
+  <math|v<rsub|w>>s in contexts, but the <math|u<rsub|w>> is the
+  context-independent vector that is closest, at least statistically, to
+  these <math|v<rsub|w>>s.
+
+  As a summary, we have built a general model for teaching machine to
+  understand the meaning of words, by representing each word by two
+  <math|n>-dimensional real vectors. One is context-dependent (the
+  <math|v<rsub|w>> vector); and the other is context-independent or absolute
+  (the <math|u<rsub|w>> vector). All that left is determining the explicit
+  form of <math|f<around*|(|\<ldots\>;t,\<theta\>|)>> in equation
   (<reference|equation:vector representation>). Different researchers propose
   different forms of <math|f<around*|(|\<ldots\>;t,\<theta\>|)>>, with
   different complexities, resulting in different performances.
@@ -171,7 +175,9 @@
   Transformers>
 
   <\footnote>
-    The original paper can be found in <hlink|arXiv|https://arxiv.org/abs/1810.04805>.
+    <with|font-shape|italic|BERT: Pre-training of Deep Bidirectional
+    Transformers for Language Understanding>, by Jacob Devlin and others,
+    2018. The paper can be found in <hlink|arXiv|https://arxiv.org/abs/1810.04805>.
   </footnote>
 
   <subsection|Application: Named-Entity Recognition>
@@ -385,6 +391,7 @@
     <associate|auto-12|<tuple|1.5.2|4>>
     <associate|auto-13|<tuple|1.5.3|4>>
     <associate|auto-14|<tuple|1.6|4>>
+    <associate|auto-15|<tuple|5|?>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1.2|1>>
@@ -396,16 +403,21 @@
     <associate|equation:general model 0|<tuple|1.1|1>>
     <associate|equation:vector representation|<tuple|1.2|2>>
     <associate|equation:word2vec|<tuple|1.5|3>>
+    <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|2>>
     <associate|footnote-1.3|<tuple|1.3|2>>
     <associate|footnote-1.4|<tuple|1.4|3>>
     <associate|footnote-1.5|<tuple|1.5|3>>
+    <associate|footnote-2|<tuple|2|?>>
+    <associate|footnr-0|<tuple|1.3|?>>
+    <associate|footnr-1|<tuple|1|?>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|2>>
     <associate|footnr-1.3|<tuple|1.3|2>>
     <associate|footnr-1.4|<tuple|1.4|3>>
     <associate|footnr-1.5|<tuple|1.5|3>>
+    <associate|footnr-2|<tuple|2|?>>
   </collection>
 </references>
 

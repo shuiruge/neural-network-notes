@@ -6,7 +6,7 @@
   <chapter|Gradient Based Optimization>
 
   <section|The Objective Is the Expected Distance Between Prediction and
-  Truth>
+  Truth><label|section: loss function>
 
   As discussed in section <reference|section: Simulation Is a Kind of
   Data-Fitting>, the performance of simulation or, generally, data-fitting
@@ -307,7 +307,7 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.6.2|2>>
+    <associate|auto-10|<tuple|1.6.2|3>>
     <associate|auto-11|<tuple|1.6.3|3>>
     <associate|auto-12|<tuple|1.6.4|3>>
     <associate|auto-2|<tuple|1.1|1>>
@@ -319,9 +319,10 @@
     <associate|auto-8|<tuple|1.6|2>>
     <associate|auto-9|<tuple|1.6.1|2>>
     <associate|equation:loss function|<tuple|1.1|1>>
-    <associate|figure: gradient direction is not optimal|<tuple|1.1|?>>
+    <associate|figure: gradient direction is not optimal|<tuple|1.1|1>>
     <associate|footnote-1.1|<tuple|1.1|2>>
     <associate|footnr-1.1|<tuple|1.1|2>>
+    <associate|section: loss function|<tuple|1.1|?>>
   </collection>
 </references>
 

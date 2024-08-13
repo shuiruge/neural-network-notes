@@ -5,26 +5,123 @@
 <\body>
   <chapter|When Neural Network Becomes Deep>
 
-  <section|Enlarging Model Is Efficient for Increasing Its Representability>
+  <section|(TODO)>
 
-  When fitting data using a function with trainable parameters, it is
-  well-known that the more parameters it has, the better representability it
-  will be, as long as these parameters are independent (or
-  non-degenerate).<\footnote>
-    This viewpoint has been examined by scaling law. Researchers in OpenAI
-    found that, when the model has been large enough, the validation loss has
-    a strong dependence with the number of trainable parameters, but is
-    insensitive to the hyper-parameters of architecture such as
-    width-depth-ratio (see section 3.1 of the
-    <hlink|paper|https://arxiv.org/pdf/2001.08361>).
-  </footnote>
+  Introducing new parameters to a model may increase its representability,
+  but not always so. Consider the feed-forward neural network with single
+  hidden layer (see, section <reference|section: With Hidden Layers, Model
+  Can Fit Any Dataset>),
 
-  So, for increasing the representability of a model (neural network), so as
-  to fit more and more data with sufficient flexibility, we can enlarge it by
-  increasing the number of the trainable parameters. Even though there are
-  many other ways of increasing representability, such as changing the model
-  architecture, simply increasing the number of trainable parameters will be
-  the most cheap, safe, and efficient.
+  <\equation*>
+    f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>\<assign\>U<rsup|\<alpha\>><rsub|\<beta\>>
+    \<sigma\><around*|(|W<rsup|\<beta\>><rsub|\<gamma\>>
+    x<rsup|\<gamma\>>+b<rsup|\<beta\>>|)>+c<rsup|\<alpha\>>,
+  </equation*>
+
+  where <math|\<theta\>\<assign\><around*|(|U,W,b,c|)>>,
+  <math|x\<in\>\<bbb-R\><rsup|n>>, <math|W\<in\>\<bbb-R\><rsup|m\<times\>n>>.
+  and <math|\<sigma\>> denotes the activation function. Now, introduce a new
+  parameter <math|V\<in\>\<bbb-R\><rsup|m\<times\>n>> in such a way that
+
+  <\equation*>
+    f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>\<rightarrow\>f<rsub|ext><rsup|\<alpha\>><around*|(|x;\<theta\><rsub|ext>|)>\<assign\>U<rsup|\<alpha\>><rsub|\<beta\>>
+    \<sigma\><around*|(|<around*|(|<with|color|blue|V<rsup|\<beta\>><rsub|\<gamma\>>>+W<rsup|\<beta\>><rsub|\<gamma\>>|)>
+    x<rsup|\<gamma\>>+b<rsup|\<beta\>>|)>+c<rsup|\<alpha\>>,
+  </equation*>
+
+  where <math|\<theta\><rsub|ext>\<assign\><around*|(|U,V,W,b,c|)>>. It is
+  apparently that the new parameter may not help increase the
+  representability. In fact, we can combine <math|V+W> as a whole,
+  <math|<wide|W|~>\<assign\>V+W>. Thus, <math|f<rsub|ext>> goes back to
+  <math|U<rsup|\<alpha\>><rsub|\<beta\>> \<sigma\><around*|(|<wide|W|~><rsup|\<beta\>><rsub|\<gamma\>>
+  x<rsup|\<gamma\>>+b<rsup|\<beta\>>|)>+c<rsup|\<alpha\>>>, which is the same
+  as <math|f>. So, introducing new parameters in a \Pwrong\Q way will not
+  increase the representability of the model.
+
+  This example is still too complicated to investigated. Let us simply it
+  further. Consider a model
+
+  <\equation*>
+    g<around*|(|x;\<theta\>|)>\<assign\>a \<sigma\><around*|(|b x|)>,
+  </equation*>
+
+  where <math|\<theta\>\<assign\><around*|(|a,b|)>> and
+  <math|x,a,b\<in\>\<bbb-R\>>. You can recognize that this model <math|g> is
+  the extremely simplified version of the model <math|f>. The same, introduce
+  a \Pwrong\Q parameter <math|c\<in\>\<bbb-R\>> such that
+
+  <\equation*>
+    g<rsub|ext><around*|(|x;\<theta\><rsub|ext>|)>\<assign\>a
+    \<sigma\><around*|(|<around*|(|b+<with|color|blue|c>|)> x|)>,
+  </equation*>
+
+  where <math|\<theta\><rsub|ext>\<assign\><around*|(|a,b,c|)>> is the
+  extended collection of parameters; and defining
+  <math|<wide|b|~>\<assign\>b+c> makes <math|g<rsub|ext>> go back to
+  <math|g>. The key is that, after defining <math|<wide|b|~>>,
+  <math|g<rsub|ext>> has the same <with|font-shape|italic|form> as <math|g>.
+  This definition can be seem as a coordinates transform on the parameter
+  space <math|<around*|(|a,b,c|)>\<rightarrow\><around*|(|a,<wide|b|~>,c|)>>
+  after which some coordinate (the <math|c>) is absent. Notice that this
+  coordinates transform is only for <math|\<theta\><rsub|ext>>, thus is
+  independent of <math|x>. Contrarily, if we introduce the parameter <math|c>
+  in such a way that
+
+  <\equation*>
+    g<rprime|'><rsub|ext><around*|(|x;\<theta\><rsub|ext>|)>\<assign\>a
+    \<sigma\><around*|(|b x+c|)>,
+  </equation*>
+
+  then (recall that <math|\<sigma\>> is a non-linear function) we cannot find
+  an <math|x>-independent coordinate transform of <math|\<theta\><rsub|ext>>
+  by which some coordinate becomes absent.
+
+  <section|Draft>
+
+  As discussed in section <reference|section: loss function>, given a dataset
+  <math|D>, the performance of data-fitting is characterized by a loss
+  function <math|L<rsub|D><around*|(|\<theta\>|)>> where <math|\<theta\>> is
+  the collection of model parameters. These parameters are like the knobs on
+  an instrument. By tuning these knobs, the value displayed on the instrument
+  screen varies. But, unlike the knobs, not all the parameters are
+  independent. As an example, consider a loss function
+  <math|L<rsub|D><around*|(|\<theta\><rsub|1>,\<theta\><rsub|2>|)>=g<around*|(|\<theta\><rsub|1>+\<theta\><rsub|2>|)>>
+  on <math|2>-dimensional parameter space, where
+  <math|g:\<bbb-R\>\<rightarrow\>\<bbb-R\>>. It seems that <math|L<rsub|D>>
+  has two knobs, but letting the coordinates transform as
+  <math|\<theta\>\<rightarrow\><wide|\<theta\>|~>> where
+  <math|<wide|\<theta\>|~><rsub|1>\<assign\><around*|(|\<theta\><rsub|1>+\<theta\><rsub|2>|)>/2>
+  and <math|<wide|\<theta\>|~><rsub|2>\<assign\><around*|(|\<theta\><rsub|1>-\<theta\><rsub|2>|)>/2>,
+  which is apparently bijective, we have <math|<wide|L|~><rsub|D><around*|(|<wide|\<theta\>|~><rsub|1>,<wide|\<theta\>|~><rsub|2>|)>\<assign\>L<rsub|D><around*|(|\<theta\><rsub|1><around*|(|<wide|\<theta\>|~><rsub|1>,<wide|\<theta\>|~><rsub|2>|)>,\<theta\><rsub|2><around*|(|<wide|\<theta\>|~><rsub|1>,<wide|\<theta\>|~><rsub|2>|)>|)>=g<around*|(|2<wide|\<theta\>|~><rsub|1>|)>>.
+  Tuning <math|<wide|\<theta\>|~><rsub|2>> does not change the loss function;
+  it is a useless knob. Precisely, there may exist a global coordinate
+  transformation <math|\<theta\>\<rightarrow\><wide|\<theta\>|~>> on the
+  parameter space such that some component
+  <math|<wide|\<theta\>|~><rsub|\<alpha\>>> is absent in the transformed loss
+  function <math|<wide|L|~><rsub|D><around*|(|<wide|\<theta\>|~>|)>\<assign\>L<rsub|D><around*|(|\<theta\><around*|(|<wide|\<theta\>|~>|)>|)>>.
+  That is,
+
+  <\equation*>
+    <big|sum><rsub|\<beta\>><frac|\<partial\>L<rsub|D>|\<partial\>\<theta\><rsub|\<beta\>>><around*|(|\<theta\>|)>
+    <frac|\<partial\>\<theta\><rsub|\<beta\>>|\<partial\><wide|\<theta\>|~><rsub|\<alpha\>>><around*|(|<wide|\<theta\>|~><around*|(|\<theta\>|)>|)>=0
+  </equation*>
+
+  holds for all <math|\<theta\>>. This indicates that not all parameters are
+  equally effective for decreasing the loss function. Parameters like this
+  are called <with|font-series|bold|degenerate>.
+
+  <section|Enlarging Model Is Efficient for Increasing Its Representability
+  (TODO)>
+
+  As long as the model is not degenerate, all its \Pknobs\Q are effective for
+  tuning. We may expect that the more parameters it has, the better
+  performance it will be. So, for increasing the representability of a model
+  (neural network), so as to fit more and more data with sufficient
+  flexibility, we can enlarge it by increasing the number of the trainable
+  parameters. Even though there are many other ways of increasing
+  representability, such as changing the model architecture, simply
+  increasing the number of trainable parameters will be the most cheap, safe,
+  and efficient.
 
   <section|Increasing Depth Is More Efficient for Enlarging Model>
 
@@ -555,28 +652,31 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.4.1|3>>
-    <associate|auto-11|<tuple|1.4.2|4>>
-    <associate|auto-12|<tuple|1.4.3|4>>
-    <associate|auto-13|<tuple|1.4.4|4>>
-    <associate|auto-14|<tuple|1.5|5>>
-    <associate|auto-15|<tuple|1.5.1|5>>
-    <associate|auto-16|<tuple|1.5.2|5>>
-    <associate|auto-17|<tuple|1.5.3|5>>
-    <associate|auto-18|<tuple|1.5.4|6>>
-    <associate|auto-19|<tuple|1.5.5|6>>
+    <associate|auto-10|<tuple|1.5|3>>
+    <associate|auto-11|<tuple|1.6|4>>
+    <associate|auto-12|<tuple|1.6.1|4>>
+    <associate|auto-13|<tuple|1.6.2|4>>
+    <associate|auto-14|<tuple|1.6.3|5>>
+    <associate|auto-15|<tuple|1.6.4|5>>
+    <associate|auto-16|<tuple|1.7|5>>
+    <associate|auto-17|<tuple|1.7.1|5>>
+    <associate|auto-18|<tuple|1.7.2|6>>
+    <associate|auto-19|<tuple|1.7.3|6>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-20|<tuple|1.5.6|6>>
-    <associate|auto-21|<tuple|1.5.7|6>>
+    <associate|auto-20|<tuple|1.7.4|6>>
+    <associate|auto-21|<tuple|1.7.5|6>>
+    <associate|auto-22|<tuple|1.7.6|?>>
+    <associate|auto-23|<tuple|1.7.7|?>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.2.1|1>>
-    <associate|auto-5|<tuple|1.2.2|2>>
-    <associate|auto-6|<tuple|1.2.3|2>>
-    <associate|auto-7|<tuple|1.2.4|2>>
-    <associate|auto-8|<tuple|1.3|3>>
-    <associate|auto-9|<tuple|1.4|3>>
+    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-5|<tuple|1.4|2>>
+    <associate|auto-6|<tuple|1.4.1|2>>
+    <associate|auto-7|<tuple|1.4.2|2>>
+    <associate|auto-8|<tuple|1.4.3|3>>
+    <associate|auto-9|<tuple|1.4.4|3>>
     <associate|equation:batch normalization|<tuple|1.3|6>>
     <associate|equation:gradient chain-rule|<tuple|1.2|3>>
+    <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnote-1.3|<tuple|1.3|5>>
@@ -589,7 +689,7 @@
     <associate|footnr-1.4|<tuple|1.4|6>>
     <associate|footnr-1.5|<tuple|1.5|6>>
     <associate|footnr-1.6|<tuple|1.6|6>>
-    <associate|section: Simple Baseline Model|<tuple|1.2.1|1>>
+    <associate|section: Simple Baseline Model|<tuple|1.4.1|1>>
   </collection>
 </references>
 
@@ -601,7 +701,7 @@
       <no-break><pageref|auto-1><vspace|0.5fn>
 
       1.1<space|2spc>Enlarging Model Is Efficient for Increasing Its
-      Representability <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      Representability (TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
       1.2<space|2spc>Increasing Depth Is More Efficient for Enlarging Model
@@ -653,7 +753,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-14>
 
-      <with|par-left|<quote|1tab>|1.5.1<space|2spc>Regularization (TODO)
+      <with|par-left|<quote|1tab>|1.5.1<space|2spc>Regularization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15>>
 
