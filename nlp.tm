@@ -69,31 +69,32 @@
   We are to build a model for the conditional probability
 
   <\equation>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>,<label|equation:general
-    model 0>
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>,<label|equation:firth
+    idea>
   </equation>
 
   for each word <math|w> in vocabulary <math|\<cal-V\>>, such that, at least
-  statistically, <math|w<rsub|t>> has the maximal probability. The parameter
-  <math|t> indicates the position of word <math|w> in context. \ For example,
-  for predicting <samp|fox> out of its company, we shall compute
-  <math|p<around*|(|w\|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|the>>,<text|<samp|lazy>>,<text|<samp|dog>>;4|)>>
+  statistically, <math|w<rsub|t>> has the maximal probability. The word
+  <verbatim|\<less\>?\<gtr\>>, which is a specific element in vocabulary
+  <math|\<cal-V\>>, is a placeholder used for indicating the position of word
+  <math|w> in context sequence. For example, for predicting <samp|fox> out of
+  its company, we shall compute <math|p<around*|(|w\|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<verbatim|\<less\>?\<gtr\>>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|the>>,<text|<samp|lazy>>,<text|<samp|dog>>|)>>
   for each word <math|w> in <math|<around*|(|<text|<samp|the>>,<text|<samp|quick>>,<text|<samp|brown>>,<text|<samp|fox>>,<text|<samp|jumps>>,<text|<samp|over>>,<text|<samp|lazy>>,<text|<samp|dog>>,\<ldots\>|)>>,
   and expect the probability of <samp|fox> to be maximum.
 
   Since the ultimate goal is to find a vector representation for each word in
-  vocabulary, the conditional probability (<reference|equation:general model
-  0>) shall be computed out of the vector representation of the word
+  vocabulary, the conditional probability (<reference|equation:firth idea>)
+  shall be computed out of the vector representation of the word
   <math|w<rsub|t>>, the meaning of <math|w<rsub|t>> that a machine can
   understand. The vector representation of <math|w<rsub|t>>, which is
   context-dependent, can be generally expressed by
 
   <\equation>
-    v<rsub|w<rsub|t>>\<assign\>f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t,\<theta\>|)>,<label|equation:vector
+    v<rsub|w<rsub|t>>\<assign\>f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;\<theta\>|)>,<label|equation:vector
     representation>
   </equation>
 
-  where <math|f<around*|(|\<ldots\>;t,\<theta\>|)>:\<cal-V\><rsup|T-1>\<rightarrow\>\<bbb-R\><rsup|n>>
+  where <math|f<around*|(|\<ldots\>;\<theta\>|)>:\<cal-V\><rsup|T>\<rightarrow\>\<bbb-R\><rsup|n>>
   represents a general model parameterized by <math|\<theta\>>, such as a
   neural network. Regardless of the explicit form of <math|f>, the point is
   that the vector representation <math|v<rsub|w<rsub|t>>> shall depend on the
@@ -118,7 +119,7 @@
   trainable <math|<around*|\||\<cal-V\>|\|>\<times\>n> matrix. Thus,
 
   <\equation*>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=softmax<rsub|w><around*|(|U
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>=softmax<rsub|w><around*|(|U
     v<rsub|w<rsub|t>>|)>.
   </equation*>
 
@@ -132,7 +133,7 @@
 
   <\equation>
     L<around*|(|\<theta\>,U|)>\<assign\>-\<bbb-E\><rsub|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|T>|)>\<sim\>corpus,t\<sim\><around*|(|1,\<ldots\>,T|)>><around*|[|ln
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>|]>,
+    p<around*|(|w<rsub|t>\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>|]>,
   </equation>
 
   where we have applied the whole process to all the contexts in the corpus
@@ -149,7 +150,7 @@
   \ \<alpha\>>> for <math|\<alpha\>=1,\<ldots\>,n>. This results in
 
   <\equation>
-    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;t|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
+    p<around*|(|w\|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|t>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|t>>|)>>,
   </equation>
 
   where, for each <math|w\<in\>\<cal-V\>>,
@@ -166,18 +167,101 @@
   <math|n>-dimensional real vectors. One is context-dependent (the
   <math|v<rsub|w>> vector); and the other is context-independent or absolute
   (the <math|u<rsub|w>> vector). All that left is determining the explicit
-  form of <math|f<around*|(|\<ldots\>;t,\<theta\>|)>> in equation
+  form of <math|f<around*|(|\<ldots\>;\<theta\>|)>> in equation
   (<reference|equation:vector representation>). Different researchers propose
-  different forms of <math|f<around*|(|\<ldots\>;t,\<theta\>|)>>, with
+  different forms of <math|f<around*|(|\<ldots\>;\<theta\>|)>>, with
   different complexities, resulting in different performances.
 
   <subsection|Example: Bidirectional Encoder Representations from
-  Transformers>
+  Transformers (BERT)>
 
-  <\footnote>
-    <with|font-shape|italic|BERT: Pre-training of Deep Bidirectional
-    Transformers for Language Understanding>, by Jacob Devlin and others,
-    2018. The paper can be found in <hlink|arXiv|https://arxiv.org/abs/1810.04805>.
+  \;
+
+  In 2018, Jacob Devlin and others built a model for the vector
+  representation, equation (<reference|equation:vector
+  representation>).<\footnote>
+    <hlink|<with|font-shape|italic|BERT: Pre-training of Deep Bidirectional
+    Transformers for Language Understanding>|https://arxiv.org/abs/1810.04805>
+    by Jacob Devlin and others, 2018.
+  </footnote> Given a context <math|<around*|(|w<rsub|1>,w<rsub|2>,\<ldots\>,w<rsub|T>|)>>,
+  a word <math|w<rsub|t>> keeps company <math|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>>,
+  to model the parameterized function <math|f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;\<theta\>|)>>,
+  they considered a neural network which is a stack of multiple
+  self-attention layers and feed-forward layers.
+
+  The first layer in the neural network is called
+  <with|font-series|bold|embedding>. In this layer, each word
+  <math|w<rsub|t>> and its position <math|t> are assigned with two
+  <math|n>-dimensional real vectors respectively. Then add the two vectors
+  together, resulting in one <math|n>-dimensional real vector for the pair
+  <math|<around*|(|w<rsub|t>,t|)>>, denoted by <math|x<rsub|t>>. So, the
+  input <math|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,<text|<verbatim|\<less\>?\<gtr\>>>,w<rsub|t+1>,\<ldots\>,w<rsub|T>|)>>
+  is \Pembedded\Q as <math|<around*|(|x<rsub|1>,\<ldots\>,x<rsub|T>|)>\<in\>\<bbb-R\><rsup|n\<times\>T>>.
+
+  Upon the embedding layer, it is stacked by self-attention layers and
+  feed-forward layers in turn. <with|font-series|bold|Self-attention> layer
+  mixes the information of the \Pembedded words\Q mutually. It accepts the
+  sequence <math|<around*|(|x<rsub|1>,\<ldots\>,x<rsub|T>|)>> as input. The
+  portion of information propagating from position <math|t<rprime|'>> to
+  <math|t> for each <math|t,t<rprime|'>=1,\<ldots\>,T> is determined by a
+  real valued function <math|q<around*|(|x<rsub|t>,x<rsub|t<rprime|'>>;\<varphi\>|)>>,
+  parameterized by <math|\<varphi\>>. The information of <math|x<rsub|t>> is
+  mixed by others via
+
+  <\equation*>
+    <wide|x|\<bar\>><rsub|t>\<assign\><frac|<big|sum><rsub|t<rprime|'>=1><rsup|T>exp<around*|(|q<around*|(|x<rsub|t>,x<rsub|t<rprime|'>>;\<varphi\>|)>|)>
+    x<rsub|t<rprime|'>>|<big|sum><rsub|t<rprime|''>=1><rsup|T>exp<around*|(|q<around*|(|x<rsub|t>,x<rsub|t<rprime|''>>;\<varphi\>|)>|)>>.
+  </equation*>
+
+  If we regard <math|q<around*|(|x<rsub|t>,x<rsub|t<rprime|'>>;\<varphi\>|)>>
+  as the logits of a categorical probability
+  <math|Q<around*|(|t<rprime|'>|)>>, that is
+  <math|Q<around*|(|t<rprime|'>|)>\<assign\>softmax<rsub|t<rprime|'>><around*|(|q<around*|(|x<rsub|t>,x<rsub|\<cdummy\>>;\<varphi\>|)>|)>>,
+  then <math|<wide|x|\<bar\>><rsub|t>> can be realized as the expectation
+
+  <\equation*>
+    <wide|x|\<bar\>><rsub|t>=\<bbb-E\><rsub|t<rprime|'>\<sim\>Q><around*|[|x<rsub|t<rprime|'>>|]>,
+  </equation*>
+
+  and <math|Q<around*|(|t<rprime|'>|)>> becomes the portion of information
+  propagating from <math|t<rprime|'>> to <math|t>. This is why we use the
+  bar-notation, which is usually assigned for mean or expectation. The output
+  of self-attention layer is thus the \Pmixed embedded words\Q
+  <math|<around*|(|<wide|x|\<bar\>><rsub|1>,\<ldots\>,<wide|x|\<bar\>><rsub|T>|)>\<in\>\<bbb-R\><rsup|n\<times\>T>>.
+  Next, the <with|font-series|bold|feed-forward> layer update each
+  <math|<wide|x|\<bar\>><rsub|t>> individually. The feed-forward layer, as it
+  is named, is a shallow feed-forward neural network
+  <math|g<around*|(|x;\<psi\>|)>>, parameterized by <math|\<psi\>>. The
+  output is thus the sequence <math|<around*|(|g<around*|(|<wide|x|\<bar\>><rsub|1>;\<varphi\>|)>,\<ldots\>,g<around*|(|<wide|x|\<bar\>><rsub|T>;\<varphi\>|)>|)>>.
+  This sequence is in turn sent to the next self-attention layer, then next
+  feed-forward layer. Repeating this process multiple times, the final output
+  will be the output of <math|f<around*|(|\<ldots\>;\<theta\>|)>>, the
+  context-dependent vector representation of words. The <math|\<theta\>>
+  comes to be the collection of parameters in all layers, including
+  embedding, self-attention layers, and feed-forward layers. <\footnote>
+    This is a sketch of how BERT works. The
+    <math|q<around*|(|x<rsub|t>,x<rsub|t<rprime|'>>;\<varphi\>|)>> is
+    implemented by
+
+    <\equation*>
+      q<around*|(|x<rsub|t>,x<rsub|t<rprime|'>>;\<varphi\>|)>\<assign\><around*|(|W<rsub|K>
+      x<rsub|t>|)><rsup|T>\<cdot\><around*|(|W<rsub|Q>
+      x<rsub|t<rprime|'>>|)>,
+    </equation*>
+
+    where <math|W<rsub|K>> and <math|W<rsub|Q>> are both <math|n\<times\>n>
+    matrices, and <math|\<varphi\>\<assign\><around*|(|W<rsub|K>,W<rsub|Q>|)>>.
+    In practice, before sending to feed-forward layer, the
+    <math|<wide|x|\<bar\>><rsub|t>> is linearly transformed as
+    <math|W<rsub|V> <wide|x|\<bar\>><rsub|t>> where <math|W<rsub|V>> is a
+    <math|n\<times\>n> matrix. Residual structure and normalization
+    (discussed in section <reference|section: Techniques Are Combined for
+    Controlling the Gradients>) are employed for controlling gradients. They
+    also employ techniques \Pmulti-head attention\Q for enriching the
+    information propagation and \Pword-piece\Q for avoiding the
+    out-of-vocabulary problem. As an example for illustrating how vector
+    representation of words is made in practice, we simply omit these
+    details, referring the reader to their original paper.
   </footnote>
 
   <subsection|Application: Named-Entity Recognition>
@@ -195,186 +279,29 @@
   have a set of named-entity classes, like <verbatim|person>,
   <verbatim|orgnization>, <verbatim|time>, etc. We also have a specific
   class, labeled by <verbatim|\<less\>O\<gtr\>>, for words that are not
-  named-entity, such as <samp|is>, <samp|walk>, and <samp|good>. So, the task
-  is classify the word into any of these classes.
+  named-entity, such as <samp|is>, <samp|walk>, and <samp|good>. The task
+  turns to be classifying the word into any of these classes. This can be
+  done by sending the context-dependent vector representation to a
+  feed-forward neural network appended by a softmax function.
 
-  <section|Representation of Sentences>
+  <section|Representation of Sentences (TODO)>
 
-  <section|Machine Translation>
+  <subsection|From Words to Sentences: Firth's Idea Continued>
 
-  <section|Language Modeling>
-
-  <section|Drafts>
-
-  <subsection|<verbatim|Word2vec> Is a Simple Model that Implements the
-  Firth's Idea>
-
-  In 2013, Tomas Mikolov and others proposed a simple model that encodes the
-  words into <math|n>-dimensional real vectors.<\footnote>
-    The original paper can be found in <hlink|arXiv|https://arxiv.org/abs/1301.3781>.
-  </footnote> The underlying idea is that of Firth: words that company a word
-  give the meaning of the word. There are two questions: what does company
-  mean explicitly, and how these words give the meaning of a word. The
-  answers are:
-
-  <\itemize>
-    <item>the words surround a word in a sentence company the word; and
-
-    <item>from these words, the central word can be predicted.
-  </itemize>
-
-  For example, consider the sentence: <samp|the quick brown fox jumps over
-  the lazy dog.> If we take into account four neighbors, then the word
-  <samp|fox> will have neighbors <samp|quick>, <samp|brown>, <samp|jumps>,
-  and <samp|over>. These four words company the central <samp|fox>.
-
-  Then, to predict <samp|fox> out of its four neighbors, the authors employed
-  a simple probabilistic model. First, they assumed that the probability is
-  \Pseparable\Q, as
-
-  <\equation*>
-    p<around*|(|fox\|quick,brown,jumps,over|)>=p<around*|(|fox\|quick|)>
-    p<around*|(|fox\|brown|)> p<around*|(|fox\|jumps|)>
-    p<around*|(|fox\|over|)>.
-  </equation*>
-
-  This indicates that the positional relationship is omitted. For modeling
-  each conditional probability, they assigned two <math|n>-dimensional real
-  vectors for each word in a given vocabulary. For example, let vocabulary
-  <math|\<cal-V\>=<around*|(|the,quick,brown,fox,jumps,over,lazy,dog,\<ldots\>|)>>
-  in which each word is represented by two vectors
-  <math|u,v\<in\>\<bbb-R\><rsup|n>>. They then built a simple model for
-  predicting <samp|fox> out of <samp|quick>, <samp|brown>, etc, as
-
-  <\equation>
-    p<around*|(|w\|w<rprime|'>|)>=<frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rprime|'>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rprime|'>>|)>>.<label|equation:word2vec>
-  </equation>
-
-  For example, <math|w> and <math|w<rprime|'>> denote <samp|fox> and
-  <samp|quick> respectively. The vector <math|u> represents for the center
-  word, which is to be predicted, and the vector <math|v> for one of the
-  neighbors. In this model, the vectors <math|u> and <math|v> for each word
-  in vocabulary <math|\<cal-V\>> are trainable parameters. They are adjusted
-  so as to maximize the probabilities like
-  <math|p<around*|(|fox\|quick,brown,jumps,over|)>>. In this way, <samp|fox>
-  is \Pknown\Q, or predicted, by the words <samp|quick>, <samp|brown>,
-  <samp|jumps>, and <samp|over> that company it. This model is called
-  word-to-vector, or <samp|word2vec> for short. Either <math|u<rsub|w>> or
-  <math|v<rsub|w>> is employed as the vector representation of a word
-  <math|w>.<\footnote>
-    In the paper, the authors employed the vector <math|v> as representation.
+  <\footnote>
+    <hlink|<with|font-shape|italic|Universal Sentence
+    Encoder>|https://arxiv.org/abs/1803.11175> by Daniel Cer and others,
+    2018. A better explanation of universal sentence encoder can be found
+    <hlink|here|https://amitness.com/posts/universal-sentence-encoder>.
   </footnote>
 
-  What does the equation (<reference|equation:word2vec>) really mean? Recall
-  that softmax function is defined by <math|softmax<rsub|\<alpha\>><around*|(|x|)>\<assign\>exp<around*|(|x<rsub|\<alpha\>>|)>/<big|sum><rsub|\<beta\>>exp<around*|(|x<rsub|\<beta\>>|)>>.
-  Since softmax is positive definite and <math|<big|sum><rsub|\<alpha\>>softmax<rsub|\<alpha\>><around*|(|x|)>=1>,
-  its output is usually interpreted as categorical probability. So, if we
-  collect the <math|u> vectors for all the words in the vocabulary and
-  concatenate them together as a <math|<around*|\||\<cal-V\>|\|>\<times\>n>
-  matrix <math|U>, then equation (<reference|equation:word2vec>) can be
-  re-written as
+  <subsection|Human Languages Are Recursive (Maybe)>
 
-  <\equation*>
-    p<around*|(|w\|w<rprime|'>|)>=softmax<rsub|w><around*|(|U
-    v<rsub|w<rprime|'>>|)>,
-  </equation*>
+  <subsection|Application: Textual Similarity>
 
-  where the <math|U v<rsub|w<rprime|'>>> is a matrix-vector multiplication,
-  and the <math|softmax<rsub|w>> is the <math|w>-component of the categorical
-  probability. Noticing that <math|\<cal-V\>> is a list, the
-  <math|w>-component represents the position of the word <math|w> in
-  <math|\<cal-V\>>. Thus, <math|softmax<rsub|w>> is the probability of
-  encountering the word <math|w> (given its neighbor <math|w<rprime|'>>).
-  <math|>Now the model is found to be a linear transformation of the vector
-  <math|v<rsub|w<rprime|'>>> with an additional softmax/probabilistic output.
-  Can you find a simpler model for the same task?
+  <subsection|Application: Machine Translation>
 
-  <subsection|<verbatim|Word2vec> in Practice>
-
-  \ After building vocabulary, we iterate over the corpus again to fetch each
-  word <math|w> and its neighbors <math|<around*|{|w<rsub|1>,\<ldots\>,w<rsub|N>|}>>
-  where <math|N> is a hyper-parameter. We assign an <math|n>-dimensional real
-  vector <math|u<rsub|w>> to the word <math|w> and <math|v<rsub|w<rsub|i>>>
-  for each neighbor <math|w<rsub|i>>. Thus, the loss function for this datum
-  can be written as
-
-  <\equation*>
-    l<around*|(|u,v<rsub|w<rsub|1>>,\<ldots\>,v<rsub|w<rsub|N>>|)>\<assign\>-ln
-    <around*|(|<big|prod><rsub|i=1><rsup|N><frac|exp<around*|(|u<rsub|w>\<cdot\>v<rsub|w<rsub|i>>|)>|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|u<rsub|x>\<cdot\>v<rsub|w<rsub|i>>|)>>|)>.
-  </equation*>
-
-  As usually, the total loss function will be
-
-  <\equation*>
-    L<around*|(|u,v|)>\<assign\>\<bbb-E\><rsub|<around*|(|w,<around*|{|w<rsub|1>,\<ldots\>,w<rsub|N>|}>|)>\<sim\>copus><around*|[|l<around*|(|u,v<rsub|w<rsub|1>>,\<ldots\>,v<rsub|w<rsub|N>>|)>|]>.
-  </equation*>
-
-  The authors of <verbatim|word2vec> argued that, when the vocabulary size
-  becomes large, the term <math|<big|sum><rsub|x\<in\>\<cal-V\>>exp<around*|(|x\<cdot\>v<rsub|w<rsub|i>>|)>>
-  in loss function will become very compute intensive.\ 
-
-  <subsection|Lost and Found>
-
-  There are, however, many drawbacks of <verbatim|word2vec>. The first is the
-  omission of positional information. In many situations, this will not be a
-  problem. For example, if we exchange the positions of <samp|fox> and
-  <samp|quick>, it becomes: <samp|the fox brown quick jumps over the lazy
-  dog.> Because of the flexion of words, a reader can understand it without
-  any difficulty. Another problem is much more serious: words can be
-  polysemy. As an example, <samp|ass> has the meanings of fool, hip, and
-  being sexy, but it has at most two vectors of representation.
-
-  Even though <verbatim|word2vec> is not a faithful modeling of the Firth's
-  idea, many interesting results are revealed. First of all, the words with
-  similar meanings are similar in their vector representations, characterized
-  by the <hlink|cosine similarity|https://en.wikipedia.org/wiki/Cosine_similarity#Definition>
-  between the vectors. A more interesting result is the relative relation
-  between words, like <math|v<rsub|king>-v<rsub|man>\<approx\>v<rsub|qu\<mathe\>en>-v<rsub|woman>>,
-  or <math|v<rsub|big>-v<rsub|biggest>\<approx\>v<rsub|small>-v<rsub|smallest>>.
-
-  <section|The Second Example: People in a Park>
-
-  Now, for vector representation of words, the main problem turns to be
-  determining the explicitly form of the model
-  <math|f<around*|(|w<rsub|1>,\<ldots\>,w<rsub|t-1>,w<rsub|t+1>,\<ldots\>,w<rsub|T>;\<theta\>|)>>
-  in equation (<reference|equation:general model 1>).
-
-  Recall that, in <verbatim|word2vec>, the positional information of the
-  words in context is omitted. But, in fact, position can also be encoded.
-  So, we can regard <math|w<rsub|t>> as a pair
-  <math|<around*|(|w<rsub|t>,t|)>> where the second variable labels the
-  position of the word <math|w<rsub|t>> in the context
-  <math|<around*|(|w<rsub|1>,\<ldots\>,w<rsub|T>|)>>.
-
-  We first assign each <math|w<rsub|t>> and <math|t> <math|n>-dimensional
-  real vectors respectively, and then add them together, resulting in one
-  <math|n>-dimensional real vector for the pair
-  <math|<around*|(|w<rsub|t>,t|)>>, denoted by <math|x<rsub|t>>. Then, these
-  vectors, each for a word, are mutually mixed. Explicitly, it computes the
-  \Pproximity\Q from <math|x<rsub|t<rprime|'>>> to <math|x<rsub|t>> for each
-  <math|t,t<rprime|'>=1,\<ldots\>,T> with <math|t\<neq\>t<rprime|'>>,
-  determined by
-
-  <\equation*>
-    W<rsub|t t<rprime|'>>\<assign\><frac|exp<around*|(|x<rsub|t>\<cdot\><around*|(|K<rsup|T>
-    K|)>\<cdot\>x<rsub|t<rprime|'>>|)>|<big|sum><rsub|<rsub|t<rprime|''>=1>><rsup|T>exp<around*|(|x<rsub|t<rprime|''>>\<cdot\><around*|(|K<rsup|T>
-    K|)>\<cdot\>x<rsub|t<rprime|'>>|)>>,
-  </equation*>
-
-  and <math|w<rsub|t t>=0>, where <math|K> is an <math|m\<times\>n> matrix
-  with <math|m> arbitrary. Then, compute the weighted output
-
-  <\equation*>
-    z<rsub|t>\<assign\><big|sum><rsub|t<rprime|'>=1><rsup|T>W<rsub|t
-    t<rprime|'>> x<rsub|t<rprime|'>>.
-  </equation*>
-
-  The greater the <math|W<rsub|t t<rprime|'>>> is, the more contribution from
-  <math|x<rsub|t<rprime|'>>> to <math|z<rsub|t>>.
-
-  Next, let <math|FFN<rsub|\<theta\>>> a feed-forward neural network
-  parameterized by <math|\<theta\>>, the output is
-  <math|v<rsub|w<rsub|t>>\<assign\>FFN<rsub|\<theta\>><around*|(|z<rsub|t>|)>>.
+  <section|Language Modeling>
 </body>
 
 <\initial>
@@ -386,38 +313,38 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.5|3>>
-    <associate|auto-11|<tuple|1.5.1|3>>
-    <associate|auto-12|<tuple|1.5.2|4>>
-    <associate|auto-13|<tuple|1.5.3|4>>
-    <associate|auto-14|<tuple|1.6|4>>
-    <associate|auto-15|<tuple|5|?>>
+    <associate|auto-10|<tuple|1.2.3|4>>
+    <associate|auto-11|<tuple|1.2.4|4>>
+    <associate|auto-12|<tuple|1.3|4>>
+    <associate|auto-13|<tuple|1.4.1|4>>
+    <associate|auto-14|<tuple|1.4.2|5>>
+    <associate|auto-15|<tuple|1.4.3|5>>
+    <associate|auto-16|<tuple|1.5|5>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1.2|1>>
-    <associate|auto-5|<tuple|1.1.3|2>>
+    <associate|auto-5|<tuple|1.1.3|3>>
     <associate|auto-6|<tuple|1.1.4|3>>
     <associate|auto-7|<tuple|1.2|3>>
-    <associate|auto-8|<tuple|1.3|3>>
-    <associate|auto-9|<tuple|1.4|3>>
-    <associate|equation:general model 0|<tuple|1.1|1>>
+    <associate|auto-8|<tuple|1.2.1|3>>
+    <associate|auto-9|<tuple|1.2.2|4>>
+    <associate|equation:firth idea|<tuple|1.1|2>>
     <associate|equation:vector representation|<tuple|1.2|2>>
-    <associate|equation:word2vec|<tuple|1.5|3>>
-    <associate|footnote-1|<tuple|1|?>>
+    <associate|equation:word2vec|<tuple|1.5|4>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|2>>
-    <associate|footnote-1.3|<tuple|1.3|2>>
+    <associate|footnote-1.3|<tuple|1.3|3>>
     <associate|footnote-1.4|<tuple|1.4|3>>
-    <associate|footnote-1.5|<tuple|1.5|3>>
-    <associate|footnote-2|<tuple|2|?>>
-    <associate|footnr-0|<tuple|1.3|?>>
-    <associate|footnr-1|<tuple|1|?>>
+    <associate|footnote-1.5|<tuple|1.5|4>>
+    <associate|footnote-1.6|<tuple|1.6|4>>
+    <associate|footnote-1.7|<tuple|1.7|?>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|2>>
-    <associate|footnr-1.3|<tuple|1.3|2>>
+    <associate|footnr-1.3|<tuple|1.3|3>>
     <associate|footnr-1.4|<tuple|1.4|3>>
-    <associate|footnr-1.5|<tuple|1.5|3>>
-    <associate|footnr-2|<tuple|2|?>>
+    <associate|footnr-1.5|<tuple|1.5|4>>
+    <associate|footnr-1.6|<tuple|1.6|4>>
+    <associate|footnr-1.7|<tuple|1.7|?>>
   </collection>
 </references>
 
@@ -428,7 +355,7 @@
       Language Processing> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Vector Representation of Words
+      1.1<space|2spc>Representation of Words
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
@@ -453,31 +380,40 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>
 
-      1.3<space|2spc>Machine Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
+      <with|par-left|<quote|1tab>|1.2.1<space|2spc>From Words to Sentences:
+      Firth's Idea Continued <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
 
-      1.4<space|2spc>Language Modeling <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>
+      <with|par-left|<quote|1tab>|1.2.2<space|2spc>Human Languages Are
+      Recursive (Maybe) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-9>>
 
-      1.5<space|2spc>Drafts <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>
+      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Application: Machine
+      Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|1.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
+      1.3<space|2spc>Language Modeling <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>
+
+      1.4<space|2spc>Drafts <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12>
+
+      <with|par-left|<quote|1tab>|1.4.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
       Is a Simple Model that Implements the Firth's Idea
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      <with|par-left|<quote|1tab>|1.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
-      in Practice <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
-
-      <with|par-left|<quote|1tab>|1.5.3<space|2spc>Lost and Found
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
-      1.6<space|2spc>The Second Example: People in a Park
+      <with|par-left|<quote|1tab>|1.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
+      in Practice <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14>>
+
+      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Lost and Found
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>
+      <no-break><pageref|auto-15>>
+
+      1.5<space|2spc>The Second Example: People in a Park
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-16>
     </associate>
   </collection>
 </auxiliary>

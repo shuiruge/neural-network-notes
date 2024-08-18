@@ -320,7 +320,9 @@
   model becomes quite deep, the training process will be extremely unstable:
   the gradients of parameters jump back and forth over a wide range.
 
-  <section|Techniques Are Combined for Controlling the Gradients>
+  <section|Techniques Are Combined for Controlling the
+  Gradients><label|section: Techniques Are Combined for Controlling the
+  Gradients>
 
   <subsection|Residual Structure>
 
@@ -411,7 +413,7 @@
   <math|<around*|\<\|\|\>|W<rsub|l>|\<\|\|\>>> and
   <math|<around*|\<\|\|\>|b<rsub|l>|\<\|\|\>>> are bounded to be small.
 
-  <subsection|Normalization>
+  <subsection|Normalization><label|section: Normalization>
 
   Normalization techniques, such as batch normalization and layer
   normalization, serve for bounding the second term. Explicitly, it passes
@@ -655,41 +657,41 @@
     <associate|auto-10|<tuple|1.5|3>>
     <associate|auto-11|<tuple|1.6|4>>
     <associate|auto-12|<tuple|1.6.1|4>>
-    <associate|auto-13|<tuple|1.6.2|4>>
+    <associate|auto-13|<tuple|1.6.2|5>>
     <associate|auto-14|<tuple|1.6.3|5>>
     <associate|auto-15|<tuple|1.6.4|5>>
-    <associate|auto-16|<tuple|1.7|5>>
-    <associate|auto-17|<tuple|1.7.1|5>>
+    <associate|auto-16|<tuple|1.7|6>>
+    <associate|auto-17|<tuple|1.7.1|6>>
     <associate|auto-18|<tuple|1.7.2|6>>
     <associate|auto-19|<tuple|1.7.3|6>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-20|<tuple|1.7.4|6>>
-    <associate|auto-21|<tuple|1.7.5|6>>
-    <associate|auto-22|<tuple|1.7.6|?>>
-    <associate|auto-23|<tuple|1.7.7|?>>
+    <associate|auto-21|<tuple|1.7.5|7>>
+    <associate|auto-22|<tuple|1.7.6|7>>
+    <associate|auto-23|<tuple|1.7.7|7>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-4|<tuple|1.3|2>>
     <associate|auto-5|<tuple|1.4|2>>
     <associate|auto-6|<tuple|1.4.1|2>>
     <associate|auto-7|<tuple|1.4.2|2>>
     <associate|auto-8|<tuple|1.4.3|3>>
     <associate|auto-9|<tuple|1.4.4|3>>
-    <associate|equation:batch normalization|<tuple|1.3|6>>
+    <associate|equation:batch normalization|<tuple|1.3|7>>
     <associate|equation:gradient chain-rule|<tuple|1.2|3>>
-    <associate|footnote-1|<tuple|1|?>>
-    <associate|footnote-1.1|<tuple|1.1|1>>
-    <associate|footnote-1.2|<tuple|1.2|3>>
-    <associate|footnote-1.3|<tuple|1.3|5>>
-    <associate|footnote-1.4|<tuple|1.4|6>>
-    <associate|footnote-1.5|<tuple|1.5|6>>
-    <associate|footnote-1.6|<tuple|1.6|6>>
-    <associate|footnr-1.1|<tuple|1.1|1>>
-    <associate|footnr-1.2|<tuple|1.2|3>>
-    <associate|footnr-1.3|<tuple|1.3|5>>
-    <associate|footnr-1.4|<tuple|1.4|6>>
-    <associate|footnr-1.5|<tuple|1.5|6>>
-    <associate|footnr-1.6|<tuple|1.6|6>>
-    <associate|section: Simple Baseline Model|<tuple|1.4.1|1>>
+    <associate|footnote-1.1|<tuple|1.1|4>>
+    <associate|footnote-1.2|<tuple|1.2|5>>
+    <associate|footnote-1.3|<tuple|1.3|6>>
+    <associate|footnote-1.4|<tuple|1.4|7>>
+    <associate|footnote-1.5|<tuple|1.5|7>>
+    <associate|footnr-1.1|<tuple|1.1|4>>
+    <associate|footnr-1.2|<tuple|1.2|5>>
+    <associate|footnr-1.3|<tuple|1.3|6>>
+    <associate|footnr-1.4|<tuple|1.4|7>>
+    <associate|footnr-1.5|<tuple|1.5|7>>
+    <associate|section: Normalization|<tuple|1.6.3|?>>
+    <associate|section: Simple Baseline Model|<tuple|1.4.1|2>>
+    <associate|section: Techniques Are Combined for Controlling the
+    Gradients|<tuple|1.6|?>>
   </collection>
 </references>
 
@@ -700,86 +702,92 @@
       Neural Network Becomes Deep> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Enlarging Model Is Efficient for Increasing Its
-      Representability (TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      1.1<space|2spc>(TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      1.2<space|2spc>Increasing Depth Is More Efficient for Enlarging Model
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      1.2<space|2spc>Draft <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>
 
-      <with|par-left|<quote|1tab>|1.2.1<space|2spc>Simple Baseline Model
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>>
+      1.3<space|2spc>Enlarging Model Is Efficient for Increasing Its
+      Representability (TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4>
 
-      <with|par-left|<quote|1tab>|1.2.2<space|2spc>Increasing Depth
+      1.4<space|2spc>Increasing Depth Is More Efficient for Enlarging Model
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
+      <no-break><pageref|auto-5>
 
-      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Increasing Width
+      <with|par-left|<quote|1tab>|1.4.1<space|2spc>Simple Baseline Model
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.2.4<space|2spc>Summary: Increasing Depth
-      v.s. Increasing Width <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.4.2<space|2spc>Increasing Depth
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      1.3<space|2spc>Increasing Depth Makes It Hard to Control the Gradients
+      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Increasing Width
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
+      <no-break><pageref|auto-8>>
 
-      1.4<space|2spc>Techniques Are Combined for Controlling the Gradients
+      <with|par-left|<quote|1tab>|1.4.4<space|2spc>Summary: Increasing Depth
+      v.s. Increasing Width <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-9>>
+
+      1.5<space|2spc>Increasing Depth Makes It Hard to Control the Gradients
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>
+      <no-break><pageref|auto-10>
 
-      <with|par-left|<quote|1tab>|1.4.1<space|2spc>Residual Structure
+      1.6<space|2spc>Techniques Are Combined for Controlling the Gradients
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-11>
 
-      <with|par-left|<quote|1tab>|1.4.2<space|2spc>Regularization
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Normalization
+      <with|par-left|<quote|1tab>|1.6.1<space|2spc>Residual Structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|1tab>|1.4.4<space|2spc>Summary: Gradients Are
-      Bounded by the Techniques Altogether
+      <with|par-left|<quote|1tab>|1.6.2<space|2spc>Regularization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
-      1.5<space|2spc>A Little History about Depth
+      <with|par-left|<quote|1tab>|1.6.3<space|2spc>Normalization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>
+      <no-break><pageref|auto-14>>
 
-      <with|par-left|<quote|1tab>|1.5.1<space|2spc>Regularization
+      <with|par-left|<quote|1tab>|1.6.4<space|2spc>Summary: Gradients Are
+      Bounded by the Techniques Altogether
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15>>
 
-      <with|par-left|<quote|1tab>|1.5.2<space|2spc>Recurrent Neural Network
+      1.7<space|2spc>A Little History about Depth
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>>
+      <no-break><pageref|auto-16>
 
-      <with|par-left|<quote|1tab>|1.5.3<space|2spc>Long Short-Term Memory
+      <with|par-left|<quote|1tab>|1.7.1<space|2spc>Regularization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-17>>
 
-      <with|par-left|<quote|1tab>|1.5.4<space|2spc>Highway
+      <with|par-left|<quote|1tab>|1.7.2<space|2spc>Recurrent Neural Network
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|1tab>|1.5.5<space|2spc>Batch Normalization
+      <with|par-left|<quote|1tab>|1.7.3<space|2spc>Long Short-Term Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|1tab>|1.5.6<space|2spc>Layer Normalization
+      <with|par-left|<quote|1tab>|1.7.4<space|2spc>Highway
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|1tab>|1.5.7<space|2spc>Residual Neural Network
+      <with|par-left|<quote|1tab>|1.7.5<space|2spc>Batch Normalization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
+
+      <with|par-left|<quote|1tab>|1.7.6<space|2spc>Layer Normalization
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-22>>
+
+      <with|par-left|<quote|1tab>|1.7.7<space|2spc>Residual Neural Network
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-23>>
     </associate>
   </collection>
 </auxiliary>

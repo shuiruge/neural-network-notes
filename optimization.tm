@@ -19,24 +19,25 @@
   which can be explained as the prediction of the model when its parameter is
   <math|\<theta\>>. If the model has good performance, we should expect that
   its prediction <math|<wide|y|^><rsub|i>> is very close to the truth or
-  target <math|y<rsub|i>>. This can be characterized by a
-  <hlink|distance|https://en.wikipedia.org/wiki/Metric_space#Definition>
-  <math|d<around*|(|\<cdummy\>,\<cdummy\>|)>>. That is,
-  <math|d<around*|(|<wide|y|^><rsub|i>,y<rsub|i>|)>> shall be small enough.
-  This is the demand for one datum, <math|<around*|(|x<rsub|i>,y<rsub|i>|)>>.
-  Since each datum is equally weighted (we suppose so), we shall characterize
-  the total performance by <math|<big|sum><rsub|<around*|(|x<rsub|i>,y<rsub|i>|)>\<in\>D>d<around*|(|f<around*|(|x<rsub|i>;\<theta\>|)>,y<rsub|i>|)>>
+  target <math|y<rsub|i>>. This can be characterized by a \Pdistance\Q
+  <math|d<around*|(|\<cdummy\>,\<cdummy\>|)>> for which
+  <math|d<around*|(|x,y|)>\<geqslant\>0> and <math|d<around*|(|x,y|)>=0> if
+  and only if <math|x=y>. That is, <math|d<around*|(|y<rsub|i>,<wide|y|^><rsub|i>|)>>
+  shall be small enough. This is the demand for one datum,
+  <math|<around*|(|x<rsub|i>,y<rsub|i>|)>>. Since each datum is equally
+  weighted (we suppose so), we shall characterize the total performance by
+  <math|<big|sum><rsub|<around*|(|x<rsub|i>,y<rsub|i>|)>\<in\>D>d<around*|(|y<rsub|i>,f<around*|(|x<rsub|i>;\<theta\>|)>|)>>
   which should be small enough.
 
   But, when the size of dataset <math|D> is extremely large, computing
-  <math|<big|sum><rsub|<around*|(|x<rsub|i>,y<rsub|i>|)>\<in\>D>d<around*|(|f<around*|(|x<rsub|i>;\<theta\>|)>,y<rsub|i>|)>>
+  <math|<big|sum><rsub|<around*|(|x<rsub|i>,y<rsub|i>|)>\<in\>D>d<around*|(|y<rsub|i>,f<around*|(|x<rsub|i>;\<theta\>|)>|)>>
   will become difficult. In practice, we sample sufficient many data from
   <math|D>, and compute the expectation of
-  <math|d<around*|(|f<around*|(|x;\<theta\>|)>,y|)>> on these samples
+  <math|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>> on these samples
   instead. Thus, a proper quantity that characterizes performance is
 
   <\equation>
-    L<rsub|D><around*|(|\<theta\>|)>\<assign\>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|d<around*|(|f<around*|(|x;\<theta\>|)>,y|)>|]>,<label|equation:loss
+    L<rsub|D><around*|(|\<theta\>|)>\<assign\>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>|]>,<label|equation:loss
     function>
   </equation>
 
@@ -57,34 +58,82 @@
   means, we can use gradient based methods to find the minimum of
   <math|L<rsub|D>> without any constraint.
 
-  <section|Going Along Gradient Direction May Not Be Optimal (TODO)>
+  <section|Different Learning-Rate for Different Layer>
 
-  <\big-figure|<with|gr-mode|<tuple|edit|text-at>|gr-frame|<tuple|scale|1cm|<tuple|0.5gw|0.5gh>>|gr-geometry|<tuple|geometry|10|10|center>|gr-grid|<tuple|cartesian|<point|0|0>|1>|gr-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-aspect|<tuple|<tuple|axes|none>|<tuple|1|none>|<tuple|10|none>>|gr-edit-grid|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-point-style|star|gr-color|dark
-  green|gr-point-size|5ln|gr-dash-style|11100|gr-auto-crop|true|<graphics||<with|magnify|0.85|color|<pattern|/nix/store/wg1k8l9fryi4aas6qsmn63m7pivi5ny2-texmacs-2.1.2/share/TeXmacs/misc/patterns/vintage/wood-xdark.png|1gu|>|dash-style|1111010|<cspline|<point|5.1|-0.45>|<point|-5.1|-0.45>|<point|0.0|0.4>>>|<with|magnify|1.1726234593406|color|<pattern|/nix/store/wg1k8l9fryi4aas6qsmn63m7pivi5ny2-texmacs-2.1.2/share/TeXmacs/misc/patterns/vintage/wood-xdark.png|1gu|>|dash-style|1111010|<cspline|<point|7.03574075604366|-0.557541153113536>|<point|-7.03574075604366|-0.557541153113536>|<point|0.0|0.615082306227072>>>|<with|magnify|0.258543620749278|color|<pattern|/nix/store/wg1k8l9fryi4aas6qsmn63m7pivi5ny2-texmacs-2.1.2/share/TeXmacs/misc/patterns/vintage/wood-xdark.png|1gu|>|dash-style|1111010|line-width|2ln|<cspline|<point|1.55126172449567|-0.252847873583093>|<point|-1.55126172449567|-0.252847873583093>|<point|0.0|0.00569574716618582>>>|<with|magnify|0.509594336979169|color|<pattern|/nix/store/wg1k8l9fryi4aas6qsmn63m7pivi5ny2-texmacs-2.1.2/share/TeXmacs/misc/patterns/vintage/wood-xdark.png|1gu|>|dash-style|1111010|line-width|2ln|<cspline|<point|3.05756602187502|-0.336531445659723>|<point|-3.05756602187502|-0.336531445659723>|<point|0.0|0.173062891319446>>>|<with|color|red|point-size|5ln|fill-color|red|point-style|star|<point|0|-0.2>>|<with|color|dark
-  green|arrow-end|\|\<gtr\>|dash-style|11100|<line|<point|-6|-0.7>|<point|-6.0|2.0>>>|<with|color|dark
-  green|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-6|-0.7>|<point|-5.6|2.0>>>|<with|color|dark
-  green|arrow-end|\|\<gtr\>|dash-style|11100|<line|<point|-6|-0.7>|<point|-5.6|-0.673234555704961>>>|<with|color|dark
-  green|point-size|5ln|fill-color|dark green|point-style|star|<point|-6|-0.7>>|<with|color|dark
-  green|dash-style|11100|<line|<point|-6|2>|<point|-5.6|2.0>>>|<with|color|dark
-  green|dash-style|11100|<line|<point|-5.6|-0.689409>|<point|-5.6|2.0>>>>>>
-    <label|figure: gradient direction is not optimal>The black dash curves
-    represents the contour map of a function
-    <math|f:\<bbb-R\><rsup|2>\<rightarrow\>\<bbb-R\>>. The red star is the
-    top or <math|argmin f>. The green star is where you are. The green lines
-    represent the negative direction of gradient based on the contour map and
-    its decomposition along horizontal and vertical directions.
-  </big-figure>
+  For simplicity, consider a feed-forward neural network with a single hidden
+  layer. The <math|M>-dimensional model output is
 
-  The critical problem of gradient based optimization is how to reach the
-  optimum with the minimum number of iteration steps. But, going along the
-  negative direction of the gradient of loss function may not be optimal.
-  Figure <reference|figure: gradient direction is not optimal> shows a
-  typical example where the negative direction of gradient (the solid green
-  arrow) does not point to the optimum (the red star), but a direction which
-  is almost irrelevant to the optimum.
+  <\equation*>
+    y<rsup|\<alpha\>>\<assign\>f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>=<big|sum><rsub|\<beta\>=1><rsup|H>U<rsup|\<alpha\>><rsub|\<beta\>>
+    z<rsup|\<beta\>>+c<rsup|\<alpha\>>
+  </equation*>
 
-  To deal with this situation, we have to increase the horizontal component
-  of the green vector, and decrease the vertical one.
+  with the <math|H>-dimensional output of hidden layer
+
+  <\equation*>
+    z<rsup|\<beta\>>\<assign\>\<sigma\><around*|(|<big|sum><rsub|\<gamma\>=1><rsup|N>W<rsup|\<beta\>><rsub|\<gamma\>>
+    x<rsup|\<gamma\>>+b<rsup|\<beta\>>|)>,
+  </equation*>
+
+  where <math|x\<in\>\<bbb-R\><rsup|N>> is model input,
+  <math|\<theta\>\<assign\><around*|(|U,W,b,c|)>> is the collection of model
+  parameters, and <math|\<sigma\>> is the activation function. Thus, we have
+  gradient
+
+  <\equation*>
+    <frac|\<partial\>L<rsub|D>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>=<with|color|blue|<frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<alpha\>>>><frac|\<partial\>y<rsup|\<alpha\>>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>,
+  </equation*>
+
+  and
+
+  <\equation*>
+    <frac|\<partial\>L<rsub|D>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>=<with|color|blue|<big|sum><rsub|\<gamma\>=1><rsup|M><frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<gamma\>>><frac|\<partial\>y<rsup|\<gamma\>>|\<partial\>z<rsup|\<alpha\>>>><frac|\<partial\>z<rsup|\<alpha\>>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>.
+  </equation*>
+
+  \;
+
+  Now, we try to estimate the relation of orders between
+  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>U|\<\|\|\>>> and
+  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>W|\<\|\|\>>>.
+  Generally, the output of each layer is properly normalized, which is
+  ensured by initialization and normalization (we will discuss normalization
+  in section <reference|section: Normalization>). Thus,
+  <math|\<partial\>y<rsup|\<alpha\>>/\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>=z<rsup|\<beta\>>>
+  and <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|<big|sum><rsub|\<gamma\>>W<rsup|\<alpha\>><rsub|\<gamma\>>
+  x<rsup|\<gamma\>>+b<rsup|\<alpha\>>|)> x<rsup|\<beta\>>> share the same
+  order which is <math|<with|font|cal|O><around*|(|1|)>>. (For example, when
+  <math|\<sigma\>> represent ReLU activation function,
+  <math|\<sigma\><rprime|'><around*|(|\<cdummy\>|)>\<in\><around*|{|0,1|}>>
+  is roughly estimated as <math|1/2>, thus
+  <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.)
+  So, we have a rough estimation<math|>
+
+  <\align>
+    <tformat|<table|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>U>|\<\|\|\>>\<sim\>>|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>;>>|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>W>|\<\|\|\>>\<sim\>>|<cell|<sqrt|M>
+    <around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>
+    <around*|\<\|\|\>|<frac|\<partial\>y|\<partial\>z>|\<\|\|\>>>>|<row|<cell|=>|<cell|<sqrt|M>
+    <around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>
+    <around*|\<\|\|\>|U|\<\|\|\>>,>>>>
+  </align>
+
+  where, in the last line, we used the relation
+  <math|\<partial\>y/\<partial\>z=U>. The <math|<sqrt|M>> factor is estimated
+  by central limit theorem where we roughly regard
+  <math|\<partial\>L<rsub|D>/\<partial\>W> and <math|U> as i.d.d. random
+  variables. Generally, <math|U> is initialized with scale
+  <math|<sqrt|6/<around*|(|M+H|)>>>.<\footnote>
+    This is the Glorot initialization. We will not discuss the initialization
+    techniques, but refer the reader to the paper by Xavier Glorot and Yoshua
+    Bengio: <hlink|<with|font-shape|italic|Understanding the difficulty of
+    training deep feedforward neural networks>|https://proceedings.mlr.press/v9/glorot10a.html>.
+  </footnote> Thus, <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<sim\><sqrt|6
+  M/<around*|(|M+H|)>>=<sqrt|6/<around*|(|1+H/M|)>>>. When <math|H\<gg\>M>,
+  indicating that the hidden dimension is much larger than the output
+  dimension, which is usually the situation we encounter, we have
+  <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<ll\>1>, leading to
+  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>U|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>W|\<\|\|\>>>.
+
+  \;
 
   \;
 
@@ -307,22 +356,28 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.6.2|3>>
-    <associate|auto-11|<tuple|1.6.3|3>>
-    <associate|auto-12|<tuple|1.6.4|3>>
+    <associate|auto-10|<tuple|1.6.3|3>>
+    <associate|auto-11|<tuple|1.6.4|3>>
+    <associate|auto-12|<tuple|4.4|3>>
+    <associate|auto-13|<tuple|1.7.4|?>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.1|1>>
-    <associate|auto-5|<tuple|1.3|2>>
-    <associate|auto-6|<tuple|1.4|2>>
-    <associate|auto-7|<tuple|1.5|2>>
-    <associate|auto-8|<tuple|1.6|2>>
-    <associate|auto-9|<tuple|1.6.1|2>>
+    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-5|<tuple|1.4|2>>
+    <associate|auto-6|<tuple|1.5|2>>
+    <associate|auto-7|<tuple|1.6|2>>
+    <associate|auto-8|<tuple|1.6.1|2>>
+    <associate|auto-9|<tuple|1.6.2|2>>
     <associate|equation:loss function|<tuple|1.1|1>>
     <associate|figure: gradient direction is not optimal|<tuple|1.1|1>>
+    <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|2>>
+    <associate|footnote-1.2|<tuple|1.2|?>>
+    <associate|footnr-0|<tuple|1.1|?>>
+    <associate|footnr-1|<tuple|1|?>>
     <associate|footnr-1.1|<tuple|1.1|2>>
-    <associate|section: loss function|<tuple|1.1|?>>
+    <associate|footnr-1.2|<tuple|1.2|?>>
+    <associate|section: loss function|<tuple|1.1|1>>
   </collection>
 </references>
 
