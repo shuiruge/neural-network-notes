@@ -324,7 +324,7 @@
   Gradients><label|section: Techniques Are Combined for Controlling the
   Gradients>
 
-  <subsection|Residual Structure>
+  <subsection|Residual Structure><label|section: Residual Structure>
 
   As the chain-rule (<reference|equation:gradient chain-rule>) indicated, the
   problem of bounding the gradients by parameters, such as
@@ -688,10 +688,11 @@
     <associate|footnr-1.3|<tuple|1.3|6>>
     <associate|footnr-1.4|<tuple|1.4|7>>
     <associate|footnr-1.5|<tuple|1.5|7>>
-    <associate|section: Normalization|<tuple|1.6.3|?>>
+    <associate|section: Normalization|<tuple|1.6.3|5>>
+    <associate|section: Residual Structure|<tuple|1.6.1|?>>
     <associate|section: Simple Baseline Model|<tuple|1.4.1|2>>
     <associate|section: Techniques Are Combined for Controlling the
-    Gradients|<tuple|1.6|?>>
+    Gradients|<tuple|1.6|4>>
   </collection>
 </references>
 

@@ -102,11 +102,12 @@
   and <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|<big|sum><rsub|\<gamma\>>W<rsup|\<alpha\>><rsub|\<gamma\>>
   x<rsup|\<gamma\>>+b<rsup|\<alpha\>>|)> x<rsup|\<beta\>>> share the same
   order which is <math|<with|font|cal|O><around*|(|1|)>>. (For example, when
-  <math|\<sigma\>> represent ReLU activation function,
+  <math|\<sigma\>> represents ReLU activation function,
   <math|\<sigma\><rprime|'><around*|(|\<cdummy\>|)>\<in\><around*|{|0,1|}>>
   is roughly estimated as <math|1/2>, thus
-  <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.)
-  So, we have a rough estimation<math|>
+  <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|\<cdots\>|)>
+  x<rsup|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.) So, we have a rough
+  estimation<math|>
 
   <\align>
     <tformat|<table|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>U>|\<\|\|\>>\<sim\>>|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>;>>|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>W>|\<\|\|\>>\<sim\>>|<cell|<sqrt|M>
@@ -119,7 +120,7 @@
   where, in the last line, we used the relation
   <math|\<partial\>y/\<partial\>z=U>. The <math|<sqrt|M>> factor is estimated
   by central limit theorem where we roughly regard
-  <math|\<partial\>L<rsub|D>/\<partial\>W> and <math|U> as i.d.d. random
+  <math|\<partial\>L<rsub|D>/\<partial\>W> and <math|U> as i.i.d. random
   variables. Generally, <math|U> is initialized with scale
   <math|<sqrt|6/<around*|(|M+H|)>>>.<\footnote>
     This is the Glorot initialization. We will not discuss the initialization
@@ -356,43 +357,29 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.6.3|3>>
-    <associate|auto-11|<tuple|1.6.4|3>>
-    <associate|auto-12|<tuple|4.4|3>>
-    <associate|auto-13|<tuple|1.7.4|?>>
+    <associate|auto-10|<tuple|1.6.3|4>>
+    <associate|auto-11|<tuple|1.6.4|4>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-4|<tuple|1.3|2>>
     <associate|auto-5|<tuple|1.4|2>>
-    <associate|auto-6|<tuple|1.5|2>>
-    <associate|auto-7|<tuple|1.6|2>>
-    <associate|auto-8|<tuple|1.6.1|2>>
-    <associate|auto-9|<tuple|1.6.2|2>>
+    <associate|auto-6|<tuple|1.5|3>>
+    <associate|auto-7|<tuple|1.6|3>>
+    <associate|auto-8|<tuple|1.6.1|3>>
+    <associate|auto-9|<tuple|1.6.2|3>>
     <associate|equation:loss function|<tuple|1.1|1>>
-    <associate|figure: gradient direction is not optimal|<tuple|1.1|1>>
-    <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|2>>
-    <associate|footnote-1.2|<tuple|1.2|?>>
-    <associate|footnr-0|<tuple|1.1|?>>
-    <associate|footnr-1|<tuple|1|?>>
+    <associate|footnote-1.2|<tuple|1.2|3>>
+    <associate|footnote-1.3|<tuple|1.3|?>>
     <associate|footnr-1.1|<tuple|1.1|2>>
-    <associate|footnr-1.2|<tuple|1.2|?>>
+    <associate|footnr-1.2|<tuple|1.2|3>>
+    <associate|footnr-1.3|<tuple|1.3|?>>
     <associate|section: loss function|<tuple|1.1|1>>
   </collection>
 </references>
 
 <\auxiliary>
   <\collection>
-    <\associate|figure>
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
-        The black dash curves represents the contour map of a function
-        <with|mode|<quote|math>|f:\<bbb-R\><rsup|2>\<rightarrow\>\<bbb-R\>>.
-        The red star is the top or <with|mode|<quote|math>|argmin f>. The
-        green star is where you are. The green lines represent the negative
-        direction of gradient based on the contour map and its decomposition
-        along horizontal and vertical directions.
-      </surround>|<pageref|auto-4>>
-    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Gradient
       Based Optimization> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -402,41 +389,41 @@
       Prediction and Truth <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      1.2<space|2spc>Going Along Gradient Direction May Not Be Optimal (TODO)
+      1.2<space|2spc>Different Learning-Rate for Different Layer
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>
 
       1.3<space|2spc>Validation Helps Avoid the Instability of Optimization
       (TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>
+      <no-break><pageref|auto-4>
 
       1.4<space|2spc>Moment Helps Avoid Stochastic Disturbance (TODO)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>
+      <no-break><pageref|auto-5>
 
       1.5<space|2spc>A Little History about Optimizer (TODO)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>
+      <no-break><pageref|auto-6>
 
       1.6<space|2spc>Gradient Is Computed by Vector-Jacobian Product
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
+      <no-break><pageref|auto-7>
 
       <with|par-left|<quote|1tab>|1.6.1<space|2spc>From Feed-Forward Neural
       Network to General Composition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|1.6.2<space|2spc>Vector-Jacobian Product
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-9>>
 
       <with|par-left|<quote|1tab>|1.6.3<space|2spc>Forward Propagation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|1tab>|1.6.4<space|2spc>Backward Propagation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-11>>
     </associate>
   </collection>
 </auxiliary>
