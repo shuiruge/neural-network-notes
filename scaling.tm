@@ -17,23 +17,21 @@
   Thus, <math|P<rsub|<text|Internet>>> is really a data generator; and we can
   generate infinite data from <math|P<rsub|<text|Internet>>>, theoretically.
 
-  <subsection|Model Is Functional Form (Essential?)>
+  <subsection|Model Is Functional Form>
 
-  What a model represents is the functional form. When we define a model,
-  such as a neural network, we have to figure out how the model varies when
-  more parameters are added. Ideally, we can think of a model defined with
-  infinitly many parameters, with all but finite number of them vanishing.
-  For example, we define a model <math|f<around*|(|x;\<theta\>|)>> to be
-  polynomial with <math|\<theta\>> the collection of coefficients. Thus,
-  <math|f<around*|(|x;\<theta\>|)>=<big|sum><rsub|k=1><rsup|+\<infty\>>\<theta\><rsub|k>
+  Usually, we deal with models with finite parameters. But, ideally, we can
+  think of a model defined with infinitly many parameters, with all but
+  finite number of them vanishing. For example, we define a model
+  <math|f<around*|(|x;\<theta\>|)>> to be polynomial with <math|\<theta\>>
+  the collection of coefficients. Thus, <math|f<around*|(|x;\<theta\>|)>\<assign\><big|sum><rsub|k=1><rsup|+\<infty\>>\<theta\><rsub|k>
   x<rsup|k>> where only finite number of <math|\<theta\><rsub|k>> are not
-  zero. What we have defined is the functional form of <math|f>.
+  zero. What we have defined is the functional form of the model <math|f>.
 
   <subsection|Complexity of Dataset Characterized by Model>
 
   Let us consider a simple one-dimensional regression task. Given by a
-  dataset distribution <math|P> and the form of model <math|f>, the loss
-  function is
+  dataset distribution <math|P> and the functional form of model <math|f>,
+  the loss function is
 
   <\equation*>
     L<around*|(|\<theta\>|)>=<big|int>\<mathd\>x\<mathd\>y
@@ -43,7 +41,9 @@
   Without losing generality, suppose that <math|f<around*|(|x;0|)>=0> for
   <math|\<forall\>x\<in\>\<bbb-R\>>. Thus,
   <math|L<rsub|0>\<assign\>L<around*|(|0|)>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>P><around*|[|y<rsup|2>|]>>.
-  By optimization, we have <math|\<theta\><rsub|\<star\>>\<assign\>argmin<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<around*|(|\<theta\>|)>>
+  Let <math|n> the number of parameters of <math|f>, thus
+  <math|\<theta\>\<in\>\<bbb-R\><rsup|n>>. By optimization, we have
+  <math|\<theta\><rsub|\<star\>>\<assign\>argmin<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<around*|(|\<theta\>|)>>
   and <math|L<rsub|\<star\>>\<assign\>L<around*|(|\<theta\><rsub|\<star\>>|)>>.
 
   Given the model <math|f>, the relation between <math|n> and
@@ -75,8 +75,10 @@
   <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\<rightarrow\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
   <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>>, where
   <math|r\<in\><around*|(|0,+\<infty\>|)>> to be determined and
-  <math|<wide|f|~>> a new model with <math|n> parameters. In this way, the
-  new model has <math|2n> parameters. For this new model, the loss becomes
+  <math|<wide|f|~><rsup|<around*|(|n|)>>> a new model with <math|n>
+  parameters, with, again <math|<wide|f|~><rsup|<around*|(|n|)>><around*|(|*x;0|)>=0>
+  for all <math|x>. In this way, the new model has <math|2n> parameters. For
+  this new model, the loss becomes
 
   <\align>
     <tformat|<table|<row|<cell|L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\>>|<cell|<big|int>\<mathd\>x\<mathd\>y
@@ -119,7 +121,7 @@
 
     <\align>
       <tformat|<table|<row|<cell|>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~>
-      <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>>>|<row|<cell|<around*|{|<wide|p|~><rsup|<around*|(|n|)>>\<assign\>\<cdots\>|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y<rprime|'>
+      <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>>>|<row|<cell|<around*|{|<wide|p|~><rsup|<around*|(|n|)>>\<assign\>\<cdots\>|}>=>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~>
       <around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
       \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
       <wide|y|~>-y+f<around*|(|x;\<theta\>|)>|)>|]>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x
@@ -135,7 +137,7 @@
   \;
 
   If we freeze the <math|\<theta\>> to be <math|\<theta\><rsub|\<star\>>> and
-  only adjust the <math|\<varphi\>> while optimizing the model, then
+  only adjust the <math|<wide|\<theta\>|~>> while optimizing the model, then
   <math|<wide|p|~><rsup|<around*|(|n|)>>> depends only on <math|x> and
   <math|<wide|y|~>>, and <math|L<rsup|<around*|(|2n|)>>> depends only on
   <math|<wide|\<theta\>|~>>. Since <math|L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,0|)>=L<rsub|\<star\>><rsup|<around*|(|n|)>>>,
@@ -151,7 +153,7 @@
 
   Comparing with the expression of <math|L<rsup|<around*|(|n|)>>>,
   <math|<wide|L|~><rsup|<around*|(|n|)>>> is formally the same as <math|L>,
-  even with <math|<wide|L|~><rsup|<around*|(|n|)>><around*|(|0|)>=L<rsup|<around*|(|n|)>><around*|(|0|)>=L<rsub|0>>.
+  even with <math|<wide|L|~><rsup|<around*|(|n|)>><around*|(|0|)>=L<rsup|><around*|(|0|)>=L<rsub|0>>.
   The <math|<wide|f|~>> is equivalent to <math|f> since their spaces of
   parameters are both <math|n>-dimensional. Thus, the only difference is that
   <math|p> is replaced by <math|<wide|p|~><rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\><rsub|\<star\>>|)>>.
@@ -252,25 +254,28 @@
 
   Generally, we have
 
-  <\equation*>
+  <\equation>
     L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>=L<rsup|<around*|(|n|)>><rsub|\<star\>>
     <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>\<cdots\><frac|<wide|L|~><rsup|<around*|(|2<rsup|<around*|(|m-1|)>>
-    n|)>><rsub|\<star\>>|L<rsub|0>>.
-  </equation*>
+    n|)>><rsub|\<star\>>|L<rsub|0>>.<label|equation:L star regression>
+  </equation>
 
   <subsection|Power-Law>
 
   We wonder when the power-law relation between
   <math|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> and <math|2<rsup|m>
-  n> may arise. We have known that a function
-  <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>> is power-law if
-  and only if there is a function <math|k:\<bbb-R\><rsub|+>\<rightarrow\>\<bbb-R\><rsub|+>>
-  such that, for <math|\<forall\>s,x>, <math|f<around*|(|s
-  x|)>=k<around*|(|s|)> f<around*|(|x|)>>. Applying to our situation, we find
-  that, given <math|n>, the condition for power-law to arise is that
+  n> may arise. It is known that a function
+  <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>> is power-law,
+  which means there is a <math|\<gamma\>\<in\>\<bbb-R\>> such that
+  <math|f<around*|(|x|)>=x<rsup|\<gamma\>>>, if and only if there is a
+  function <math|k:\<bbb-R\><rsub|+>\<rightarrow\>\<bbb-R\><rsub|+>> such
+  that, for <math|\<forall\>s,x>, <math|f<around*|(|s x|)>=k<around*|(|s|)>
+  f<around*|(|x|)>>. Applying to our situation, we find that, given <math|n>,
+  the condition for power-law to arise is that
   <math|L<rsup|<around*|(|2<rsup|<around*|(|m+1|)>>
   n|)>><rsub|\<star\>>/L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> is
-  independent of <math|m>. From what we have derived,
+  independent of <math|m>. From equation (<reference|equation:L star
+  regression>), we have
 
   <\equation*>
     <frac|L<rsup|<around*|(|2<rsup|<around*|(|m+1|)>>
@@ -279,7 +284,7 @@
     n|)>><rsub|\<star\>>|L<rsub|0>>,
   </equation*>
 
-  this indicates that <math|><math|<wide|L|~><rsup|<around*|(|2<rsup|m>
+  indicating that <math|><math|<wide|L|~><rsup|<around*|(|2<rsup|m>
   n|)>><rsub|\<star\>>> shall be independent of <math|m>. Recall that
   <math|<wide|L|~><rsup|<around*|(|2<rsup|m>
   n|)>><around*|(|<wide|\<theta\>|~>|)>>, as the loss of residual error of
@@ -310,6 +315,7 @@
     <associate|auto-6|<tuple|1.1.4|?>>
     <associate|auto-7|<tuple|1.1.5|?>>
     <associate|auto-8|<tuple|1.1.6|?>>
+    <associate|equation:L star regression|<tuple|1.1|?>>
     <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|?>>
