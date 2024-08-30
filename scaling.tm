@@ -17,7 +17,7 @@
   Thus, <math|P<rsub|<text|Internet>>> is really a data generator; and we can
   generate infinite data from <math|P<rsub|<text|Internet>>>, theoretically.
 
-  <subsection|Model Is Functional Form>
+  <subsection|Model Is Functional Form (Essential?)>
 
   What a model represents is the functional form. When we define a model,
   such as a neural network, we have to figure out how the model varies when
@@ -55,7 +55,7 @@
   for reaching a fixed <math|L<rsub|\<star\>>>, or obtaining a smaller
   <math|L<rsub|\<star\>>> when <math|n> is fixed.
 
-  <subsection|Example>
+  <subsection|An Extending-Rescaling Process of Loss Function>
 
   We are to exame how the <math|L<rsub|\<star\>>> changes with <math|n>
   increasing. To do so, we have to employ proper notations. A model with
@@ -72,7 +72,7 @@
 
   With these new notations, we enlarge the space of parameters by introducing
   a new model <math|f<rsup|<around*|(|2n|)>>> and replacing
-  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\<rightarrow\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r
+  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\<rightarrow\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
   <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>>, where
   <math|r\<in\><around*|(|0,+\<infty\>|)>> to be determined and
   <math|<wide|f|~>> a new model with <math|n> parameters. In this way, the
@@ -80,51 +80,29 @@
 
   <\align>
     <tformat|<table|<row|<cell|L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\>>|<cell|<big|int>\<mathd\>x\<mathd\>y
-    \ p<around*|(|x,y|)><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r
+    \ p<around*|(|x,y|)><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
     <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>>|<row|<cell|<around*|{|<around*|[|\<cdots\>|]>=1|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y
-    \ p<around*|(|x,y|)><around*|[|r<big|int>\<mathd\><wide|y|~>
-    \<delta\><around*|(|r <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r
-    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~><around*|[|r<big|int>\<mathd\>y
-    \ p<around*|(|x,y|)> \<delta\><around*|(|r
-    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|r
-    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-r
+    \ p<around*|(|x,y|)><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\><wide|y|~>
+    \<delta\><around*|(|r <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
+    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
+    \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
+    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|r<rsup|<around*|(|n|)>>
+    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-r<rsup|<around*|(|n|)>>
     <wide|y|~>|)><rsup|2>.>>>>
   </align>
 
-  Define
+  By defining
 
   <\equation*>
-    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<big|int>\<mathd\>y
-    \ p<around*|(|x,y|)> \<delta\><around*|(|r
-    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>.
+    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
+    \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
+    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>,
   </equation*>
 
-  Thus, we have <\footnote>
-    We have, inversely from the conclusion
-
-    <\align>
-      <tformat|<table|<row|<cell|>|<cell|<big|int>\<mathd\>x\<mathd\>y<rprime|'>
-      p<rprime|'><rsub|D><around*|(|x,y<rprime|'>|)><around*|(|r
-      f<rprime|'><around*|(|x;\<theta\><rprime|'>|)>-r
-      y<rprime|'>|)><rsup|2>>>|<row|<cell|<around*|{|p<rprime|'><rsub|D>\<assign\>\<cdots\>|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y<rprime|'>
-      <around*|[|r<big|int>\<mathd\>y p<rsub|D><around*|(|x,y|)>
-      \<delta\><around*|(|r y<rprime|'>-y+f<around*|(|x;\<theta\>|)>|)>|]>
-      <around*|(|r f<rprime|'><around*|(|x;\<theta\><rprime|'>|)>-r
-      y<rprime|'>|)><rsup|2>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x\<mathd\>y
-      p<rsub|D><around*|(|x,y|)> <around*|[|r<big|int>\<mathd\>y<rprime|'>
-      \<delta\><around*|(|r y<rprime|'>-y+f<around*|(|x;\<theta\>|)>|)>|]>
-      <around*|(|r f<rprime|'><around*|(|x;\<theta\><rprime|'>|)>-r
-      y<rprime|'>|)><rsup|2>>>|<row|<cell|<around*|{|<text|integrate over
-      <math|y<rprime|'>>>|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y
-      p<rsub|D><around*|(|x,y|)> <around*|(|f<around*|(|x;\<theta\>|)>+r
-      f<rprime|'><around*|(|x;\<theta\><rprime|'>|)>-y|)><rsup|2>,>>>>
-    </align>
-
-    which is exactly the condition.
-  </footnote>
+  we have
 
   <\equation*>
-    L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|2>
+    L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|<around*|(|n|)>><rsup|2>
     <big|int>\<mathd\>x \<mathd\><wide|y|~>
     <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>
     <around*|(|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>.
@@ -142,10 +120,12 @@
     <\align>
       <tformat|<table|<row|<cell|>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~>
       <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>>>|<row|<cell|<around*|{|<wide|p|~><rsup|<around*|(|n|)>>\<assign\>\<cdots\>|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y<rprime|'>
-      <around*|[|r<big|int>\<mathd\>y \ p<around*|(|x,y|)>
-      \<delta\><around*|(|r <wide|y|~>-y+f<around*|(|x;\<theta\>|)>|)>|]>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x
-      \<mathd\>y p<around*|(|x,y|)> <around*|[|r<big|int>\<mathd\><wide|y|~>
-      \<delta\><around*|(|r <wide|y|~>-y+f<around*|(|x;\<theta\>|)>|)>|]>>>|<row|<cell|<around*|{|<text|integrate
+      <around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
+      \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
+      <wide|y|~>-y+f<around*|(|x;\<theta\>|)>|)>|]>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x
+      \<mathd\>y p<around*|(|x,y|)> <around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\><wide|y|~>
+      \<delta\><around*|(|r<rsup|<around*|(|n|)>>
+      <wide|y|~>-y+f<around*|(|x;\<theta\>|)>|)>|]>>>|<row|<cell|<around*|{|<text|integrate
       over <math|<wide|y|~>>>|}>=>|<cell|<big|int>\<mathd\>x \<mathd\>y
       p<around*|(|x,y|)>>>|<row|<cell|<around*|{|<text|<math|p<rsub|D>><math|
       is a distribution>>|}>=>|<cell|1.>>>>
@@ -160,7 +140,7 @@
   <math|<wide|y|~>>, and <math|L<rsup|<around*|(|2n|)>>> depends only on
   <math|<wide|\<theta\>|~>>. Since <math|L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,0|)>=L<rsub|\<star\>><rsup|<around*|(|n|)>>>,
   for formally going back to the original, let
-  <math|r=<sqrt|L<rsub|\<star\>><rsup|<around*|(|n|)>>/L<around*|(|0|)>>>,
+  <math|r<rsup|<around*|(|n|)>>=<sqrt|L<rsub|\<star\>><rsup|<around*|(|n|)>>/L<around*|(|0|)>>>,
   thus
 
   <\equation*>
@@ -176,7 +156,7 @@
   parameters are both <math|n>-dimensional. Thus, the only difference is that
   <math|p> is replaced by <math|<wide|p|~><rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\><rsub|\<star\>>|)>>.
 
-  The minimal value of <math|<wide|L|~><rsup|<around*|(|n|)>>> depends on the
+  The minimum of <math|<wide|L|~><rsup|<around*|(|n|)>>> depends on the
   complexity of <math|<wide|P|~><rsup|<around*|(|n|)>><around*|(|\<theta\><rsub|\<star\>>|)>>,
   which characterizes the distribution of residual errors of
   <math|f<rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\><rsub|\<star\>>|)>>.
@@ -189,6 +169,10 @@
     <wide|L|~><rsub|\<star\>><rsup|<around*|(|n|)>>=L<rsup|<around*|(|n|)>><rsub|\<star\>>
     <frac|<wide|L|~><rsub|\<star\>><rsup|<around*|(|n|)>>|L<rsub|0>>.
   </equation*>
+
+  In the penult equality, we insert the definition of
+  <math|<wide|L|~><rsub|\<star\>><rsup|<around*|(|n|)>>>; and lastly, the
+  expression is re-arranged.
 
   Even though <math|L<rsup|<around*|(|2n|)>><rsub|\<star\>>> or
   <math|L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~><rsub|\<star\>>|)>>
@@ -205,7 +189,8 @@
 
   Now, we consider <math|4n>-dimensional space of parameters. To do this, we
   consider <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>>
-  as the baseline model, <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>\<assign\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+<wide|f|~><around*|(|x;<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>>
+  as the baseline model, <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>\<assign\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+r<rsup|<around*|(|n|)>>
+  <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>>
   and <math|\<theta\>\<assign\><around*|(|\<theta\><rsup|<around*|(|n|)>>,<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>\<in\>\<bbb-R\><rsup|2n>>.
   Thus, from what we have derived, <math|L<rsup|<around*|(|2n|)>><rsub|\<star\>>=L<rsup|<around*|(|n|)>><rsub|\<star\>>
   <around*|(|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>/L<rsub|0>|)>>.
@@ -216,13 +201,13 @@
   <wide|f|~><rsup|<around*|(|2n|)>><around*|(|x;<wide|\<theta\>|~>|)>> where
   <math|r\<in\><around*|(|0,+\<infty\>|)>> to be determined. Thus the loss
   <math|L<rsup|<around*|(|4n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
-  \ p<around*|(|x,y|)><around*|(|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>+r
+  \ p<around*|(|x,y|)><around*|(|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|2n|)>>
   <wide|f|~><rsup|<around*|(|2n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>.
   Following the same steps, we arrive at
 
   <\equation*>
-    <wide|p|~><rsup|<around*|(|2n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<big|int>\<mathd\>y
-    \ p<around*|(|x,y|)> \<delta\><around*|(|r
+    <wide|p|~><rsup|<around*|(|2n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<rsup|<around*|(|2n|)>><big|int>\<mathd\>y
+    \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|2n|)>>
     <wide|y|~>-y+f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>|)>
   </equation*>
 
@@ -230,7 +215,7 @@
   <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>>, and
 
   <\equation*>
-    L<rsup|<around*|(|4n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|2>
+    L<rsup|<around*|(|4n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|<around*|(|2n|)>><rsup|2>
     <big|int>\<mathd\>x \<mathd\><wide|y|~>
     <wide|p|~><rsup|<around*|(|2n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>
     <around*|(|<wide|f|~><rsup|<around*|(|2n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>.
@@ -241,11 +226,14 @@
   \;
 
   <\equation*>
-    <wide|L|~><rsup|<around*|(|2n|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><frac|L<rsub|0>|L<rsup|<around*|(|2n|)>><rsub|\<star\>>>L<rsup|<around*|(|4n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~>|)>
+    <wide|L|~><rsup|<around*|(|2n|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><frac|L<rsub|0>|L<rsup|<around*|(|2n|)>><rsub|\<star\>>>L<rsup|<around*|(|4n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~>|)>=<big|int>\<mathd\>x
+    \<mathd\><wide|y|~> <wide|p|~><rsup|<around*|(|2n|)>><around*|(|x,<wide|y|~>;\<theta\><rsub|\<star\>>|)>
+    <around*|(|<wide|f|~><rsup|<around*|(|2n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>
   </equation*>
 
-  with <math|r=<sqrt|L<rsup|<around*|(|2n|)>><rsub|\<star\>>/L<rsub|0>>> and
-  <math|<wide|L|~><rsup|<around*|(|2n|)>><around*|(|0|)>=L<rsub|0>>, we have
+  with <math|r<rsup|<around*|(|2n|)>>=<sqrt|L<rsup|<around*|(|2n|)>><rsub|\<star\>>/L<rsub|0>>>
+  and <math|<wide|L|~><rsup|<around*|(|2n|)>><around*|(|0|)>=L<rsub|0>>, we
+  have
 
   <\equation*>
     L<rsup|<around*|(|4n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~><rsub|\<star\>>|)>=<frac|L<rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>><wide|L|~><rsup|<around*|(|2n|)>><around*|(|<wide|\<theta\>|~><rsub|\<star\>>|)>=<frac|L<rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>
@@ -269,6 +257,41 @@
     <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>\<cdots\><frac|<wide|L|~><rsup|<around*|(|2<rsup|<around*|(|m-1|)>>
     n|)>><rsub|\<star\>>|L<rsub|0>>.
   </equation*>
+
+  <subsection|Power-Law>
+
+  We wonder when the power-law relation between
+  <math|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> and <math|2<rsup|m>
+  n> may arise. We have known that a function
+  <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>> is power-law if
+  and only if there is a function <math|k:\<bbb-R\><rsub|+>\<rightarrow\>\<bbb-R\><rsub|+>>
+  such that, for <math|\<forall\>s,x>, <math|f<around*|(|s
+  x|)>=k<around*|(|s|)> f<around*|(|x|)>>. Applying to our situation, we find
+  that, given <math|n>, the condition for power-law to arise is that
+  <math|L<rsup|<around*|(|2<rsup|<around*|(|m+1|)>>
+  n|)>><rsub|\<star\>>/L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> is
+  independent of <math|m>. From what we have derived,
+
+  <\equation*>
+    <frac|L<rsup|<around*|(|2<rsup|<around*|(|m+1|)>>
+    n|)>><rsub|\<star\>>|L<rsup|<around*|(|2<rsup|m>
+    n|)>><rsub|\<star\>>>=<frac|<wide|L|~><rsup|<around*|(|2<rsup|m>
+    n|)>><rsub|\<star\>>|L<rsub|0>>,
+  </equation*>
+
+  this indicates that <math|><math|<wide|L|~><rsup|<around*|(|2<rsup|m>
+  n|)>><rsub|\<star\>>> shall be independent of <math|m>. Recall that
+  <math|<wide|L|~><rsup|<around*|(|2<rsup|m>
+  n|)>><around*|(|<wide|\<theta\>|~>|)>>, as the loss of residual error of
+  <math|f<rsup|<around*|(|2<rsup|m> n|)>><around*|(|x;\<theta\>|)>>, has a
+  \Pstandard\Q format. Thus, its minimum,
+  <math|<wide|L|~><rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>>, is
+  completely determined by the complexity of
+  <math|<wide|p|~><rsup|<around*|(|2<rsup|m>
+  n|)>><around*|(|x,<wide|y|~>;\<theta\><rsub|\<star\>>|)>> where
+  <math|\<theta\><rsub|\<star\>>=argmin L<rsup|<around*|(|2<rsup|m> n|)>>>,
+  the best-fit of <math|f<rsup|<around*|(|2<rsup|m>
+  n|)>><around*|(|x;\<theta\>|)>>.
 </body>
 
 <\initial>
