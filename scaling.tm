@@ -3,11 +3,14 @@
 <style|book>
 
 <\body>
-  <chapter|Scaling and Power Law>
+  <chapter|Scaling and Power-Law>
 
-  <section|Power Law>
+  <section|Complexity>
 
-  <subsection|Distribution Is Data Generator>
+  In this section, we introduce the complexity of a dataset examed by a
+  model. It is a preparation for the discussion of power-law.
+
+  <subsection|Distribution Is a Data Generator>
 
   Ideally, a dataset is described by a distribution. This distribution is in
   fact a data generator. For example, Internet is a generator of texture
@@ -17,49 +20,62 @@
   Thus, <math|P<rsub|<text|Internet>>> is really a data generator; and we can
   generate infinite data from <math|P<rsub|<text|Internet>>>, theoretically.
 
-  <subsection|Model Is Functional Form>
+  <subsection|Model Is a Functional Form>
 
   Usually, we deal with models with finite parameters. But, ideally, we can
-  think of a model defined with infinitly many parameters, with all but
-  finite number of them vanishing. For example, we define a model
+  think of a model defined with infinity many parameters, with all but finite
+  number of them vanishing. For example, we define a model
   <math|f<around*|(|x;\<theta\>|)>> to be polynomial with <math|\<theta\>>
   the collection of coefficients. Thus, <math|f<around*|(|x;\<theta\>|)>\<assign\><big|sum><rsub|k=1><rsup|+\<infty\>>\<theta\><rsub|k>
   x<rsup|k>> where only finite number of <math|\<theta\><rsub|k>> are not
   zero. What we have defined is the functional form of the model <math|f>.
 
-  <subsection|Complexity of Dataset Characterized by Model>
+  <subsection|Complexity of Dataset Examed by Model>
 
-  Let us consider a simple one-dimensional regression task. Given by a
-  dataset distribution <math|P> and the functional form of model <math|f>,
-  the loss function is
+  Given a distribution of dataset <math|P>, and the functional form of model
+  <math|f>, the loss function of a supervised learning task is
 
   <\equation*>
     L<around*|(|\<theta\>|)>=<big|int>\<mathd\>x\<mathd\>y
-    \ p<around*|(|x,y|)><around*|(|f<around*|(|x;\<theta\>|)>-y|)><rsup|2>.
+    \ p<around*|(|x,y|)>d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>,
   </equation*>
 
+  where <math|d> is some distance between target and model prediction (for
+  regression task, it is the mean squared error; and for classification task,
+  it is the relative entropy).
+
   Without losing generality, suppose that <math|f<around*|(|x;0|)>=0> for
-  <math|\<forall\>x\<in\>\<bbb-R\>>. Thus,
-  <math|L<rsub|0>\<assign\>L<around*|(|0|)>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>P><around*|[|y<rsup|2>|]>>.
-  Let <math|n> the number of parameters of <math|f>, thus
-  <math|\<theta\>\<in\>\<bbb-R\><rsup|n>>. By optimization, we have
-  <math|\<theta\><rsub|\<star\>>\<assign\>argmin<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<around*|(|\<theta\>|)>>
+  <math|\<forall\>x\<in\>\<bbb-R\>>. Otherwise, we can re-define
+  <math|f<around*|(|x;\<theta\>|)>> by <math|f<around*|(|x;\<theta\>|)>-f<around*|(|x;0|)>>.
+  Thus, <math|L<rsub|0>\<assign\>L<around*|(|0|)>=<big|int>\<mathd\>x\<mathd\>y
+  \ p<around*|(|x,y|)>d<around*|(|y,0|)>>. Let <math|n> the number of
+  parameters of <math|f>, thus <math|\<theta\>\<in\>\<bbb-R\><rsup|n>>. By
+  optimization, we have <math|\<theta\><rsub|\<star\>>\<assign\>argmin<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<around*|(|\<theta\>|)>>
   and <math|L<rsub|\<star\>>\<assign\>L<around*|(|\<theta\><rsub|\<star\>>|)>>.
+  The <math|L<rsub|\<star\>>> has dimension <math|<around*|[|L|]>>. The
+  dimensionless quantity is <math|L<rsub|\<star\>>/L<rsub|0>>.
 
   Given the model <math|f>, the relation between <math|n> and
-  <math|L<rsub|\<star\>>> reflects the complexity of dataset <math|P>. The
-  more complex the <math|P> is, the greater <math|n> it is needed for
-  obtaining a fixed <math|L<rsub|\<star\>>>, or the greater
-  <math|L<rsub|\<star\>>> is obtained with a fixed number of parameters.
-  Contrarily, if the <math|P> is simpler, the smaller <math|n> is sufficient
-  for reaching a fixed <math|L<rsub|\<star\>>>, or obtaining a smaller
-  <math|L<rsub|\<star\>>> when <math|n> is fixed.
+  <math|L<rsub|\<star\>>/L<rsub|0>> reflects the complexity of dataset
+  <math|P>. The more complex the <math|P> is, the greater <math|n> it is
+  needed for obtaining a fixed <math|L<rsub|\<star\>>/L<rsub|0>>, or the
+  greater <math|L<rsub|\<star\>>/L<rsub|0>> is obtained with a fixed number
+  of parameters. Contrarily, if the <math|P> is simpler, the smaller <math|n>
+  is sufficient for reaching a fixed <math|L<rsub|\<star\>>/L<rsub|0>>, or
+  obtaining a smaller <math|L<rsub|\<star\>>/L<rsub|0>> when <math|n> is
+  fixed. So, we call this relation the <with|font-series|bold|complexity> of
+  the dataset <math|P> examed by the model <math|f>.
 
-  <subsection|An Extending-Rescaling Process of Loss Function>
+  <section|Relation between Minimum of Loss and Number of Parameters: A
+  Simple Example>
 
-  We are to exame how the <math|L<rsub|\<star\>>> changes with <math|n>
-  increasing. To do so, we have to employ proper notations. A model with
-  <math|n> parameters is denoted by <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>>.
+  We are to exam how the <math|L<rsub|\<star\>>/L<rsub|0>> changes with
+  <math|n> increasing. To do so, we have to employ proper notations.
+
+  <subsection|Notations>
+
+  A model with <math|n> parameters is denoted by
+  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>>.
   Usually, we omit the <math|<around*|(|n|)>> in
   <math|\<theta\><rsup|<around*|(|n|)>>>, thus
   <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>>, since it is
@@ -70,49 +86,62 @@
   <math|\<theta\><rsup|<around*|(|n|)>><rsub|\<star\>>> for its <math|min>
   and <math|argmin> respectively.
 
-  With these new notations, we enlarge the space of parameters by introducing
-  a new model <math|f<rsup|<around*|(|2n|)>>> and replacing
+  <subsection|An Extending-Rescaling Process of Loss Function>
+
+  For simplicity, let us consider an one-dimensional regression task. Given
+  by a dataset distribution <math|P> and the functional form of model
+  <math|f>, the loss function is
+
+  <\equation*>
+    L<around*|(|\<theta\>|)>=<big|int>\<mathd\>x\<mathd\>y
+    \ p<around*|(|x,y|)><around*|(|f<around*|(|x;\<theta\>|)>-y|)><rsup|2>.
+  </equation*>
+
+  We wonder how the <math|L<rsup|<around*|(|n|)>><rsub|\<star\>>/L<rsub|0>>
+  changes with <math|n\<rightarrow\>2n>. The point is first train a baseline
+  model with <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>>, which
+  furnishes a residual error. Then, enlarge the
+  <math|f<rsup|<around*|(|n|)>>> to a model with <math|2n> parameters by
+  combining with another <math|<wide|f|~><rsup|<around*|(|n|)>>> which fits
+  the residual error. We then estimate the minimum of loss for the combined
+  model.
+
+  Explicitly, we enlarge the space of parameters by introducing a new model
+  <math|<wide|f|~><rsup|<around*|(|n|)>>> and replacing
   <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\<rightarrow\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
   <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>>, where
   <math|r\<in\><around*|(|0,+\<infty\>|)>> to be determined and
-  <math|<wide|f|~><rsup|<around*|(|n|)>>> a new model with <math|n>
-  parameters, with, again <math|<wide|f|~><rsup|<around*|(|n|)>><around*|(|*x;0|)>=0>
-  for all <math|x>. In this way, the new model has <math|2n> parameters. For
-  this new model, the loss becomes
+  <math|<wide|f|~><rsup|<around*|(|n|)>>> has <math|n> parameters. Again, we
+  suppose that <math|<wide|f|~><rsup|<around*|(|n|)>><around*|(|*x;0|)>=0>
+  for all <math|x>. In this way, we construct a new model with <math|2n>
+  parameters. The loss function now becomes
 
-  <\align>
-    <tformat|<table|<row|<cell|L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\>>|<cell|<big|int>\<mathd\>x\<mathd\>y
+  <\equation*>
+    L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
     \ p<around*|(|x,y|)><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
-    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>>|<row|<cell|<around*|{|<around*|[|\<cdots\>|]>=1|}>=>|<cell|<big|int>\<mathd\>x\<mathd\>y
-    \ p<around*|(|x,y|)><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\><wide|y|~>
+    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>.
+  </equation*>
+
+  By inserting a unity, the RHS becomes
+
+  <\equation*>
+    <big|int>\<mathd\>x\<mathd\>y \ p<around*|(|x,y|)><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\><wide|y|~>
     \<delta\><around*|(|r <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|n|)>>
-    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>>>|<row|<cell|=>|<cell|<big|int>\<mathd\>x\<mathd\><wide|y|~><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
+    <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>,
+  </equation*>
+
+  where the <math|<around*|[|\<ldots\>|]>=1>. Exchanging the integerals of
+  <math|y> and of <math|<wide|y|~>>, we get
+
+  <\equation*>
+    <big|int>\<mathd\>x\<mathd\><wide|y|~><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
     \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
     <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>|]><around*|(|r<rsup|<around*|(|n|)>>
     <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-r<rsup|<around*|(|n|)>>
-    <wide|y|~>|)><rsup|2>.>>>>
-  </align>
-
-  By defining
-
-  <\equation*>
-    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
-    \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
-    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>,
+    <wide|y|~>|)><rsup|2>.
   </equation*>
 
-  we have
-
-  <\equation*>
-    L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|<around*|(|n|)>><rsup|2>
-    <big|int>\<mathd\>x \<mathd\><wide|y|~>
-    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>
-    <around*|(|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>.
-  </equation*>
-
-  The <math|<wide|y|~>> is the rescaled residual error, and
-  <math|<wide|p|~><rsup|<around*|(|n|)>>> describes its
-  distribution.<\footnote>
+  The term in the bracket is in fact a distribution:<\footnote>
     We have to show that <math|<wide|p|~><rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\>|)>>
     is indeed a distribution, that is, for any <math|\<theta\>>,
     <math|<big|int>\<mathd\>x\<mathd\><wide|y|~>
@@ -134,6 +163,25 @@
     </align>
   </footnote>
 
+  <\equation*>
+    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>\<assign\>r<rsup|<around*|(|n|)>><big|int>\<mathd\>y
+    \ p<around*|(|x,y|)> \<delta\><around*|(|r<rsup|<around*|(|n|)>>
+    <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>.
+  </equation*>
+
+  Plugging into the RHS, we find
+
+  <\equation*>
+    L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|<around*|(|n|)>><rsup|2>
+    <big|int>\<mathd\>x \<mathd\><wide|y|~>
+    <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\>|)>
+    <around*|(|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>.
+  </equation*>
+
+  The <math|<wide|y|~>=<around*|(|y-f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>/r<rsup|<around*|(|n|)>>>
+  is the rescaled residual error, and <math|<wide|P|~><rsup|<around*|(|n|)>>>
+  describes its distribution.
+
   \;
 
   If we freeze the <math|\<theta\>> to be <math|\<theta\><rsub|\<star\>>> and
@@ -142,11 +190,11 @@
   <math|<wide|y|~>>, and <math|L<rsup|<around*|(|2n|)>>> depends only on
   <math|<wide|\<theta\>|~>>. Since <math|L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,0|)>=L<rsub|\<star\>><rsup|<around*|(|n|)>>>,
   for formally going back to the original, let
-  <math|r<rsup|<around*|(|n|)>>=<sqrt|L<rsub|\<star\>><rsup|<around*|(|n|)>>/L<around*|(|0|)>>>,
-  thus
+  <math|r<rsup|<around*|(|n|)>>=<sqrt|L<rsub|\<star\>><rsup|<around*|(|n|)>>/L<rsub|0>>>,
+  and we finally arrive at
 
   <\equation*>
-    <wide|L|~><rsup|<around*|(|n|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><frac|L<around*|(|0|)>|L<rsub|\<star\>><rsup|<around*|(|n|)>>>L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~>|)>=<big|int>\<mathd\>x
+    <wide|L|~><rsup|<around*|(|n|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><frac|L<rsub|0>|L<rsub|\<star\>><rsup|<around*|(|n|)>>>L<rsup|<around*|(|2n|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~>|)>=<big|int>\<mathd\>x
     \<mathd\><wide|y|~> <wide|p|~><rsup|<around*|(|n|)>><around*|(|x,<wide|y|~>;\<theta\><rsub|\<star\>>|)>
     <around*|(|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-<wide|y|~>|)><rsup|2>.
   </equation*>
@@ -186,20 +234,24 @@
   optimized synchronously. The reason is that the optimization of
   <math|\<theta\>> has taken most of the work that minimizes the loss, while
   optimizing <math|<wide|\<theta\>|~>> in the next step is just fine-tuning.
+  Thus, we may expect that, when optimize <math|\<theta\>> and
+  <math|<wide|\<theta\>|~>> synchronously, the change of <math|\<theta\>>
+  from <math|\<theta\><rsub|\<star\>>> will be negligible.
 
-  <subsection|Generalization to Higher Dimensions>
+  <subsection|Generalizing to More Parameters>
 
   Now, we consider <math|4n>-dimensional space of parameters. To do this, we
   consider <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>>
-  as the baseline model, <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>\<assign\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+r<rsup|<around*|(|n|)>>
+  as the baseline model, that is, <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>\<assign\>f<rsup|<around*|(|n|)>><around*|(|x;\<theta\><rsup|<around*|(|n|)>>|)>+r<rsup|<around*|(|n|)>>
   <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>>
   and <math|\<theta\>\<assign\><around*|(|\<theta\><rsup|<around*|(|n|)>>,<wide|\<theta\>|~><rsup|<around*|(|n|)>>|)>\<in\>\<bbb-R\><rsup|2n>>.
   Thus, from what we have derived, <math|L<rsup|<around*|(|2n|)>><rsub|\<star\>>=L<rsup|<around*|(|n|)>><rsub|\<star\>>
   <around*|(|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>/L<rsub|0>|)>>.
 
-  Next, we consider the residual error. As before, replace
+  Then, we repeat the previous steps, or simply replace <math|n> by
+  <math|2n>. We sketch out the main steps here. As before, replace
   <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>> by
-  <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>+r
+  <math|f<rsup|<around*|(|2n|)>><around*|(|x;\<theta\>|)>+r<rsup|<around*|(|2n|)>>
   <wide|f|~><rsup|<around*|(|2n|)>><around*|(|x;<wide|\<theta\>|~>|)>> where
   <math|r\<in\><around*|(|0,+\<infty\>|)>> to be determined. Thus the loss
   <math|L<rsup|<around*|(|4n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
@@ -252,6 +304,8 @@
     <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>.
   </equation*>
 
+  \;
+
   Generally, we have
 
   <\equation>
@@ -260,11 +314,13 @@
     n|)>><rsub|\<star\>>|L<rsub|0>>.<label|equation:L star regression>
   </equation>
 
-  <subsection|Power-Law>
+  <section|Power-Law>
+
+  <subsection|Power-Law Arises From Self-Similarity of Complexity>
 
   We wonder when the power-law relation between
-  <math|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> and <math|2<rsup|m>
-  n> may arise. It is known that a function
+  <math|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>/L<rsub|0>> and
+  <math|2<rsup|m> n> may arise. It is known that a function
   <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>> is power-law,
   which means there is a <math|\<gamma\>\<in\>\<bbb-R\>> such that
   <math|f<around*|(|x|)>=x<rsup|\<gamma\>>>, if and only if there is a
@@ -296,7 +352,7 @@
   n|)>><around*|(|x,<wide|y|~>;\<theta\><rsub|\<star\>>|)>> where
   <math|\<theta\><rsub|\<star\>>=argmin L<rsup|<around*|(|2<rsup|m> n|)>>>,
   the best-fit of <math|f<rsup|<around*|(|2<rsup|m>
-  n|)>><around*|(|x;\<theta\>|)>>.
+  n|)>><around*|(|x;\<theta\>|)>>. TODO
 </body>
 
 <\initial>
@@ -308,13 +364,16 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|1.3|?>>
+    <associate|auto-11|<tuple|1.3.1|?>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|?>>
     <associate|auto-4|<tuple|1.1.2|?>>
     <associate|auto-5|<tuple|1.1.3|?>>
-    <associate|auto-6|<tuple|1.1.4|?>>
-    <associate|auto-7|<tuple|1.1.5|?>>
-    <associate|auto-8|<tuple|1.1.6|?>>
+    <associate|auto-6|<tuple|1.2|?>>
+    <associate|auto-7|<tuple|1.2.1|?>>
+    <associate|auto-8|<tuple|1.2.2|?>>
+    <associate|auto-9|<tuple|1.2.3|?>>
     <associate|equation:L star regression|<tuple|1.1|?>>
     <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|1>>
