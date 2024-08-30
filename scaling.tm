@@ -32,8 +32,8 @@
 
   <subsection|Complexity of Dataset Examed by Model>
 
-  Given a distribution of dataset <math|P>, and the functional form of model
-  <math|f>, the loss function of a supervised learning task is
+  Let <math|P> a distribution of dataset and <math|f> a functional form of
+  model. The loss function of a supervised learning task is
 
   <\equation*>
     L<around*|(|\<theta\>|)>=<big|int>\<mathd\>x\<mathd\>y
@@ -64,7 +64,24 @@
   is sufficient for reaching a fixed <math|L<rsub|\<star\>>/L<rsub|0>>, or
   obtaining a smaller <math|L<rsub|\<star\>>/L<rsub|0>> when <math|n> is
   fixed. So, we call this relation the <with|font-series|bold|complexity> of
-  the dataset <math|P> examed by the model <math|f>.
+  dataset examed by the model <math|f>. The model <math|f> can be viewed as a
+  ruler that exams the complexity of different datasets.
+
+  To be explicit, we add the following definition.
+
+  <\definition>
+    [Complexity of Dataset Examed by Model] Let <math|f> a functional form of
+    model and <math|P,Q> are two distributions of dataset. Let
+    <math|L<rsub|P><around*|(|\<theta\>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
+    \ p<around*|(|x,y|)>d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>> and the
+    same for <math|L<rsub|Q>>. Complexity is a partial order relation:
+    <math|P> is said to be more complicated than <math|Q> if, for
+    <math|\<forall\>\<epsilon\>\<gtr\>0>, the minimal <math|n> such that
+    <math|min<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<rsub|P><around*|(|\<theta\>|)>\<leqslant\>\<epsilon\>
+    L<rsub|P><around*|(|0|)>> is greater than the minimal <math|m> such that
+    <math|min<rsub|\<theta\>\<in\>\<bbb-R\><rsup|m>>L<rsub|Q><around*|(|\<theta\>|)>\<leqslant\>\<epsilon\>
+    L<rsub|Q><around*|(|0|)>>.
+  </definition>
 
   <section|Relation between Minimum of Loss and Number of Parameters: A
   Simple Example>
@@ -304,12 +321,33 @@
     <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>.
   </equation*>
 
+  Interestingly, we can regard <math|L<rsup|<around*|(|n|)>><rsub|\<star\>>>
+  as <math|<wide|L|~><rsub|\<star\>><rsup|<around*|(|0|)>>> by viewing
+  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>> as fitting the
+  residual error of <math|f<around*|(|x;0|)>>. Indeed, recall that
+  <math|f<around*|(|x;0|)>=0> for all <math|x>, the loss for the residual
+  error of <math|f<around*|(|x;0|)>> comes to be
+
+  <\equation*>
+    <wide|L|~><rsup|<around*|(|n|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><big|int>\<mathd\>x
+    \<mathd\>y p<around*|(|x,y|)> <around*|(|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>,
+  </equation*>
+
+  which is exactly the form of <math|L<rsup|<around*|(|n|)>>>. It means
+  <math|<wide|L|~><rsub|\<star\>><rsup|<around*|(|0|)>>\<assign\>min<rsub|<wide|\<theta\>|~>\<in\>\<bbb-R\><rsup|n>><wide|L|~><rsup|<around*|(|n|)>><around*|(|<wide|\<theta\>|~>|)>=min<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<rsup|<around*|(|n|)>><around*|(|\<theta\>|)>=L<rsup|<around*|(|n|)>><rsub|\<star\>>>.
+  So, we arrive at
+
+  <\equation*>
+    <frac|L<rsup|<around*|(|4n|)>><rsub|\<star\>>|L<rsub|0>>=<frac|<wide|L|~><rsup|<around*|(|0|)>><rsub|\<star\>>|L<rsub|0>>
+    <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>.
+  </equation*>
+
   \;
 
   Generally, we have
 
   <\equation>
-    L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>=L<rsup|<around*|(|n|)>><rsub|\<star\>>
+    <frac|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>|L<rsub|0>>=<frac|<wide|L|~><rsup|<around*|(|0|)>><rsub|\<star\>>|L<rsub|0>>
     <frac|<wide|L|~><rsup|<around*|(|n|)>><rsub|\<star\>>|L<rsub|0>><frac|<wide|L|~><rsup|<around*|(|2n|)>><rsub|\<star\>>|L<rsub|0>>\<cdots\><frac|<wide|L|~><rsup|<around*|(|2<rsup|<around*|(|m-1|)>>
     n|)>><rsub|\<star\>>|L<rsub|0>>.<label|equation:L star regression>
   </equation>
@@ -364,24 +402,19 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.3|?>>
-    <associate|auto-11|<tuple|1.3.1|?>>
+    <associate|auto-10|<tuple|1.3|4>>
+    <associate|auto-11|<tuple|1.3.1|4>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-3|<tuple|1.1.1|?>>
-    <associate|auto-4|<tuple|1.1.2|?>>
-    <associate|auto-5|<tuple|1.1.3|?>>
-    <associate|auto-6|<tuple|1.2|?>>
-    <associate|auto-7|<tuple|1.2.1|?>>
-    <associate|auto-8|<tuple|1.2.2|?>>
-    <associate|auto-9|<tuple|1.2.3|?>>
-    <associate|equation:L star regression|<tuple|1.1|?>>
-    <associate|footnote-1|<tuple|1|?>>
-    <associate|footnote-1.1|<tuple|1.1|1>>
-    <associate|footnote-1.2|<tuple|1.2|?>>
-    <associate|footnote-1.3|<tuple|1.3|?>>
-    <associate|footnr-1.1|<tuple|1.1|1>>
-    <associate|footnr-1.2|<tuple|1.2|?>>
-    <associate|footnr-1.3|<tuple|1.3|?>>
+    <associate|auto-3|<tuple|1.1.1|1>>
+    <associate|auto-4|<tuple|1.1.2|1>>
+    <associate|auto-5|<tuple|1.1.3|1>>
+    <associate|auto-6|<tuple|1.2|2>>
+    <associate|auto-7|<tuple|1.2.1|2>>
+    <associate|auto-8|<tuple|1.2.2|2>>
+    <associate|auto-9|<tuple|1.2.3|3>>
+    <associate|equation:L star regression|<tuple|1.1|4>>
+    <associate|footnote-1.1|<tuple|1.1|2>>
+    <associate|footnr-1.1|<tuple|1.1|2>>
   </collection>
 </references>
 
@@ -389,11 +422,46 @@
   <\collection>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Scaling
-      and Power Law> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      and Power-Law> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Power Law <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      1.1<space|2spc>Complexity <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
+
+      <with|par-left|<quote|1tab>|1.1.1<space|2spc>Distribution Is a Data
+      Generator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-3>>
+
+      <with|par-left|<quote|1tab>|1.1.2<space|2spc>Model Is a Functional Form
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4>>
+
+      <with|par-left|<quote|1tab>|1.1.3<space|2spc>Complexity of Dataset
+      Examed by Model <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-5>>
+
+      1.2<space|2spc>Relation between Minimum of Loss and Number of
+      Parameters: A Simple Example <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-6>
+
+      <with|par-left|<quote|1tab>|1.2.1<space|2spc>Notations
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7>>
+
+      <with|par-left|<quote|1tab>|1.2.2<space|2spc>An Extending-Rescaling
+      Process of Loss Function <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
+
+      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Generalizing to More
+      Parameters <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-9>>
+
+      1.3<space|2spc>Power-Law <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>
+
+      <with|par-left|<quote|1tab>|1.3.1<space|2spc>Power-Law Arises From
+      Self-Similarity of Complexity <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>>
     </associate>
   </collection>
 </auxiliary>
