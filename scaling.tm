@@ -7,7 +7,7 @@
 
   <section|Complexity>
 
-  In this section, we introduce the complexity of a dataset examed by a
+  In this section, we introduce the complexity of a dataset examined by a
   model. It is a preparation for the discussion of power-law.
 
   <subsection|Distribution Is a Data Generator>
@@ -30,7 +30,7 @@
   x<rsup|k>> where only finite number of <math|\<theta\><rsub|k>> are not
   zero. What we have defined is the functional form of the model <math|f>.
 
-  <subsection|Complexity of Dataset Examed by Model>
+  <subsection|Complexity of Dataset Examined by Model>
 
   Let <math|P> a distribution of dataset and <math|f> a functional form of
   model. The loss function of a supervised learning task is
@@ -52,26 +52,29 @@
   parameters of <math|f>, thus <math|\<theta\>\<in\>\<bbb-R\><rsup|n>>. By
   optimization, we have <math|\<theta\><rsub|\<star\>>\<assign\>argmin<rsub|\<theta\>\<in\>\<bbb-R\><rsup|n>>L<around*|(|\<theta\>|)>>
   and <math|L<rsub|\<star\>>\<assign\>L<around*|(|\<theta\><rsub|\<star\>>|)>>.
-  The <math|L<rsub|\<star\>>> has dimension <math|<around*|[|L|]>>. The
-  dimensionless quantity is <math|L<rsub|\<star\>>/L<rsub|0>>.
+  The <math|L<rsub|\<star\>>> has the dimension <math|<around*|[|L|]>>. The
+  dimensionless quantity we are to consider shall be
+  <math|L<rsub|\<star\>>/L<rsub|0>>.
 
-  Given the model <math|f>, the relation between <math|n> and
-  <math|L<rsub|\<star\>>/L<rsub|0>> reflects the complexity of dataset
-  <math|P>. The more complex the <math|P> is, the greater <math|n> it is
-  needed for obtaining a fixed <math|L<rsub|\<star\>>/L<rsub|0>>, or the
-  greater <math|L<rsub|\<star\>>/L<rsub|0>> is obtained with a fixed number
-  of parameters. Contrarily, if the <math|P> is simpler, the smaller <math|n>
-  is sufficient for reaching a fixed <math|L<rsub|\<star\>>/L<rsub|0>>, or
-  obtaining a smaller <math|L<rsub|\<star\>>/L<rsub|0>> when <math|n> is
-  fixed. So, we call this relation the <with|font-series|bold|complexity> of
-  dataset examed by the model <math|f>. The model <math|f> can be viewed as a
-  ruler that exams the complexity of different datasets.
+  Given the model <math|f>, the relation between the number of parameters
+  <math|n> and the (relative) minimal loss <math|L<rsub|\<star\>>/L<rsub|0>>
+  reflects the complexity of dataset <math|P>. With a fixed
+  <math|L<rsub|\<star\>>/L<rsub|0>> as the target of optimization, the more
+  model parameters we use for obtaining the
+  <math|L<rsub|\<star\>>/L<rsub|0>>, the more complicated the <math|P> should
+  be. Or with a fixed <math|n> as the model size, a simpler dataset <math|P>
+  will furnish a smaller best-fit loss <math|L<rsub|\<star\>>/L<rsub|0>>. So,
+  we call this relation between <math|n> and
+  <math|L<rsub|\<star\>>/L<rsub|0>> the <with|font-series|bold|complexity> of
+  dataset examined by the model <math|f>. The model <math|f> can be viewed as
+  a ruler that exams the complexity of different dataset.
 
-  To be explicit, we add the following definition.
+  To be explicit and thorough, we add a formal definition in the end of our
+  discussion.
 
   <\definition>
-    [Complexity of Dataset Examed by Model] Let <math|f> a functional form of
-    model and <math|P,Q> are two distributions of dataset. Let
+    [Complexity of Dataset Examined by Model] Let <math|f> a functional form
+    of model and <math|P,Q> are two distributions of dataset. Let
     <math|L<rsub|P><around*|(|\<theta\>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
     \ p<around*|(|x,y|)>d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>> and the
     same for <math|L<rsub|Q>>. Complexity is a partial order relation:
@@ -147,7 +150,7 @@
     <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>,
   </equation*>
 
-  where the <math|<around*|[|\<ldots\>|]>=1>. Exchanging the integerals of
+  where the <math|<around*|[|\<ldots\>|]>=1>. Exchanging the integrals of
   <math|y> and of <math|<wide|y|~>>, we get
 
   <\equation*>
