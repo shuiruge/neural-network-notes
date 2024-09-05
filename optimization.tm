@@ -111,7 +111,7 @@
   For minimizing a function <math|h:\<bbb-R\><rsup|n>\<rightarrow\>\<bbb-R\>>,
   standard gradient descent method computes the gradient of <math|h>, and
   iterates along the gradient direction so as to decrease <math|h> at each
-  iteration. Explicity, let <math|t=0,1,\<ldots\>> denotes the step of
+  iteration. Explicitly, let <math|t\<in\>\<bbb-N\>> denotes the step of
   iteration, thus the variable at step <math|t+1> is given by
 
   <\equation>
@@ -119,10 +119,13 @@
     descent method>
   </equation>
 
-  where the step-size <math|\<eta\>> is fixed. As long as
-  <math|0\<less\>\<eta\>\<ll\>1>, we have
-  <math|h<around*|(|x<rsub|t+1>|)>\<leqslant\>h<around*|(|x<rsub|t>|)>>, thus
-  always decreasing.
+  where the <math|\<eta\>> is a fixed positive number, called
+  <with|font-series|bold|learning rate>. If <math|h> is smooth, then we have
+  <math|h<around*|(|x<rsub|t+1>|)>\<less\>h<around*|(|x<rsub|t>|)>> as long
+  as the learning rate is sufficiently small and
+  <math|\<nabla\>h<around*|(|x<rsub|t>|)>\<neq\>0>. Thus, the iteration
+  (<reference|equation:gradient descent method>) always decrease <math|h>
+  until the (maybe local) minimum.
 
   Problems arise when applying gradient descent method directly to minimize
   <math|L<rsub|D>> because of the random disturbance
@@ -156,7 +159,7 @@
   <math|<around*|(|1/n|)><big|sum><rsub|i=t><rsup|t-n+1>\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|i>|)>>.
   In this way, the variance of randomness caused by
   <math|\<nabla\>\<delta\>L<rsub|D>> is decreased by a factor <math|1/n>. By
-  adjusting the value of <math|n>, the randomenss can be limited
+  adjusting the value of <math|n>, the randomness can be limited
   sufficiently.
 
   This \Pbare\Q average calls for caching the most recent gradients. It is
@@ -166,10 +169,11 @@
   <math|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>, denoted by
   <math|g<rsub|t>>, is computed by iteration
 
-  <\equation*>
+  <\equation>
     g<rsub|t>=\<gamma\> g<rsub|t-1>+<around*|(|1-\<gamma\>|)>
-    \<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>,
-  </equation*>
+    \<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>,<label|equation:moving
+    average>
+  </equation>
 
   with initialization <math|g<rsub|0>=0>. The <math|\<gamma\>>, called
   <with|font-series|bold|decay factor> or <with|font-series|bold|forgetting
@@ -186,6 +190,33 @@
     \<theta\><rsub|t+1>=\<theta\><rsub|t>-\<eta\> g<rsub|t>.
   </equation*>
 
+  <subsection|Finetune Decay Factor and Learning Rate>
+
+  When <math|\<gamma\>> is close to <math|0>, the moving average
+  <math|g<rsub|t>> is easy to forget the old information of
+  <math|\<nabla\>L<rsub|D>>. Indeed, the factor <math|\<gamma\>\<ll\>1> in
+  equation (<reference|equation:moving average>) implies
+  <math|g<rsub|t>\<approx\>\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>,
+  no averaging at all. So, for make the moving average effective,
+  <math|\<gamma\>> shall not be too small.
+
+  On the contrary, when <math|\<gamma\>> is close to <math|1>, the moving
+  average <math|g<rsub|t>> is hard to \Paccept\Q new information of
+  <math|\<nabla\>L<rsub|D>>. Indeed, the factor
+  <math|<around*|(|1-\<gamma\>|)>\<ll\>1> in equation
+  (<reference|equation:moving average>) implies
+  <math|g<rsub|t>\<approx\>g<rsub|t-1>> for all <math|t>. So, the moving
+  average is hard to be modified when <math|\<gamma\>> is close to <math|1>.
+  This is equivalent to a large learning rate, leading to an ascend of loss
+  function instead of descent.
+
+  So, for efficiently and safely using moving average, the <math|\<gamma\>>
+  shall be moderate. And if, in practice, the
+  <math|\<nabla\>\<delta\>L<rsub|D>> is so large that the moving average can
+  be effective only when <math|\<gamma\>> is close to <math|1>, then we shall
+  accordingly tune the learning rate <math|\<eta\>> to be smaller, so as to
+  decrease the loss function safely.
+
   <subsection|History and Remark>
 
   Moving average of gradient was first applied to gradient descent in
@@ -194,7 +225,7 @@
     errors>, by David E. Rumelhart, Geoffrey E. Hinton, and Ronald J.
     Williams, 1986.
   </footnote> Later, the efficiency of moving average was explained as
-  avoiding getting stucked by local minima. They compared moving average of
+  avoiding getting sucked by local minima. They compared moving average of
   gradient to the momentum in physics: the \Pheavy ball\Q rushes out of a
   local minimum with large \Pmomentum\Q. But, in a space with extremely high
   dimension, it is rare to encounter a local minimum, but saddle points
@@ -202,7 +233,7 @@
   that it is easy for the eigenvalues of random symmetric matrix (Hessian
   matrix can be seen as one) to be all positive when it is two dimensional,
   but being exponentially harder when the dimension increases. In fact, the
-  eigenvalue of a random symmtric matrix obeys the <hlink|Wigner semicircle
+  eigenvalue of a random symmetric matrix obeys the <hlink|Wigner semicircle
   distribution|https://en.wikipedia.org/wiki/Wigner_semicircle_distribution>,
   when the dimension goes to infinity. This distribution is parity symmetric.
 
@@ -274,7 +305,7 @@
     This is the Glorot initialization. We will not discuss the initialization
     techniques, but refer the reader to the paper by Xavier Glorot and Yoshua
     Bengio: <hlink|<with|font-shape|italic|Understanding the difficulty of
-    training deep feedforward neural networks>|https://proceedings.mlr.press/v9/glorot10a.html>.
+    training deep feed-forward neural networks>|https://proceedings.mlr.press/v9/glorot10a.html>.
   </footnote> Thus, <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<sim\><sqrt|6
   M/<around*|(|M+H|)>>=<sqrt|6/<around*|(|1+H/M|)>>>. When <math|H\<gg\>M>,
   indicating that the hidden dimension is much larger than the output
@@ -286,7 +317,7 @@
 
   The idea of using the sign of gradient is proposed by Martin Riedmiller and
   Heinrich Braun in 1992. In their <verbatim|Rprop> (short for resilient
-  backpropagation) algorithm, TODO. But, <verbatim|Rprop> algorithm cannot
+  back-propagation) algorithm, TODO. But, <verbatim|Rprop> algorithm cannot
   deal with mini-batch which indicates stochastic gradient. TODO
 
   Later in 2012, James Martens and Ilya Sutskever generalized the
@@ -331,8 +362,8 @@
   Thus, <math|<around*|(|H<rsup|-1>|)><rsup|\<alpha\>\<gamma\>>
   g<rsub|\<alpha\>><around*|(|\<theta\>|)>\<approx\><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<gamma\>>>.
 
-  If <math|H<rsup|2>> is approximatly diagonal when dimension is sufficiently
-  large (since <math|<around*|(|H<rsup|2>|)><rsub|\<alpha\>\<beta\>>=<around*|(|H<rsup|t>
+  If <math|H<rsup|2>> is approximately diagonal when dimension is
+  sufficiently large (since <math|<around*|(|H<rsup|2>|)><rsub|\<alpha\>\<beta\>>=<around*|(|H<rsup|t>
   H|)><rsub|\<alpha\>\<beta\>>=H<rsub|\<cdummy\>
   \<alpha\>>\<cdot\>H<rsub|\<cdummy\> \<beta\>>> which is inner product of
   two random vectors), then
@@ -536,22 +567,24 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.5|4>>
-    <associate|auto-11|<tuple|1.6|4>>
-    <associate|auto-12|<tuple|1.6.1|?>>
-    <associate|auto-13|<tuple|1.6.2|?>>
-    <associate|auto-14|<tuple|1.6.3|?>>
-    <associate|auto-15|<tuple|1.6.4|?>>
+    <associate|auto-10|<tuple|1.4|4>>
+    <associate|auto-11|<tuple|1.5|4>>
+    <associate|auto-12|<tuple|1.6|?>>
+    <associate|auto-13|<tuple|1.6.1|?>>
+    <associate|auto-14|<tuple|1.6.2|?>>
+    <associate|auto-15|<tuple|1.6.3|?>>
+    <associate|auto-16|<tuple|1.6.4|?>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.2.1|2>>
     <associate|auto-5|<tuple|1.2.2|2>>
     <associate|auto-6|<tuple|1.2.3|3>>
     <associate|auto-7|<tuple|1.2.4|3>>
-    <associate|auto-8|<tuple|1.3|3>>
-    <associate|auto-9|<tuple|1.4|3>>
+    <associate|auto-8|<tuple|1.2.5|3>>
+    <associate|auto-9|<tuple|1.3|3>>
     <associate|equation:gradient descent method|<tuple|1.2|?>>
     <associate|equation:loss function|<tuple|1.1|1>>
+    <associate|equation:moving average|<tuple|1.3|?>>
     <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|2>>
     <associate|footnote-1.2|<tuple|1.2|3>>
