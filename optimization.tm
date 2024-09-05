@@ -110,9 +110,9 @@
 
   For minimizing a function <math|h:\<bbb-R\><rsup|n>\<rightarrow\>\<bbb-R\>>,
   standard gradient descent method computes the gradient of <math|h>, and
-  iterates along the gradient direction so as to decrease <math|h> at each
-  iteration. Explicitly, let <math|t\<in\>\<bbb-N\>> denotes the step of
-  iteration, thus the variable at step <math|t+1> is given by
+  iterates along the negative direction of gradient so as to decrease
+  <math|h> at each iteration. Explicitly, let <math|t\<in\>\<bbb-N\>> denotes
+  the step of iteration, thus the variable at step <math|t+1> is given by
 
   <\equation>
     x<rsub|t+1>=x<rsub|t>-\<eta\> \<nabla\>h<around*|(|x<rsub|t>|)>,<label|equation:gradient
@@ -186,9 +186,10 @@
   Then, we iterate the <math|\<theta\><rsub|t>> by <math|g<rsub|t>> instead
   of <math|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>, as
 
-  <\equation*>
-    \<theta\><rsub|t+1>=\<theta\><rsub|t>-\<eta\> g<rsub|t>.
-  </equation*>
+  <\equation>
+    \<theta\><rsub|t+1>=\<theta\><rsub|t>-\<eta\>
+    g<rsub|t>.<label|equation:moving average 2>
+  </equation>
 
   <subsection|Finetune Decay Factor and Learning Rate>
 
@@ -225,7 +226,7 @@
     errors>, by David E. Rumelhart, Geoffrey E. Hinton, and Ronald J.
     Williams, 1986.
   </footnote> Later, the efficiency of moving average was explained as
-  avoiding getting sucked by local minima. They compared moving average of
+  avoiding getting stucked by local minima. They compared moving average of
   gradient to the momentum in physics: the \Pheavy ball\Q rushes out of a
   local minimum with large \Pmomentum\Q. But, in a space with extremely high
   dimension, it is rare to encounter a local minimum, but saddle points
@@ -237,10 +238,41 @@
   distribution|https://en.wikipedia.org/wiki/Wigner_semicircle_distribution>,
   when the dimension goes to infinity. This distribution is parity symmetric.
 
-  <section|Different Learning-Rate for Different Layer (TODO)>
+  <subsection|Implementation>
 
-  For simplicity, consider a feed-forward neural network with a single hidden
-  layer. The <math|M>-dimensional model output is
+  We summarize this section by a <verbatim|Numpy> implementation.
+
+  <\small>
+    <\python-code>
+      def moving_average(loss_gradient, initial_theta, decay_factor,
+
+      \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ learning_rate, steps):
+
+      \ \ \ \ theta = initial_theta
+
+      \ \ \ \ g = np.zeros(np.shape(theta))
+
+      \ \ \ \ for t in range(steps):
+
+      \ \ \ \ \ \ \ \ g = decay_factor * g + (1-decay_factor) *
+      loss_gradient(theta)
+
+      \ \ \ \ \ \ \ \ theta = theta - learning_rate * g
+
+      \ \ \ \ return theta
+    </python-code>
+  </small>
+
+  <section|Gradient Direction May Not Be Optimal>
+
+  <subsection|Estimation of Gradients at Different Layer>
+
+  Iterating along the negative direction of the (moving average of) gradient
+  <math|\<nabla\>L<rsub|D>> may not be optimal. To address this issue, let us
+  consider a simple instance and compute the gradients at different layers.
+
+  Consider a feed-forward neural network with a single hidden layer. The
+  <math|M>-dimensional model output is
 
   <\equation*>
     y<rsup|\<alpha\>>\<assign\>f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>=<big|sum><rsub|\<beta\>=1><rsup|H>U<rsup|\<alpha\>><rsub|\<beta\>>
@@ -271,12 +303,12 @@
 
   \;
 
-  Now, we try to estimate the relation of orders between
-  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>U|\<\|\|\>>> and
-  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>W|\<\|\|\>>>.
-  Generally, the output of each layer is properly normalized, which is
-  ensured by initialization and normalization (we will discuss normalization
-  in section <reference|section: Normalization>). Thus,
+  We are to estimate the relation of orders between
+  <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>U|]>> and
+  <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>W|]>>. Generally, the
+  output of each layer is properly normalized, which is ensured by
+  initialization and normalization (we will discuss normalization in section
+  <reference|section: Normalization>). Thus,
   <math|\<partial\>y<rsup|\<alpha\>>/\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>=z<rsup|\<beta\>>>
   and <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|<big|sum><rsub|\<gamma\>>W<rsup|\<alpha\>><rsub|\<gamma\>>
   x<rsup|\<gamma\>>+b<rsup|\<alpha\>>|)> x<rsup|\<beta\>>> share the same
@@ -285,35 +317,108 @@
   <math|\<sigma\><rprime|'><around*|(|\<cdummy\>|)>\<in\><around*|{|0,1|}>>
   is roughly estimated as <math|1/2>, thus
   <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|\<cdots\>|)>
-  x<rsup|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.) So, we have a rough
+  x<rsup|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.) So, \ we have a rough
   estimation<math|>
 
   <\align>
-    <tformat|<table|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>U>|\<\|\|\>>\<sim\>>|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>;>>|<row|<cell|<around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>W>|\<\|\|\>>\<sim\>>|<cell|<sqrt|M>
-    <around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>
-    <around*|\<\|\|\>|<frac|\<partial\>y|\<partial\>z>|\<\|\|\>>>>|<row|<cell|=>|<cell|<sqrt|M>
-    <around*|\<\|\|\>|<frac|\<partial\>L<rsub|D>|\<partial\>y>|\<\|\|\>>
-    <around*|\<\|\|\>|U|\<\|\|\>>,>>>>
+    <tformat|<table|<row|<cell|Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>U>|]>\<sim\>>|<cell|Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>y>|]>;>>|<row|<cell|Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>W>|]>\<sim\>>|<cell|M
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>y>|]>
+    Var<around*|[|<frac|\<partial\>y|\<partial\>z>|]>>>|<row|<cell|=>|<cell|M
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>y>|]>
+    Var<around*|[|U|]>,>>>>
   </align>
 
   where, in the last line, we used the relation
-  <math|\<partial\>y/\<partial\>z=U>. The <math|<sqrt|M>> factor is estimated
-  by central limit theorem where we roughly regard
-  <math|\<partial\>L<rsub|D>/\<partial\>W> and <math|U> as i.i.d. random
-  variables. Generally, <math|U> is initialized with scale
-  <math|<sqrt|6/<around*|(|M+H|)>>>.<\footnote>
+  <math|\<partial\>y/\<partial\>z=U>. The variance is computed over
+  components. The <math|M> factor is estimated by central limit theorem where
+  we roughly regard <math|\<partial\>L<rsub|D>/\<partial\>W> and <math|U> as
+  i.i.d. random variables. Generally, <math|U> is initialized with variance
+  <math|6/<around*|(|M+H|)>>.<\footnote>
     This is the Glorot initialization. We will not discuss the initialization
     techniques, but refer the reader to the paper by Xavier Glorot and Yoshua
     Bengio: <hlink|<with|font-shape|italic|Understanding the difficulty of
     training deep feed-forward neural networks>|https://proceedings.mlr.press/v9/glorot10a.html>.
-  </footnote> Thus, <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<sim\><sqrt|6
-  M/<around*|(|M+H|)>>=<sqrt|6/<around*|(|1+H/M|)>>>. When <math|H\<gg\>M>,
-  indicating that the hidden dimension is much larger than the output
-  dimension, which is usually the situation we encounter, we have
-  <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<ll\>1>, leading to
-  <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>U|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>W|\<\|\|\>>>.
+  </footnote> Thus, <math|M Var<around*|[|U|]>\<sim\>
+  M/<around*|(|M+H|)>=<around*|(|1+H/M|)>>. When <math|H\<gg\>M>, indicating
+  that the hidden dimension is much larger than the output dimension, which
+  is usually the situation we encounter, we have <math|M
+  Var<around*|[|U|]>\<ll\>1>, leading to <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>U|]>\<gg\>Var<around*|[|\<partial\>L<rsub|D>/\<partial\>W|]>>.
+  So, in some general situations, gradient varies greatly across layers.
+
+  <subsection|Rescale by Standard Derivation>
+
+  One way to reduce the large difference between the order of
+  <math|\<partial\>L<rsub|D>/\<partial\>U> and of
+  <math|\<partial\>L<rsub|D>/\<partial\>W> is dividing by their standard
+  derivations. That is, using <math|<around*|(|\<partial\>L<rsub|D>/\<partial\>U|)>/<sqrt|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>U|]>>>
+  and <math|<around*|(|\<partial\>L<rsub|D>/\<partial\>W|)>/<sqrt|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>W|]>>>
+  instead of <math|\<partial\>L<rsub|D>/\<partial\>U> and
+  <math|\<partial\>L<rsub|D>/\<partial\>W> for gradient descent. Then,
+
+  <\equation*>
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>U>
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>U>|]><rsup|-1/2>|]>=Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>U>|]>
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>U>|]><rsup|-1>=1,
+  </equation*>
+
+  and the same for <math|\<partial\>L<rsub|D>/\<partial\>W>. Now, the orders
+  are equal.
+
+  Generally, denote the parameters in each layer as <math|\<theta\><rsub|l>>.
+  Then <math|\<theta\>> is the concatenation of the <math|\<theta\><rsub|l>>s
+  for all layers. While iterating <math|\<theta\>> by gradient descent method
+  with moving average (equations (<reference|equation:moving average>) and
+  (<reference|equation:moving average 2>)), replace
+  <math|\<partial\>L<rsub|D>/\<partial\>\<theta\><rsub|l>> by
+
+  <\equation>
+    <frac|\<partial\>L<rsub|D>|\<partial\>\<theta\><rsub|l><rsup|\<alpha\>>>\<rightarrow\><frac|\<partial\>L<rsub|D>|\<partial\>\<theta\><rsub|l><rsup|\<alpha\>>>
+    Var<around*|[|<frac|\<partial\>L<rsub|D>|\<partial\>\<theta\><rsub|l>>|]><rsup|-1/2>,<label|equation:rescale
+    by standard derivation>
+  </equation>
+
+  where <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>\<theta\><rsub|l>|]>>
+  is computed over components, which consist of
+  <math|\<partial\>L<rsub|D>/\<partial\>\<theta\><rsub|l><rsup|\<alpha\>>>
+  for all <math|\<alpha\>>.
+
+  <subsection|Implementation>
+
+  We summarize this section by a <verbatim|Numpy> implementation.
+
+  <\small>
+    <\python-code>
+      def rescale_gradient(loss_gradient, initial_theta_list, decay_factor,
+
+      \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ learning_rate, steps):
+
+      \ \ \ \ """The initial_theta_list contains the initial parameters for
+      each layer."""
+
+      \ \ \ \ theta_list = [theta for theta in initial_theta_list]
+
+      \ \ \ \ g_list = [np.zeros(np.shape(theta)) for theta in theta_list]
+
+      \ \ \ \ for t in range(steps):
+
+      \ \ \ \ \ \ \ \ for i, theta in enumerate(theta_list):
+
+      \ \ \ \ \ \ \ \ \ \ \ \ gradient = loss_gradient(theta)
+
+      \ \ \ \ \ \ \ \ \ \ \ \ rescaled_gradient = gradient / np.std(gradient)
+
+      \ \ \ \ \ \ \ \ \ \ \ \ g = decay_factor * g + (1-decay_factor) *
+      rescaled_gradient
+
+      \ \ \ \ \ \ \ \ \ \ \ \ theta_list[i] = theta - learning_rate * g
+
+      \ \ \ \ return theta_list
+    </python-code>
+  </small>
 
   <section|Using the Sign of Gradient (TODO)>
+
+  <subsection|History and Remark>
 
   The idea of using the sign of gradient is proposed by Martin Riedmiller and
   Heinrich Braun in 1992. In their <verbatim|Rprop> (short for resilient
@@ -332,45 +437,30 @@
   Finally, in 2014, by adding moving average to the gradient, RMSprop
   algorithm is further improved, now called Adam algorithm.
 
-  <section|Draft>
+  <subsection|Implementation>
 
-  \;
+  We summarize this section by a <verbatim|Numpy> implementation.
 
-  <math|v<rsub|0><rsup|\<alpha\>>,s<rsup|\<alpha\>><rsub|0>=0>;
+  <\small>
+    <\python-code>
+      def sign_prop(loss_gradient, initial_theta, decay_factor,
 
-  <math|v<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<gamma\>|)>
-  v<rsub|t>+\<gamma\> g<rsub|t+1>>;
+      \ \ \ \ \ \ \ \ \ \ \ \ \ \ learning_rate, steps):
 
-  <math|s<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<beta\>|)>
-  s<rsup|\<alpha\>><rsub|t>+\<beta\> <around*|(|g<rsup|\<alpha\>><rsub|t+1>|)><rsup|2>>;
+      \ \ \ \ theta = initial_theta
 
-  <math|<wide|g|^><rsub|t+1><rsup|\<alpha\>>\<assign\>v<rsub|t+1><rsup|\<alpha\>>/<around*|(|<sqrt|s<rsub|t+1><rsup|\<alpha\>>>+\<epsilon\>|)>>.
+      \ \ \ \ g = np.zeros(np.shape(theta))
 
-  The underlying idea is using <math|sign<around*|(|g<rsup|\<alpha\>><rsub|t>|)>>
-  instead of <math|g<rsup|\<alpha\>><rsub|t>> itself. But, if using
-  <math|<around*|\||g|\|>> instead of <math|<sqrt|g<rsup|2>>> for computing
-  the averaged sign of gradient component, that is
-  <math|s<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<beta\>|)>
-  s<rsub|t><rsup|\<alpha\>>+\<beta\> <around*|\||g<rsub|t+1><rsup|\<alpha\>>|\|>>
-  and <math|<wide|g|^><rsup|\<alpha\>><rsub|t+1>=v<rsup|\<alpha\>><rsub|t+1>/<around*|(|s<rsup|\<alpha\>><rsub|t+1>+\<epsilon\>|)>>,
-  we cannot obtain the beautiful result any more.
+      \ \ \ \ for t in range(steps):
 
-  Exponential moving average: a constant signal will take approximately
-  <math|3/\<gamma\>> stages to reach 95% of the actual value.
+      \ \ \ \ \ \ \ \ g = decay_factor * g + (1-decay_factor) *
+      loss_gradient(theta)
 
-  <math|g<rsub|\<alpha\>><around*|(|\<theta\>|)>=<frac|\<partial\>f|\<partial\>\<theta\><rsup|\<alpha\>>><around*|(|\<theta\>|)>=g<rsub|\<alpha\>><around*|(|\<theta\><rsub|s>|)>+H<rsub|\<alpha\>\<beta\>><around*|(|\<theta\><rsub|s>|)><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<beta\>>\<approx\>H<rsub|\<alpha\>\<beta\>><around*|(|\<theta\><rsub|s>|)><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<beta\>>>.
-  Thus, <math|<around*|(|H<rsup|-1>|)><rsup|\<alpha\>\<gamma\>>
-  g<rsub|\<alpha\>><around*|(|\<theta\>|)>\<approx\><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<gamma\>>>.
+      \ \ \ \ \ \ \ \ theta = theta - learning_rate * np.sign(g)
 
-  If <math|H<rsup|2>> is approximately diagonal when dimension is
-  sufficiently large (since <math|<around*|(|H<rsup|2>|)><rsub|\<alpha\>\<beta\>>=<around*|(|H<rsup|t>
-  H|)><rsub|\<alpha\>\<beta\>>=H<rsub|\<cdummy\>
-  \<alpha\>>\<cdot\>H<rsub|\<cdummy\> \<beta\>>> which is inner product of
-  two random vectors), then
-
-  <\equation*>
-    g<rsub|\<alpha\>>=
-  </equation*>
+      \ \ \ \ return theta
+    </python-code>
+  </small>
 
   <section|Gradient Is Computed by Vector-Jacobian Product *><\footnote>
     You can skip this section if you are not care about how computer
@@ -442,23 +532,22 @@
     y<rsup|\<alpha\>> <around*|(|1-y<rsup|\<alpha\>>|)>.
   </equation*>
 
-  The vector-Jacobian product of sigmoid function has pseudo-code as
+  The vector-Jacobian product of sigmoid function has <verbatim|Numpy>
+  implementation as
 
-  <\code>
-    def sigmoid_vjp(x: Vector):
+  <\small>
+    <\python-code>
+      def sigmoid_vjp(x):
 
-    \ \ \ \ y: Vector = 1 / (1 + exp(-x))
+      \ \ \ \ y = 1 / (1 + np.exp(-x))
 
-    \ \ \ \ 
+      \ \ \ \ def grad(dy):
 
-    \ \ \ \ def grad(dy: Vector) -\<gtr\> Vector:
+      \ \ \ \ \ \ \ \ return dy * y * (1-y)
 
-    \ \ \ \ \ \ \ \ return dy * y * (1 - y)
-
-    \ \ \ \ 
-
-    \ \ \ \ return y, grad
-  </code>
+      \ \ \ \ return y, grad
+    </python-code>
+  </small>
 
   It returns the output of sigmoid function, as well as a function
   <verbatim|grad>. It can be recognized that <verbatim|grad(dy)> encodes the
@@ -567,24 +656,32 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.4|4>>
-    <associate|auto-11|<tuple|1.5|4>>
-    <associate|auto-12|<tuple|1.6|?>>
-    <associate|auto-13|<tuple|1.6.1|?>>
-    <associate|auto-14|<tuple|1.6.2|?>>
-    <associate|auto-15|<tuple|1.6.3|?>>
-    <associate|auto-16|<tuple|1.6.4|?>>
+    <associate|auto-10|<tuple|1.3|4>>
+    <associate|auto-11|<tuple|1.3.1|4>>
+    <associate|auto-12|<tuple|1.3.2|?>>
+    <associate|auto-13|<tuple|1.3.3|?>>
+    <associate|auto-14|<tuple|1.4|?>>
+    <associate|auto-15|<tuple|1.4.1|?>>
+    <associate|auto-16|<tuple|1.4.2|?>>
+    <associate|auto-17|<tuple|1.5|?>>
+    <associate|auto-18|<tuple|1.5.1|?>>
+    <associate|auto-19|<tuple|1.5.2|?>>
     <associate|auto-2|<tuple|1.1|1>>
+    <associate|auto-20|<tuple|1.5.3|?>>
+    <associate|auto-21|<tuple|1.5.4|?>>
+    <associate|auto-22|<tuple|1.6.4|?>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.2.1|2>>
     <associate|auto-5|<tuple|1.2.2|2>>
     <associate|auto-6|<tuple|1.2.3|3>>
     <associate|auto-7|<tuple|1.2.4|3>>
     <associate|auto-8|<tuple|1.2.5|3>>
-    <associate|auto-9|<tuple|1.3|3>>
+    <associate|auto-9|<tuple|1.2.6|3>>
     <associate|equation:gradient descent method|<tuple|1.2|?>>
     <associate|equation:loss function|<tuple|1.1|1>>
     <associate|equation:moving average|<tuple|1.3|?>>
+    <associate|equation:moving average 2|<tuple|1.4|?>>
+    <associate|equation:rescale by standard derivation|<tuple|1.5|?>>
     <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|2>>
     <associate|footnote-1.2|<tuple|1.2|3>>
