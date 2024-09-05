@@ -34,7 +34,10 @@
   will become difficult. In practice, we sample sufficient many data from
   <math|D>, and compute the expectation of
   <math|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>> on these samples
-  instead. Thus, a proper quantity that characterizes performance is
+  instead. These sampled data are called <with|font-series|bold|mini-batch>.
+  (The whole dataset <math|D> is thus named by
+  <with|font-series|bold|full-batch>.) Thus, a proper quantity that
+  characterizes performance is
 
   <\equation>
     L<rsub|D><around*|(|\<theta\>|)>\<assign\>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>|]>,<label|equation:loss
@@ -46,19 +49,164 @@
 
   <math|L<rsub|D>> is called a <with|font-shape|italic|loss function>, since
   the best model parameter <math|\<theta\><rsub|\<star\>>> is that which
-  minimizes the expected distance <math|L<rsub|D>>. Thus
+  minimizes the expected distance <math|L<rsub|D>>. Thus,<\footnote>
+    This is not the whole story. In fact,
+    <math|\<theta\><rsub|\<star\>>=argmin L<rsub|D>> is not what we want.
+    Generally, the performance is examined not on the training dataset
+    <math|D>, but on another similar dataset <math|T>, called test dataset.
+    While the loss function <math|L<rsub|D><around*|(|\<theta\>|)>> decreases
+    in the training process, the loss function on test dataset,
+    <math|L<rsub|T><around*|(|\<theta\>|)>> may start to increase at some
+    point <math|\<theta\><rsub|ES>> (ES for \Pearly-stopping\Q). That is,
+
+    <\equation*>
+      \<nabla\>L<rsub|D><around*|(|\<theta\><rsub|ES>|)>\<cdot\>\<nabla\>L<rsub|T><around*|(|\<theta\><rsub|ES>|)>=0.
+    </equation*>
+
+    We must stop training and use <math|\<theta\><rsub|ES>> as the best-fit
+    parameters. In this book, we try to keep things simple. Thus, we omit
+    this complicate thing, only thinking about decreasing the loss function
+    <math|L<rsub|D>>.
+  </footnote>
 
   <\equation*>
-    \<theta\><rsub|\<star\>>=argmin L<rsub|D><around*|(|\<theta\>|)>.
+    \<theta\><rsub|\<star\>>=argmin L<rsub|D>.
   </equation*>
 
   The important thing is that, in the usual situation of neural network, the
   function <math|L<rsub|D>> is a smooth function of <math|\<theta\>>, and
   that <math|\<theta\>> is on a finite-dimensional Euclidean space. This
-  means, we can use gradient based methods to find the minimum of
+  means, we can use gradient descent method to find the minimum of
   <math|L<rsub|D>> without any constraint.
 
-  <section|Different Learning-Rate for Different Layer>
+  <section|Moving Average Helps Avoid Stochastic Disturbance>
+
+  <subsection|Stochastic Disturbance in Loss Function>
+
+  Since the loss function is computed on mini-batch instead of the whole
+  dataset <math|D>, there must be stochastic disturbance. Let <math|B> a
+  random subset of <math|D>, a mini-batch. By central limit theorem, the mean
+  value of <math|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>> over <math|B>
+  approximately obeys a normal distribution. The expectation of this
+  distribution is the mean value of <math|d<around*|(|y,f<around*|(|x;\<theta\>|)>|)>>
+  over <math|D>, the loss function on full-batch. And the variance is
+  proportional to <math|1/<around*|\||B|\|>>, where <math|<around*|\||B|\|>>
+  denotes the number of elements in <math|B>. So, we can re-write the loss
+  function <math|L<rsub|D>> as
+
+  <\equation*>
+    L<rsub|D><around*|(|\<theta\>|)>=<wide|L|^><rsub|D><around*|(|\<theta\>|)>+\<delta\>L<rsub|D><around*|(|\<theta\>|)>,
+  </equation*>
+
+  where <math|<wide|L|^><rsub|D>> represents the mean value over the
+  full-batch <math|D>, and <math|\<delta\>L<rsub|D><around*|(|\<theta\>|)>>
+  is the random disturbance, which approximately obeys a normal distribution
+  with zero mean. For the same reason (central limit theorem), the gradient
+  <math|\<nabla\>\<delta\>L<rsub|D><around*|(|\<theta\>|)>> also
+  approximately obeys a normal distribution with zero mean and variance
+  proportional to <math|1/<around*|\||B|\|>>.
+
+  <subsection|Gradient Descent Method>
+
+  For minimizing a function <math|h:\<bbb-R\><rsup|n>\<rightarrow\>\<bbb-R\>>,
+  standard gradient descent method computes the gradient of <math|h>, and
+  iterates along the gradient direction so as to decrease <math|h> at each
+  iteration. Explicity, let <math|t=0,1,\<ldots\>> denotes the step of
+  iteration, thus the variable at step <math|t+1> is given by
+
+  <\equation>
+    x<rsub|t+1>=x<rsub|t>-\<eta\> \<nabla\>h<around*|(|x<rsub|t>|)>,<label|equation:gradient
+    descent method>
+  </equation>
+
+  where the step-size <math|\<eta\>> is fixed. As long as
+  <math|0\<less\>\<eta\>\<ll\>1>, we have
+  <math|h<around*|(|x<rsub|t+1>|)>\<leqslant\>h<around*|(|x<rsub|t>|)>>, thus
+  always decreasing.
+
+  Problems arise when applying gradient descent method directly to minimize
+  <math|L<rsub|D>> because of the random disturbance
+  <math|\<delta\>L<rsub|D>>. What we really want to minimize is the
+  deterministic <math|<wide|L|^><rsub|D>>, the loss function on the
+  full-batch, but what we can obtain is the <math|L<rsub|D>> instead of
+  <math|<wide|L|^><rsub|D>>. We hope that, iterated by the gradient descent
+  method <reference|equation:gradient descent method>, the trajectory
+  <math|<around*|(|\<theta\><rsub|0>,\<theta\><rsub|1>,\<ldots\>|)>>
+  generated by <math|\<nabla\>L<rsub|D>> (what we can compute) and the
+  <math|<around*|(|<wide|\<theta\>|^><rsub|0>,<wide|\<theta\>|^><rsub|1>,\<ldots\>|)>>
+  by <math|\<nabla\><wide|L|^><rsub|D>> (what we expect to compute but
+  cannot) share the same limit <math|\<theta\><rsub|\<star\>>>, the real
+  best-fit value. Only when <math|\<nabla\>L<rsub|D><around*|(|\<theta\>|)>>
+  is sufficiently close to <math|\<nabla\><wide|L|^><rsub|D><around*|(|\<theta\>|)>>
+  can this be done, which indicates that we have to reduce the randomness
+  from <math|\<nabla\>\<delta\>L<rsub|D>>.
+
+  <subsection|Moving Average of Gradient>
+
+  An efficient method for reducing randomness is averaging. Let
+  <math|<around*|{|X<rsub|i>\|i=1,\<ldots\>,n|}>> a set of i.i.d. random
+  variables, each having variance <math|Var<around*|[|X|]>>. By central limit
+  theorem, the variance of the averaged, <math|<around*|(|1/n|)>
+  <big|sum><rsub|i>X<rsub|i>>, is decreased by a factor <math|1/n>, thus
+  <math|Var<around*|[|X|]>/n>. The same, we cache the most recent <math|n>
+  gradients <math|<around*|{|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t-n+1>|)>,\<ldots\>,\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>|}>>
+  while iterating the <math|\<theta\>> (in the same way as the
+  <math|x<rsub|t>> in previous) at step <math|t>. Then, average over the
+  cache to get the gradient used for iteration,
+  <math|<around*|(|1/n|)><big|sum><rsub|i=t><rsup|t-n+1>\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|i>|)>>.
+  In this way, the variance of randomness caused by
+  <math|\<nabla\>\<delta\>L<rsub|D>> is decreased by a factor <math|1/n>. By
+  adjusting the value of <math|n>, the randomenss can be limited
+  sufficiently.
+
+  This \Pbare\Q average calls for caching the most recent gradients. It is
+  very memory intensive when the dimension of <math|\<theta\>> goes high. A
+  smarter one is <with|font-series|bold|moving average>: given
+  <math|\<gamma\>\<in\><around*|[|0,1|]>>, the moving average of
+  <math|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>, denoted by
+  <math|g<rsub|t>>, is computed by iteration
+
+  <\equation*>
+    g<rsub|t>=\<gamma\> g<rsub|t-1>+<around*|(|1-\<gamma\>|)>
+    \<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>,
+  </equation*>
+
+  with initialization <math|g<rsub|0>=0>. The <math|\<gamma\>>, called
+  <with|font-series|bold|decay factor> or <with|font-series|bold|forgetting
+  factor>, determines how many old information of gradient,
+  <math|g<rsub|t-1>>, is to be \Pforgotten\Q, and how many new information of
+  gradient, <math|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>, is to
+  be \Pmemorized\Q. The <math|g<rsub|t>> can be seen as a weighted average of
+  <math|<around*|{|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|0>|)>,\<ldots\>,\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>|}>>,
+  where the recent gradients have greater weights and the remote have less.
+  Then, we iterate the <math|\<theta\><rsub|t>> by <math|g<rsub|t>> instead
+  of <math|\<nabla\>L<rsub|D><around*|(|\<theta\><rsub|t>|)>>, as
+
+  <\equation*>
+    \<theta\><rsub|t+1>=\<theta\><rsub|t>-\<eta\> g<rsub|t>.
+  </equation*>
+
+  <subsection|History and Remark>
+
+  Moving average of gradient was first applied to gradient descent in
+  1986.<\footnote>
+    <with|font-shape|italic|Learning representations by back-propagating
+    errors>, by David E. Rumelhart, Geoffrey E. Hinton, and Ronald J.
+    Williams, 1986.
+  </footnote> Later, the efficiency of moving average was explained as
+  avoiding getting stucked by local minima. They compared moving average of
+  gradient to the momentum in physics: the \Pheavy ball\Q rushes out of a
+  local minimum with large \Pmomentum\Q. But, in a space with extremely high
+  dimension, it is rare to encounter a local minimum, but saddle points
+  instead. So, this explanation cannot be true. The underlying insight is
+  that it is easy for the eigenvalues of random symmetric matrix (Hessian
+  matrix can be seen as one) to be all positive when it is two dimensional,
+  but being exponentially harder when the dimension increases. In fact, the
+  eigenvalue of a random symmtric matrix obeys the <hlink|Wigner semicircle
+  distribution|https://en.wikipedia.org/wiki/Wigner_semicircle_distribution>,
+  when the dimension goes to infinity. This distribution is parity symmetric.
+
+  <section|Different Learning-Rate for Different Layer (TODO)>
 
   For simplicity, consider a feed-forward neural network with a single hidden
   layer. The <math|M>-dimensional model output is
@@ -81,13 +229,13 @@
   gradient
 
   <\equation*>
-    <frac|\<partial\>L<rsub|D>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>=<with|color|blue|<frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<alpha\>>>><frac|\<partial\>y<rsup|\<alpha\>>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>,
+    <frac|\<partial\>L<rsub|D>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>=<frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<alpha\>>><frac|\<partial\>y<rsup|\<alpha\>>|\<partial\>U<rsup|\<alpha\>><rsub|\<beta\>>>,
   </equation*>
 
   and
 
   <\equation*>
-    <frac|\<partial\>L<rsub|D>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>=<with|color|blue|<big|sum><rsub|\<gamma\>=1><rsup|M><frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<gamma\>>><frac|\<partial\>y<rsup|\<gamma\>>|\<partial\>z<rsup|\<alpha\>>>><frac|\<partial\>z<rsup|\<alpha\>>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>.
+    <frac|\<partial\>L<rsub|D>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>=<big|sum><rsub|\<gamma\>=1><rsup|M><frac|\<partial\>L<rsub|D>|\<partial\>y<rsup|\<gamma\>>><frac|\<partial\>y<rsup|\<gamma\>>|\<partial\>z<rsup|\<alpha\>>><frac|\<partial\>z<rsup|\<alpha\>>|\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>>.
   </equation*>
 
   \;
@@ -134,35 +282,66 @@
   <math|<sqrt|M> <around*|\<\|\|\>|U|\<\|\|\>>\<ll\>1>, leading to
   <math|<around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>U|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<partial\>L<rsub|D>/\<partial\>W|\<\|\|\>>>.
 
-  \;
+  <section|Using the Sign of Gradient (TODO)>
+
+  The idea of using the sign of gradient is proposed by Martin Riedmiller and
+  Heinrich Braun in 1992. In their <verbatim|Rprop> (short for resilient
+  backpropagation) algorithm, TODO. But, <verbatim|Rprop> algorithm cannot
+  deal with mini-batch which indicates stochastic gradient. TODO
+
+  Later in 2012, James Martens and Ilya Sutskever generalized the
+  <verbatim|Rprop> algorithm to stochastic gradient and made it much simpler.
+  The new algorithm is called <verbatim|RMSprop>. As it is named, it employs
+  root mean square (RMS for short) for computing the sign of gradient, which
+  helps stabilize the stochastic gradient. TODO The <math|s<rsup|\<alpha\>>>
+  decreases slowly when <math|<around*|\||g<rsup|\<alpha\>>|\|>> decreases,
+  but increases quickly when <math|<around*|\||g<rsup|\<alpha\>>|\|>>
+  increases.
+
+  Finally, in 2014, by adding moving average to the gradient, RMSprop
+  algorithm is further improved, now called Adam algorithm.
+
+  <section|Draft>
 
   \;
 
-  <math|<around*|(|g<rsub|t-n>,g<rsub|t-n+1>,\<ldots\>,g<rsub|t>|)>>.
-  <math|s<rsup|\<alpha\>><rsub|t>\<assign\><around*|(|g<rsup|\<alpha\>><rsub|t-n>|)><rsup|2>+\<cdots\>+<around*|(|g<rsub|t><rsup|\<alpha\>>|)><rsup|2>>.
-  <math|<wide|g|^><rsup|\<alpha\>>\<assign\>g<rsup|\<alpha\>>/<sqrt|s<rsup|\<alpha\>>+\<epsilon\>>>.
+  <math|v<rsub|0><rsup|\<alpha\>>,s<rsup|\<alpha\>><rsub|0>=0>;
 
-  <math|s<rsup|\<alpha\>><rsub|t+1>\<rightarrow\><around*|(|1-\<gamma\>|)>
-  s<rsup|\<alpha\>><rsub|t>+\<gamma\> <around*|(|g<rsup|\<alpha\>><rsub|t+1>|)><rsup|2>>.
+  <math|v<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<gamma\>|)>
+  v<rsub|t>+\<gamma\> g<rsub|t+1>>;
 
-  <section|Validation Helps Avoid the Instability of Optimization (TODO)>
+  <math|s<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<beta\>|)>
+  s<rsup|\<alpha\>><rsub|t>+\<beta\> <around*|(|g<rsup|\<alpha\>><rsub|t+1>|)><rsup|2>>;
 
-  <section|Moment Helps Avoid Stochastic Disturbance (TODO)>
+  <math|<wide|g|^><rsub|t+1><rsup|\<alpha\>>\<assign\>v<rsub|t+1><rsup|\<alpha\>>/<around*|(|<sqrt|s<rsub|t+1><rsup|\<alpha\>>>+\<epsilon\>|)>>.
 
-  <math|<wide|g|^><rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<gamma\>|)>
-  <wide|g|^><rsub|t>+\<gamma\> g<rsub|t+1>>.
+  The underlying idea is using <math|sign<around*|(|g<rsup|\<alpha\>><rsub|t>|)>>
+  instead of <math|g<rsup|\<alpha\>><rsub|t>> itself. But, if using
+  <math|<around*|\||g|\|>> instead of <math|<sqrt|g<rsup|2>>> for computing
+  the averaged sign of gradient component, that is
+  <math|s<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<beta\>|)>
+  s<rsub|t><rsup|\<alpha\>>+\<beta\> <around*|\||g<rsub|t+1><rsup|\<alpha\>>|\|>>
+  and <math|<wide|g|^><rsup|\<alpha\>><rsub|t+1>=v<rsup|\<alpha\>><rsub|t+1>/<around*|(|s<rsup|\<alpha\>><rsub|t+1>+\<epsilon\>|)>>,
+  we cannot obtain the beautiful result any more.
 
-  <math|v<rsup|\<alpha\>><rsub|t+1>=<around*|(|1-\<gamma\><rsub|1>|)>
-  v<rsup|\<alpha\>><rsub|t>+\<gamma\> g<rsub|t+1>>.
+  Exponential moving average: a constant signal will take approximately
+  <math|3/\<gamma\>> stages to reach 95% of the actual value.
 
-  <math|s<rsup|\<alpha\>><rsub|t+1>\<rightarrow\><around*|(|1-\<gamma\>|)>
-  s<rsup|\<alpha\>><rsub|t>+\<gamma\> <around*|(|g<rsup|\<alpha\>><rsub|t+1>|)><rsup|2>>
+  <math|g<rsub|\<alpha\>><around*|(|\<theta\>|)>=<frac|\<partial\>f|\<partial\>\<theta\><rsup|\<alpha\>>><around*|(|\<theta\>|)>=g<rsub|\<alpha\>><around*|(|\<theta\><rsub|s>|)>+H<rsub|\<alpha\>\<beta\>><around*|(|\<theta\><rsub|s>|)><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<beta\>>\<approx\>H<rsub|\<alpha\>\<beta\>><around*|(|\<theta\><rsub|s>|)><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<beta\>>>.
+  Thus, <math|<around*|(|H<rsup|-1>|)><rsup|\<alpha\>\<gamma\>>
+  g<rsub|\<alpha\>><around*|(|\<theta\>|)>\<approx\><around*|(|\<theta\>-\<theta\><rsub|s>|)><rsup|\<gamma\>>>.
 
-  <math|<wide|g|^><rsub|t+1><rsup|\<alpha\>>\<assign\>v<rsub|t+1><rsup|\<alpha\>>/<sqrt|s<rsub|t+1><rsup|\<alpha\>>+\<epsilon\>>>
+  If <math|H<rsup|2>> is approximatly diagonal when dimension is sufficiently
+  large (since <math|<around*|(|H<rsup|2>|)><rsub|\<alpha\>\<beta\>>=<around*|(|H<rsup|t>
+  H|)><rsub|\<alpha\>\<beta\>>=H<rsub|\<cdummy\>
+  \<alpha\>>\<cdot\>H<rsub|\<cdummy\> \<beta\>>> which is inner product of
+  two random vectors), then
 
-  <section|A Little History about Optimizer (TODO)>
+  <\equation*>
+    g<rsub|\<alpha\>>=
+  </equation*>
 
-  <section|Gradient Is Computed by Vector-Jacobian Product><\footnote>
+  <section|Gradient Is Computed by Vector-Jacobian Product *><\footnote>
     You can skip this section if you are not care about how computer
     calculates derivative.
   </footnote>
@@ -357,23 +536,37 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.6.3|4>>
-    <associate|auto-11|<tuple|1.6.4|4>>
+    <associate|auto-10|<tuple|1.5|4>>
+    <associate|auto-11|<tuple|1.6|4>>
+    <associate|auto-12|<tuple|1.6.1|?>>
+    <associate|auto-13|<tuple|1.6.2|?>>
+    <associate|auto-14|<tuple|1.6.3|?>>
+    <associate|auto-15|<tuple|1.6.4|?>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.3|2>>
-    <associate|auto-5|<tuple|1.4|2>>
-    <associate|auto-6|<tuple|1.5|3>>
-    <associate|auto-7|<tuple|1.6|3>>
-    <associate|auto-8|<tuple|1.6.1|3>>
-    <associate|auto-9|<tuple|1.6.2|3>>
+    <associate|auto-4|<tuple|1.2.1|2>>
+    <associate|auto-5|<tuple|1.2.2|2>>
+    <associate|auto-6|<tuple|1.2.3|3>>
+    <associate|auto-7|<tuple|1.2.4|3>>
+    <associate|auto-8|<tuple|1.3|3>>
+    <associate|auto-9|<tuple|1.4|3>>
+    <associate|equation:gradient descent method|<tuple|1.2|?>>
     <associate|equation:loss function|<tuple|1.1|1>>
+    <associate|footnote-1|<tuple|1|?>>
     <associate|footnote-1.1|<tuple|1.1|2>>
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnote-1.3|<tuple|1.3|?>>
+    <associate|footnote-1.4|<tuple|1.4|?>>
+    <associate|footnote-1.5|<tuple|1.5|?>>
+    <associate|footnote-2|<tuple|2|?>>
+    <associate|footnr-0|<tuple|1.1|?>>
+    <associate|footnr-1|<tuple|1|?>>
     <associate|footnr-1.1|<tuple|1.1|2>>
     <associate|footnr-1.2|<tuple|1.2|3>>
     <associate|footnr-1.3|<tuple|1.3|?>>
+    <associate|footnr-1.4|<tuple|1.4|?>>
+    <associate|footnr-1.5|<tuple|1.5|?>>
+    <associate|footnr-2|<tuple|2|?>>
     <associate|section: loss function|<tuple|1.1|1>>
   </collection>
 </references>

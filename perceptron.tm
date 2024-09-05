@@ -155,8 +155,8 @@
   </footnote> So, we cannot have <math|x<rsup|1><around*|(|t+1|)>=XOR<around*|(|x<rsup|1><around*|(|t|)>,x<rsup|2><around*|(|t|)>|)>>,
   thus we cannot hope <math|x<around*|(|t|)>\<equiv\><wide|x|^><around*|(|t|)>>.
 
-  <section|Simulation Is a Kind of Data-Fitting><label|section: Simulation Is
-  a Kind of Data-Fitting>
+  <section|Simulation Is a Kind of Data-Fitting (TODO)><label|section:
+  Simulation Is a Kind of Data-Fitting>
 
   From the previous discussion, we find that the problem of capability of
   simulation can be converted to the problem of capability of data-fitting.
@@ -167,13 +167,13 @@
 
   <\definition>
     [Capability of Data-Fitting] Let <math|d<around*|(|\<cdummy\>,\<cdummy\>|)>>
-    represent a <hlink|distance|https://en.wikipedia.org/wiki/Metric_space#Definition>.
-    Given a dataset <math|D\<assign\><around*|{|<around*|(|x<rsub|i>,y<rsub|i>|)>\|i=1,\<ldots\>,N|}>>,
-    and a parameterized function (model) <math|f<around*|(|x;\<theta\>|)>>
-    with <math|x> the input and <math|\<theta\>> the collection of
-    parameters. We say the model <math|f<around*|(|x,\<theta\>|)>> has the
-    capability of fitting the dataset <math|D>, if for any
-    <math|\<varepsilon\>\<gtr\>0>, we can find a
+    represent a \Pdistance\Q for which <math|d<around*|(|x,y|)>\<geqslant\>0>
+    and <math|d<around*|(|x,y|)>=0> if and only if <math|x=y>. Given a
+    dataset <math|D\<assign\><around*|{|<around*|(|x<rsub|i>,y<rsub|i>|)>\|i=1,\<ldots\>,N|}>>,
+    and a parameterized function <math|f<around*|(|x;\<theta\>|)>> with
+    <math|x> the input and <math|\<theta\>> the collection of parameters. We
+    say <math|f<around*|(|x,\<theta\>|)>> has the capability of fitting the
+    dataset <math|D>, if for any <math|\<varepsilon\>\<gtr\>0>, we can find a
     <math|\<theta\><rsub|\<star\>>> such that
 
     <\equation*>
@@ -239,8 +239,8 @@
   are named as <with|font-shape|italic|hidden layers>. In our example, we
   have a neural network with two layers, one of which is hidden layer.
 
-  In fact, as it was proven, when the <math|g> is identity function,
-  feed-forward neural network can fit any dataset.<\footnote>
+  In fact, as it was proven, when <math|g> is identity function, feed-forward
+  neural network can fit any dataset.<\footnote>
     A wonderful visual proof is given by Michael Nielsen in his book
     <with|font-shape|italic|Neural Networks and Deep Learning>,
     <hlink|chapter 4|http://neuralnetworksanddeeplearning.com/chap4.html>.
@@ -283,9 +283,9 @@
     <associate|footnr-1.7|<tuple|1.7|4>>
     <associate|footnr-1.8|<tuple|1.8|4>>
     <associate|perceptron|<tuple|1.1|2>>
-    <associate|section: Simulation Is a Kind of Data-Fitting|<tuple|1.3|?>>
+    <associate|section: Simulation Is a Kind of Data-Fitting|<tuple|1.3|3>>
     <associate|section: With Hidden Layers, Model Can Fit Any
-    Dataset|<tuple|1.4|?>>
+    Dataset|<tuple|1.4|3>>
   </collection>
 </references>
 
@@ -293,7 +293,7 @@
   <\collection>
     <\associate|figure>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
-        <locus|<id|%C59F908-43FD350>|<link|hyperlink|<id|%C59F908-43FD350>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
+        <locus|<id|%9456618-5021010>|<link|hyperlink|<id|%9456618-5021010>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
         figure> illustrates the shape of a neuron, and how impulses propagate
         from one neuron to another.
       </surround>|<pageref|auto-4>>
