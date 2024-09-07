@@ -248,9 +248,13 @@
 
       \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ learning_rate, steps):
 
+      \ \ \ \ # Initialization:
+
       \ \ \ \ theta = initial_theta
 
       \ \ \ \ g = np.zeros(np.shape(theta))
+
+      \ \ \ \ # Iteration:
 
       \ \ \ \ for t in range(steps):
 
@@ -263,7 +267,7 @@
     </python-code>
   </small>
 
-  <section|Gradient Direction May Not Be Optimal>
+  <section|Gradient Direction May Not Be Optimal (TODO)>
 
   <subsection|Estimation of Gradients at Different Layer>
 
@@ -317,7 +321,7 @@
   <math|\<sigma\><rprime|'><around*|(|\<cdummy\>|)>\<in\><around*|{|0,1|}>>
   is roughly estimated as <math|1/2>, thus
   <math|\<partial\>z<rsup|\<alpha\>>/\<partial\>W<rsup|\<alpha\>><rsub|\<beta\>>=\<sigma\><rprime|'><around*|(|\<cdots\>|)>
-  x<rsup|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.) So, \ we have a rough
+  x<rsup|\<beta\>>=<with|font|cal|O><around*|(|1|)>>.) So, we have a rough
   estimation<math|>
 
   <\align>
@@ -345,6 +349,31 @@
   Var<around*|[|U|]>\<ll\>1>, leading to <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>U|]>\<gg\>Var<around*|[|\<partial\>L<rsub|D>/\<partial\>W|]>>.
   So, in some general situations, gradient varies greatly across layers.
 
+  <subsection|Large Difference of Gradients May Slow Down Optimization>
+
+  The large difference between the order of
+  <math|\<partial\>L<rsub|D>/\<partial\>U> and
+  <math|\<partial\>L<rsub|D>/\<partial\>W> may slow down the optimization. We
+  are to explain the reason by estimating some orders.
+
+  Let <math|U<rsub|0>> the initial values of <math|U>, and
+  <math|U<rsub|\<star\>>> the best-fit. They share the same order, since we
+  initialize the parameters by (very roughly) estimating the order of
+  best-fit, so as to speed up the optimization. That is,
+  <math|U<rsub|0>\<sim\>U<rsub|\<star\>>\<sim\><around*|(|U<rsub|\<star\>>-U<rsub|0>|)>>.
+  The same for <math|W>, and we have <math|W<rsub|0>\<sim\>W<rsub|\<star\>>\<sim\><around*|(|W<rsub|\<star\>>-W<rsub|0>|)>>.
+  Explicity, <math|U<rsub|0>> has order <math|1/<around*|(|M+H|)>>, and
+  <math|W<rsub|0>> has order <math|1/<around*|(|H+N|)>>. Generally, the
+  hidden dimension is much greater than the input and output dimensions, or
+  say <math|H\<gg\>N,M>. Thus <math|U<rsub|0>\<sim\>W<rsub|0>\<sim\>1/H>, so
+  is <math|<around*|(|U<rsub|\<star\>>-U<rsub|0>|)>\<sim\><around*|(|W<rsub|\<star\>>-W<rsub|0>|)>>.
+
+  If, as previously estimated, <math|Var<around*|[|\<partial\>L<rsub|D>/\<partial\>U|]>\<gg\>Var<around*|[|\<partial\>L<rsub|D>/\<partial\>W|]>>,
+  then there will be much more steps for <math|W> to iterate than for
+  <math|U>, because <math|W> walks much slower than <math|U> even though they
+  have to walk the same (order of) distance. The dillydallying <math|W> slows
+  down the optimization.
+
   <subsection|Rescale by Standard Derivation>
 
   One way to reduce the large difference between the order of
@@ -367,8 +396,7 @@
   Generally, denote the parameters in each layer as <math|\<theta\><rsub|l>>.
   Then <math|\<theta\>> is the concatenation of the <math|\<theta\><rsub|l>>s
   for all layers. While iterating <math|\<theta\>> by gradient descent method
-  with moving average (equations (<reference|equation:moving average>) and
-  (<reference|equation:moving average 2>)), replace
+  (<reference|equation:gradient descent method>), replace
   <math|\<partial\>L<rsub|D>/\<partial\>\<theta\><rsub|l>> by
 
   <\equation>
@@ -384,7 +412,9 @@
 
   <subsection|Implementation>
 
-  We summarize this section by a <verbatim|Numpy> implementation.
+  We summarize this section by a <verbatim|Numpy> implementation. In this
+  implementation, we also use moving average to reduce the stochastic
+  disturbance of gradient.
 
   <\small>
     <\python-code>
@@ -395,22 +425,27 @@
       \ \ \ \ """The initial_theta_list contains the initial parameters for
       each layer."""
 
+      \ \ \ \ # Initialization:
+
       \ \ \ \ theta_list = [theta for theta in initial_theta_list]
 
       \ \ \ \ g_list = [np.zeros(np.shape(theta)) for theta in theta_list]
+
+      \ \ \ \ # Iteration:
 
       \ \ \ \ for t in range(steps):
 
       \ \ \ \ \ \ \ \ for i, theta in enumerate(theta_list):
 
-      \ \ \ \ \ \ \ \ \ \ \ \ gradient = loss_gradient(theta)
-
-      \ \ \ \ \ \ \ \ \ \ \ \ rescaled_gradient = gradient / np.std(gradient)
+      \ \ \ \ \ \ \ \ \ \ \ \ # Moving average
 
       \ \ \ \ \ \ \ \ \ \ \ \ g = decay_factor * g + (1-decay_factor) *
-      rescaled_gradient
+      loss_gradient(theta)
 
-      \ \ \ \ \ \ \ \ \ \ \ \ theta_list[i] = theta - learning_rate * g
+      \ \ \ \ \ \ \ \ \ \ \ \ # Iterate with rescaled gradient
+
+      \ \ \ \ \ \ \ \ \ \ \ \ theta_list[i] = theta - learning_rate * g /
+      np.std(g)
 
       \ \ \ \ return theta_list
     </python-code>
@@ -443,18 +478,26 @@
 
   <\small>
     <\python-code>
-      def sign_prop(loss_gradient, initial_theta, decay_factor,
+      def signprop(loss_gradient, initial_theta, decay_factor,
 
       \ \ \ \ \ \ \ \ \ \ \ \ \ \ learning_rate, steps):
+
+      \ \ \ \ # Initialization:
 
       \ \ \ \ theta = initial_theta
 
       \ \ \ \ g = np.zeros(np.shape(theta))
 
+      \ \ \ \ # Iteration:
+
       \ \ \ \ for t in range(steps):
+
+      \ \ \ \ \ \ \ \ # Moving average
 
       \ \ \ \ \ \ \ \ g = decay_factor * g + (1-decay_factor) *
       loss_gradient(theta)
+
+      \ \ \ \ \ \ \ \ # Iterate by sign of gradient
 
       \ \ \ \ \ \ \ \ theta = theta - learning_rate * np.sign(g)
 
@@ -660,16 +703,16 @@
     <associate|auto-11|<tuple|1.3.1|4>>
     <associate|auto-12|<tuple|1.3.2|?>>
     <associate|auto-13|<tuple|1.3.3|?>>
-    <associate|auto-14|<tuple|1.4|?>>
-    <associate|auto-15|<tuple|1.4.1|?>>
-    <associate|auto-16|<tuple|1.4.2|?>>
-    <associate|auto-17|<tuple|1.5|?>>
-    <associate|auto-18|<tuple|1.5.1|?>>
-    <associate|auto-19|<tuple|1.5.2|?>>
+    <associate|auto-14|<tuple|1.3.4|?>>
+    <associate|auto-15|<tuple|1.4|?>>
+    <associate|auto-16|<tuple|1.4.1|?>>
+    <associate|auto-17|<tuple|1.4.2|?>>
+    <associate|auto-18|<tuple|1.5|?>>
+    <associate|auto-19|<tuple|1.5.1|?>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-20|<tuple|1.5.3|?>>
-    <associate|auto-21|<tuple|1.5.4|?>>
-    <associate|auto-22|<tuple|1.6.4|?>>
+    <associate|auto-20|<tuple|1.5.2|?>>
+    <associate|auto-21|<tuple|1.5.3|?>>
+    <associate|auto-22|<tuple|1.5.4|?>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.2.1|2>>
     <associate|auto-5|<tuple|1.2.2|2>>
