@@ -688,6 +688,293 @@
   As a summary, the whole process is: first computing and caching
   vector-Jacobian products forwardly, and then applying the functions given
   by vector-Jacobian products to derivatives backwardly.
+
+  <chapter|Drafts>
+
+  <section|Initialization>
+
+  Let us consider a single layer, for each component
+  <math|\<alpha\>=1,\<ldots\>,M>,
+
+  <\equation*>
+    y<rsup|\<alpha\>>=\<sigma\><around*|(|<big|sum><rsub|\<beta\>=1><rsup|N>W<rsup|\<alpha\>><rsub|\<beta\>>
+    x<rsup|\<beta\>>+b<rsup|\<alpha\>>|)>.
+  </equation*>
+
+  The bias <math|b> is usually initialized as zero vector, thus we can
+  neglect <math|b> when consider initialization. The weight <math|W> is
+  usually initialized by uniformly sampling from a range
+  <math|<around*|(|-\<omega\>,\<omega\>|)>>, or by sampling from normal
+  distribution <math|<with|font|cal|N><around*|(|0,\<omega\><rsup|2>|)>>, for
+  some <math|\<omega\>\<gtr\>0>. We are to give a proper value of
+  <math|\<omega\>>. Assume that <math|x> has been properly normalized, so
+  that <math|\<bbb-E\><around*|(|x<rsup|\<alpha\>>|)>=0> and
+  <math|Var<around*|[|x<rsup|\<alpha\>>|]>=1> for each component
+  <math|\<alpha\>>, where the expectations are taken over mini-batch.
+  Otherwise, replace <math|x<rsup|\<alpha\>>\<rightarrow\><around*|(|x<rsup|\<alpha\>>-\<bbb-E\><around*|[|x<rsup|\<alpha\>>|]>|)>/<sqrt|Var<around*|[|x<rsup|\<alpha\>>|]>>>.
+
+  One extreme is <math|\<omega\>\<gg\>1>. In this situation, the randomness
+  in <math|W> will pollute the information in the input <math|x>, thus
+  <math|y> cannot gain any correlation with <math|x>. That is, information
+  cannot \Pflow through\Q the perceptron in the forward propagation. To make
+  this explicit, we first omit the <math|\<sigma\>> function and bias
+  <math|b>, thus consider <math|z<rsup|\<alpha\>>\<assign\><big|sum><rsub|\<beta\>=1><rsup|N>W<rsup|\<alpha\>><rsub|\<beta\>>
+  x<rsup|\<beta\>>>. If <math|W> was deterministic, then we would have
+  <math|Var<around*|[|z|]>=0>. Thus, the variance of <math|z> reflects the
+  randomness of <math|W>. We have <math|Var<around*|[|z<rsup|\<alpha\>>|]>=Var<around*|[|<big|sum><rsub|\<beta\>=1><rsup|N>W<rsup|\<alpha\>><rsub|\<beta\>>
+  x<rsup|\<beta\>>|]>=<big|sum><rsub|\<beta\>=1><rsup|N><around*|(|x<rsup|\<beta\>>|)><rsup|2>
+  Var<around*|[|W<rsup|\<alpha\>><rsub|\<beta\>>|]>=<around*|(|\<omega\><rsup|2>/3|)>
+  <big|sum><rsub|\<beta\>=1><rsup|N><around*|(|x<rsup|\<beta\>>|)><rsup|2>=<around*|(|\<omega\><rsup|2>/3|)><around*|\<\|\|\>|x|\<\|\|\>><rsub|2><rsup|2>>
+  for each <math|\<alpha\>>, where in the second equality, we used the
+  formula <math|Var<around*|(|a X+b Y|)>=a<rsup|2>
+  Var<around*|(|X|)>+b<rsup|2> Var<around*|(|Y|)>+2 a b Cov<around*|(|X,Y|)>>
+  and the fact that <math|W<rsup|\<alpha\>><rsub|\<beta\>>> and
+  <math|W<rsup|\<alpha\>><rsub|\<beta\><rprime|'>>>
+  (<math|\<beta\>\<neq\>\<beta\><rprime|'>>) are independent, and in the
+  third equality, we used the variance of uniform distribution. So, standard
+  derivative of <math|z<rsup|\<alpha\>>>, or the randomness introduced by
+  <math|W> to output <math|z>, is proportional to <math|\<omega\>> and
+  <math|L<rsub|2>>-norm of <math|x>. The greater <math|\<omega\>>, the
+  greater pollution.<\footnote>
+    This may not be true. The values of <math|W>, once sampled, has been
+    determined. From information perspective, as long as the <math|W> is
+    non-degenerate, then the mutual information between <math|z> and <math|x>
+    will not be lost because of <math|W>. But, <math|W> is usually
+    non-degenerate, since <math|W> obeys the Wigner semicircle theorem which
+    states that the eigenvalues of a random matrix obey a Wigner semicircle
+    distribution which is zero-measure on zero.
+  </footnote>
+
+  The other extreme is <math|\<omega\>\<ll\>1> (thus
+  <math|\<omega\>\<approx\>0>). In this situation, <math|y> will be very
+  insensitive to <math|x>, thus cannot properly react to a critical change in
+  <math|x> (for example, changing from <math|2> to <math|3> in the MNIST
+  dataset). This relates to backward propagation of information. So, consider
+  the vector-Jacobian product <math|<big|sum><rsub|\<alpha\>=1><rsup|M>v<rsub|\<alpha\>>
+  <around*|(|\<partial\>y<rsup|\<alpha\>>/\<partial\>x<rsup|\<gamma\>>|)>=<big|sum><rsub|\<alpha\>=1><rsup|M>\<sigma\><rprime|'><around*|(|<big|sum><rsub|\<beta\>=1><rsup|N>W<rsup|\<alpha\>><rsub|\<beta\>>
+  x<rsup|\<beta\>>+b<rsup|\<alpha\>>|)> W<rsup|\<alpha\>><rsub|\<gamma\>>
+  v<rsub|\<alpha\>>> for some vector <math|v>. For simplicity, now omit the
+  <math|\<sigma\><rprime|'><around*|(|\<ldots\>|)>> term (for ReLU it is
+  unit) and examine the rest, <math|><math|\<delta\><rsup|\<alpha\>>\<assign\><big|sum><rsub|\<alpha\>=1><rsup|M>
+  W<rsup|\<alpha\>><rsub|\<gamma\>> v<rsub|\<alpha\>>>. Following the same
+  process, we have <math|Var<around*|[|\<delta\><rsup|\<alpha\>>|]>=<around*|(|\<omega\><rsup|2>/3|)><around*|\<\|\|\>|v|\<\|\|\>><rsub|2><rsup|2>>
+  for each <math|\<alpha\>>. So, standard derivative of
+  <math|\<delta\><rsup|\<alpha\>>>, or the scale of backward propagation, is
+  proportional to <math|\<omega\>> and <math|L<rsub|2>>-norm of <math|v>. The
+  smaller <math|\<omega\>>, the smaller backward information progagation.
+
+  <section|Normalized Vector-Jacobian Product>
+
+  We find the optimized model has the property that, in the backward
+  propagation, <math|Var<around*|[|<big|sum><rsub|\<alpha\>=1><rsup|N<rsub|l+1>>v<rsub|\<alpha\>><around*|(|\<partial\>z<rsup|\<alpha\>><rsub|l+1>/\<partial\>z<rsup|\<beta\>><rsub|l>|)><around*|(|z<rsub|l>|)>|]>=Const>
+  for different <math|l>, where expectation is taken over component
+  <math|\<beta\>>, <with|font-shape|italic|even though
+  <math|Var<around*|[|z<rsub|l>|]>> varies greatly in different layers>. This
+  may relate to the singular values of the Jacobian
+  <math|<around*|(|\<partial\>z<rsup|\<alpha\>><rsub|l+1>/\<partial\>z<rsup|\<beta\>><rsub|l>|)><around*|(|z<rsub|l>|)>>.
+
+  Let <math|v\<in\>\<bbb-R\><rsup|M>>, <math|J\<in\>\<bbb-R\><rsup|M\<times\>N>>.
+  If suppose <math|\<bbb-E\><around*|[|v J|]>=0>, then
+
+  <\align>
+    <tformat|<table|<row|<cell|Var<around*|[|v
+    J|]>=>|<cell|<with|color|blue|\<bbb-E\>><around*|[|<around*|(|v
+    J|)><rsup|2>|]>>>|<row|<cell|=>|<cell|<with|color|blue|<frac|1|N><big|sum><rsub|\<beta\>=1><rsup|N>><around*|[|<big|sum><rsub|\<alpha\>=1><rsup|M>v<rsub|\<alpha\>>
+    J<rsup|\<alpha\>><rsub|\<beta\>>|]><around*|[|<big|sum><rsub|\<gamma\>=1><rsup|M>v<rsub|\<gamma\>>
+    J<rsup|\<gamma\>><rsub|\<beta\>>|]>>>|<row|<cell|=>|<cell|<big|sum><rsub|\<alpha\>,\<gamma\>=1><rsup|M>v<rsub|\<alpha\>>
+    v<rsub|\<gamma\>> <around*|(|<frac|1|N><big|sum><rsub|\<beta\>=1><rsup|N>J<rsup|\<alpha\>><rsub|\<beta\>>
+    J<rsup|\<gamma\>><rsub|\<beta\>>|)>.>>>>
+  </align>
+
+  Define <math|K<rsup|\<alpha\>\<gamma\>>\<assign\><around*|(|1/N|)><big|sum><rsub|\<beta\>=1><rsup|N>J<rsup|\<alpha\>><rsub|\<beta\>>
+  J<rsup|\<gamma\>><rsub|\<beta\>> > which is a <math|M\<times\>M> real
+  positive-definite symmetric matrix. Thus, it has eigenvalues
+  <math|<around*|(|<around*|(|\<sigma\><rsup|1>|)><rsup|2>,\<ldots\>,<around*|(|\<sigma\><rsup|M>|)><rsup|2>|)>>.
+  In a proper coordinate where <math|K> is diagonalized, we have
+  <math|v\<rightarrow\><wide|v|~>>. Thus,
+
+  <\equation*>
+    Var<around*|[|v J|]>=\<langle\>v<around*|\||K|\|>v\<rangle\>=<big|sum><rsub|\<alpha\>=1><rsup|M><wide|v|~><rsub|\<alpha\>><rsup|2>
+    <around*|(|\<sigma\><rsup|\<alpha\>>|)><rsup|2>,
+  </equation*>
+
+  compared with <math|Var<around*|[|v|]>> which (assume
+  <math|\<bbb-E\><around*|[|v|]>=0>) is <math|Var<around*|[|v|]>=<around*|(|1/M|)>
+  <big|sum><rsub|\<alpha\>=1><rsup|M>v<rsub|\<alpha\>><rsup|2>=<around*|(|1/M|)>
+  <big|sum><rsub|\<alpha\>=1><rsup|M><wide|v|~><rsub|\<alpha\>><rsup|2>>.
+
+  For example, when <math|<wide|v|~><rsub|\<alpha\>>\<equiv\>\<phi\>> for
+  some <math|\<phi\>\<in\>\<bbb-R\>> for all <math|\<alpha\>>, we have
+  <math|Var<around*|[|v|]>=\<phi\><rsup|2>>, thus
+
+  <\equation*>
+    <frac|Var<around*|[|v J|]>|Var<around*|[|v|]>>=<big|sum><rsub|\<alpha\>=1><rsup|M><around*|(|\<sigma\><rsup|\<alpha\>>|)><rsup|2>=tr<around*|(|K|)>.
+  </equation*>
+
+  The same for Jacobian-vector product. Let <math|u\<in\>\<bbb-R\><rsup|N>>.
+  If suppose <math|\<bbb-E\><around*|[|J u|]>=0>, then, following the same
+  steps,
+
+  <\equation*>
+    Var<around*|[|J u|]>=<big|sum><rsub|\<alpha\>,\<gamma\>=1><rsup|N>
+    <around*|(|<frac|1|M><big|sum><rsub|\<beta\>=1><rsup|M>J<rsup|\<beta\>><rsub|\<alpha\>>
+    J<rsup|\<beta\>><rsub|\<gamma\>>|)> u<rsup|\<alpha\>> u<rsup|\<gamma\>>.
+  </equation*>
+
+  Define <math|L<rsub|\<alpha\>\<gamma\>>\<assign\><around*|(|1/M|)><big|sum><rsub|\<beta\>=1><rsup|M>J<rsup|\<beta\>><rsub|\<alpha\>>
+  J<rsup|\<beta\>><rsub|\<gamma\>>> which is a <math|N\<times\>N> real
+  positive-definite symmetric matrix. Thus, it has eigenvalues
+  <math|<around*|(|\<psi\><rsub|1><rsup|2>,\<ldots\>,\<psi\><rsub|N><rsup|2>|)>>.
+  In a proper coordinate where <math|L> is diagonalized, we have
+  <math|u\<rightarrow\><wide|u|~>>. Thus,
+
+  <\equation*>
+    Var<around*|[|J u|]>=\<langle\>u<around*|\||L|\|>u\<rangle\>=<big|sum><rsub|\<alpha\>=1><rsup|N><around*|(|<wide|u|~><rsup|\<alpha\>>|)><rsup|2>
+    \<psi\><rsub|\<alpha\>><rsup|2>,
+  </equation*>
+
+  compared with <math|Var<around*|[|u|]>> which (assume
+  <math|\<bbb-E\><around*|[|u|]>=0>) is <math|Var<around*|[|u|]>=<around*|(|1/N|)>
+  <big|sum><rsub|\<alpha\>=1><rsup|N><around*|(|u<rsup|\<alpha\>>|)><rsup|2>=<around*|(|1/N|)>
+  <big|sum><rsub|\<alpha\>=1><rsup|N><around*|(|<wide|u|~><rsup|\<alpha\>>|)><rsup|2>>.
+
+  <section|Criticality>
+
+  Remind of the criticality in Ising model. An improper parameter (<math|T>
+  that away from critical <math|T<rsub|c>>) blocks the propagation of
+  <with|font-series|bold|local perturbation>. Now, we are to find a similar
+  concept in deep neural network.
+
+  A deep neural network has the general structure (<math|l=1,\<ldots\>,L>)
+
+  <\equation*>
+    z<rsub|l>=f<rsub|l><around*|(|z<rsub|l-1>;\<theta\><rsub|l>|)>,
+  </equation*>
+
+  with <math|z<rsub|0>\<assign\>x> as the model input, and
+  <math|y\<assign\>z<rsub|L>> as the model output. Thus, the model becomes
+  the composition <math|f<around*|(|\<cdummy\>;\<theta\>|)>=f<rsub|L><around*|(|\<cdummy\>;\<theta\><rsub|L>|)>\<circ\>\<cdots\>\<circ\>f<rsub|1><around*|(|\<cdummy\>;\<theta\><rsub|1>|)>>,
+  where <math|\<theta\>=\<theta\><rsub|1>\<oplus\>\<cdots\>\<oplus\>\<theta\><rsub|L>>.
+  The depth <math|l> plays the role of time in Ising model.
+
+  <subsection|RNN: Boundary between Order and Chaos>
+
+  Consider a deep neural network with residual structure. When all the layers
+  are the same function <math|f<rsub|l><around*|(|\<cdummy\>;\<theta\><rsub|l>|)>\<equiv\>f<rsub|l<rprime|'>><around*|(|\<cdummy\>;\<theta\><rsub|l<rprime|'>>|)>>
+  for each <math|l,l<rprime|'>=1,\<ldots\>,L>, then we have
+
+  <\equation*>
+    z<rsub|l+1>=f<around*|(|z<rsub|l>;\<theta\>|)>,
+  </equation*>
+
+  with <math|z<rsub|0>=x> and <math|z<rsub|L>=y> again. For a perturbation
+  <math|x<rprime|'>=x+\<delta\>x>, we have, for each layer,
+  <math|\<delta\>z<rsub|l+1>=<around*|(|\<partial\>f/\<partial\>z<rsub|l>|)><around*|(|z<rsub|l>;\<theta\>|)>
+  \<delta\>z<rsub|l>>. If <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>z<rsub|l>|)><around*|(|z<rsub|l>;\<theta\>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>\<less\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
+  we find <math|<around*|\||\<delta\>y|\|>\<ll\><around*|\||\<delta\>x|\|>>
+  as <math|L\<gg\>1>. Conversely, if <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>z<rsub|l>|)><around*|(|z<rsub|l>;\<theta\>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>\<gtr\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
+  we have <math|<around*|\||\<delta\>y|\|>\<gg\><around*|\||\<delta\>x|\|>>
+  as <math|L\<gg\>1>. The first is in order, while the second is chaos. Thus,
+  the boundary <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>z<rsub|l>|)><around*|(|z<rsub|l>;\<theta\>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>=<around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>
+  characterizes the criticality, which is the same as the bifurcation of
+  <hlink|logistic map|https://en.wikipedia.org/wiki/Logistic_map>.
+
+  <subsection|Global Perturbation>
+
+  Consider two inputs <math|x> and <math|x<rprime|'>>, which correspond to
+  different outputs <math|y> and <math|y<rprime|'>>. Thus, we have a
+  \Pglobal\Q perturbation to the model input <math|x> which is
+  <math|x<rprime|'>=x+\<delta\>x>, if <math|x\<approx\>x<rprime|'>>. The
+  perturbation then propagates toward the model output. The depth of neural
+  network plays the role of time in the Ising model. The perturbation makes
+  <math|f<around*|(|x;\<theta\>|)>> be <math|f<around*|(|x<rprime|'>;\<theta\>|)>\<sim\>f<around*|(|x;\<theta\>|)>+<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+  \<delta\>x>, changing from <math|y> to <math|y<rprime|'>>. For propagating
+  the perturbation without being blocked, we shall expect that
+
+  <\equation*>
+    <around*|\<\|\|\>|<big|sum><rsub|\<beta\>=1><rsup|N<rsub|0>><frac|\<partial\>f<rsup|\<alpha\>>|\<partial\>x<rsup|\<beta\>>><around*|(|x;\<theta\>|)>
+    \<delta\>x<rsup|\<beta\>>|\<\|\|\>>\<sim\><around*|\<\|\|\>|f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>|\<\|\|\>>,
+  </equation*>
+
+  indicating that the norms share the same order. Otherwise, if
+  <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+  \<delta\>x|\<\|\|\>>\<ll\><around*|\<\|\|\>|\<delta\>x|\<\|\|\>>>, then the
+  perturbation will diminish along the propagation, causing
+  <math|y<rprime|'>\<rightarrow\>y>. This is like the <math|T\<ll\>T<rsub|c>>
+  in Ising model. And if <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+  \<delta\>x|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<delta\>x|\<\|\|\>>>, then the
+  perturbation will \Pwash out\Q the information of
+  <math|f<around*|(|x;\<theta\>|)>> (function like <math|x+y> is not
+  monomorphic). In addition, this will make the system unstable. This is a
+  little like the <math|T\<gg\>T<rsub|c>> where the randomness is so large
+  that ???
+
+  \;
+
+  <math|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+  \<delta\>x\<gg\>f<around*|(|x;\<theta\>|)>>
+
+  <\equation*>
+    <frac|<around*|\||f<around*|(|x+\<delta\>x;\<theta\>|)>-f<around*|(|x;\<theta\>|)>-<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+    \<delta\>x|\|>|<around*|\||f<around*|(|x+\<delta\>x;\<theta\>|)>-f<around*|(|x;\<theta\>|)>|\|>+<around*|\||<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
+    \<delta\>x|\|>>\<ll\>1.
+  </equation*>
+
+  <\equation>
+    f<rsup|\<alpha\>><around*|(|x+\<delta\>x;\<theta\>|)>\<approx\>f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>+<frac|\<partial\>f<rsup|\<alpha\>>|\<partial\>x<rsup|\<beta\>>><around*|(|*x;\<theta\>|)>
+    \<delta\>x<rsup|\<beta\>>.
+  </equation>
+
+  \;
+
+  <subsection|Local Perturbation>
+
+  What is the source of local perturbation? Since <math|f<rsub|l>> has two
+  variables, the local perturbation comes from either
+  <math|z<rsub|l-1>\<rightarrow\>z<rsub|l-1>+\<delta\>z<rsub|l-1>> or
+  <math|\<theta\><rsub|l>\<rightarrow\>\<theta\><rsub|l>+\<delta\>\<theta\><rsub|l>>.
+  The first comes from the perburbation of input
+  <math|x\<rightarrow\>x+\<delta\>x>, and the later as a virtual variation
+  may come from the stochastic gradient descent optimization. Now, suppose
+  the perturbation <math|><math|z<rsub|l>\<rightarrow\>z<rsub|l>+\<delta\>z<rsub|l>>,
+  which may be trace back to <math|\<delta\>z<rsub|l-1>>, or to
+  <math|\<delta\>\<theta\><rsub|l>>. It leads to
+  <math|z<rsub|l+1>\<rightarrow\>z<rsub|l+1>+<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
+  \<delta\>z<rsub|l>>. We shall demand that
+
+  <\equation*>
+    <around*|\<\|\|\>|<big|sum><rsub|\<beta\>=1><rsup|N<rsub|l>><frac|\<partial\>z<rsup|\<alpha\>><rsub|l+1>|\<partial\>z<rsup|\<beta\>><rsub|l><rsub|>>
+    \<delta\>z<rsub|l><rsup|\<beta\>>|\<\|\|\>>\<sim\><around*|\<\|\|\>|\<delta\>z<rsub|l><rsup|\<alpha\>>|\<\|\|\>>.
+  </equation*>
+
+  Otherwise, if <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
+  the <math|\<delta\>z<rsub|l+1>> will \Pwash out\Q the information of
+  <math|z<rsub|l+1>>. Conversely, if <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>\<ll\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
+  the <math|\<delta\>z<rsub|l+1>> will diminish and \Pwashed out\Q by the
+  information of <math|z<rsub|l+1>>. Since both the information from
+  <math|\<delta\>z<rsub|l+1>> (information from a virtual variation
+  <math|\<delta\>\<theta\><rsub|l<rprime|'>>> for
+  <math|\<forall\>l<rprime|'>\<leqslant\>l>) and that from <math|z<rsub|l+1>>
+  (information sourcing from <math|x>) are important, we shall expect a
+  balance, which implies <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
+  \<delta\>z<rsub|l>|\<\|\|\>>\<sim\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>.
+
+  <section|Experiment Results>
+
+  It seems that <samp|adam> optimizer <with|font-shape|italic|just> makes the
+  difference of weights, <math|\<Delta\>W<rsub|l>\<assign\><around*|(|W<rsub|l>|)><rsub|\<star\>>-<around*|(|W<rsub|l>|)><rsub|0>>,
+  obeys the same distribution for all <math|l> and the same thing for biases.
+  But the distribution for weights and biases are different.
+  <math|\<rightarrow\>> No, this is not true. When the initialization
+  <math|Var<around*|[|<around*|(|W<rsub|l>|)><rsub|0>|]>> is larger (e.g. 5
+  times), then the <verbatim|adam> will not work. But, if it is smaller (e.g.
+  100 times), the <verbatim|adam> works well and the model is trained toward
+  its criticality.
 </body>
 
 <\initial>
@@ -699,47 +986,50 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.3|4>>
-    <associate|auto-11|<tuple|1.3.1|4>>
-    <associate|auto-12|<tuple|1.3.2|?>>
-    <associate|auto-13|<tuple|1.3.3|?>>
-    <associate|auto-14|<tuple|1.3.4|?>>
-    <associate|auto-15|<tuple|1.4|?>>
-    <associate|auto-16|<tuple|1.4.1|?>>
-    <associate|auto-17|<tuple|1.4.2|?>>
-    <associate|auto-18|<tuple|1.5|?>>
-    <associate|auto-19|<tuple|1.5.1|?>>
+    <associate|auto-10|<tuple|1.3|3>>
+    <associate|auto-11|<tuple|1.3.1|3>>
+    <associate|auto-12|<tuple|1.3.2|4>>
+    <associate|auto-13|<tuple|1.3.3|4>>
+    <associate|auto-14|<tuple|1.3.4|5>>
+    <associate|auto-15|<tuple|1.4|5>>
+    <associate|auto-16|<tuple|1.4.1|5>>
+    <associate|auto-17|<tuple|1.4.2|5>>
+    <associate|auto-18|<tuple|1.5|6>>
+    <associate|auto-19|<tuple|1.5.1|6>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-20|<tuple|1.5.2|?>>
-    <associate|auto-21|<tuple|1.5.3|?>>
-    <associate|auto-22|<tuple|1.5.4|?>>
+    <associate|auto-20|<tuple|1.5.2|6>>
+    <associate|auto-21|<tuple|1.5.3|7>>
+    <associate|auto-22|<tuple|1.5.4|7>>
+    <associate|auto-23|<tuple|2|?>>
+    <associate|auto-24|<tuple|2.1|?>>
+    <associate|auto-25|<tuple|2.2|?>>
+    <associate|auto-26|<tuple|2.3|?>>
+    <associate|auto-27|<tuple|2.3.1|?>>
+    <associate|auto-28|<tuple|2.3.2|?>>
+    <associate|auto-29|<tuple|2.3.3|?>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-4|<tuple|1.2.1|2>>
+    <associate|auto-30|<tuple|2.4|?>>
+    <associate|auto-4|<tuple|1.2.1|1>>
     <associate|auto-5|<tuple|1.2.2|2>>
-    <associate|auto-6|<tuple|1.2.3|3>>
-    <associate|auto-7|<tuple|1.2.4|3>>
+    <associate|auto-6|<tuple|1.2.3|2>>
+    <associate|auto-7|<tuple|1.2.4|2>>
     <associate|auto-8|<tuple|1.2.5|3>>
     <associate|auto-9|<tuple|1.2.6|3>>
-    <associate|equation:gradient descent method|<tuple|1.2|?>>
+    <associate|equation:gradient descent method|<tuple|1.2|2>>
     <associate|equation:loss function|<tuple|1.1|1>>
-    <associate|equation:moving average|<tuple|1.3|?>>
-    <associate|equation:moving average 2|<tuple|1.4|?>>
-    <associate|equation:rescale by standard derivation|<tuple|1.5|?>>
-    <associate|footnote-1|<tuple|1|?>>
-    <associate|footnote-1.1|<tuple|1.1|2>>
+    <associate|equation:moving average|<tuple|1.3|2>>
+    <associate|equation:moving average 2|<tuple|1.4|2>>
+    <associate|equation:rescale by standard derivation|<tuple|1.5|5>>
+    <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|3>>
-    <associate|footnote-1.3|<tuple|1.3|?>>
-    <associate|footnote-1.4|<tuple|1.4|?>>
-    <associate|footnote-1.5|<tuple|1.5|?>>
-    <associate|footnote-2|<tuple|2|?>>
-    <associate|footnr-0|<tuple|1.1|?>>
-    <associate|footnr-1|<tuple|1|?>>
-    <associate|footnr-1.1|<tuple|1.1|2>>
+    <associate|footnote-1.3|<tuple|1.3|4>>
+    <associate|footnote-1.4|<tuple|1.4|6>>
+    <associate|footnote-2.1|<tuple|2.1|?>>
+    <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|3>>
-    <associate|footnr-1.3|<tuple|1.3|?>>
-    <associate|footnr-1.4|<tuple|1.4|?>>
-    <associate|footnr-1.5|<tuple|1.5|?>>
-    <associate|footnr-2|<tuple|2|?>>
+    <associate|footnr-1.3|<tuple|1.3|4>>
+    <associate|footnr-1.4|<tuple|1.4|6>>
+    <associate|footnr-2.1|<tuple|2.1|?>>
     <associate|section: loss function|<tuple|1.1|1>>
   </collection>
 </references>
@@ -755,41 +1045,86 @@
       Prediction and Truth <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      1.2<space|2spc>Different Learning-Rate for Different Layer
+      1.2<space|2spc>Moving Average Helps Avoid Stochastic Disturbance
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>
 
-      1.3<space|2spc>Validation Helps Avoid the Instability of Optimization
-      (TODO) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>
+      <with|par-left|<quote|1tab>|1.2.1<space|2spc>Stochastic Disturbance in
+      Loss Function <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4>>
 
-      1.4<space|2spc>Moment Helps Avoid Stochastic Disturbance (TODO)
+      <with|par-left|<quote|1tab>|1.2.2<space|2spc>Gradient Descent Method
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>
+      <no-break><pageref|auto-5>>
 
-      1.5<space|2spc>A Little History about Optimizer (TODO)
+      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Moving Average of Gradient
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>
+      <no-break><pageref|auto-6>>
 
-      1.6<space|2spc>Gradient Is Computed by Vector-Jacobian Product
+      <with|par-left|<quote|1tab>|1.2.4<space|2spc>Finetune Decay Factor and
+      Learning Rate <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7>>
+
+      <with|par-left|<quote|1tab>|1.2.5<space|2spc>History and Remark
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>
-
-      <with|par-left|<quote|1tab>|1.6.1<space|2spc>From Feed-Forward Neural
-      Network to General Composition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|1.6.2<space|2spc>Vector-Jacobian Product
+      <with|par-left|<quote|1tab>|1.2.6<space|2spc>Implementation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.6.3<space|2spc>Forward Propagation
+      1.3<space|2spc>Gradient Direction May Not Be Optimal (TODO)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-10>
 
-      <with|par-left|<quote|1tab>|1.6.4<space|2spc>Backward Propagation
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.3.1<space|2spc>Estimation of Gradients at
+      Different Layer <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
+
+      <with|par-left|<quote|1tab>|1.3.2<space|2spc>Large Difference of
+      Gradients May Slow Down Optimization
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12>>
+
+      <with|par-left|<quote|1tab>|1.3.3<space|2spc>Rescale by Standard
+      Derivation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-13>>
+
+      <with|par-left|<quote|1tab>|1.3.4<space|2spc>Implementation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14>>
+
+      1.4<space|2spc>Using the Sign of Gradient (TODO)
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-15>
+
+      <with|par-left|<quote|1tab>|1.4.1<space|2spc>History and Remark
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-16>>
+
+      <with|par-left|<quote|1tab>|1.4.2<space|2spc>Implementation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-17>>
+
+      1.5<space|2spc>Gradient Is Computed by Vector-Jacobian Product *
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-18>
+
+      <with|par-left|<quote|1tab>|1.5.1<space|2spc>From Feed-Forward Neural
+      Network to General Composition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-19>>
+
+      <with|par-left|<quote|1tab>|1.5.2<space|2spc>Vector-Jacobian Product
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-20>>
+
+      <with|par-left|<quote|1tab>|1.5.3<space|2spc>Forward Propagation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-21>>
+
+      <with|par-left|<quote|1tab>|1.5.4<space|2spc>Backward Propagation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-22>>
     </associate>
   </collection>
 </auxiliary>

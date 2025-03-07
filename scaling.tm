@@ -44,16 +44,16 @@
     appears with a <math|f<rsup|<around*|(|n|)>>>, we can figure out its
     dimension. Thus, we omit the superscript of
     <math|\<theta\><rsup|<around*|(|n|)>>>, just writing <math|\<theta\>>.
-  </footnote> A model family is a set <math|<around*|{|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\|n=1,2,\<ldots\>|}>>.
+  </footnote> A <with|font-series|bold|model family> is a set
+  <math|<around*|{|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\|n=1,2,\<ldots\>|}>>.
   Thus for each <math|n>, there is one and only one model in a model family.
 
   Without losing generality, suppose that
-  <math|f<rsup|<around*|(|n|)>><around*|(|x;0|)>=0> for
-  <math|\<forall\>x\<in\>\<bbb-R\>>. Otherwise, we can re-define
-  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>> by
-  <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>-f<rsup|<around*|(|n|)>><around*|(|x;0|)>>.
-  This help introduce <math|f<rsup|<around*|(|0|)>><around*|(|x;\<theta\>|)>>,
-  a model without parameter. It is always vanishing:
+  <math|f<rsup|<around*|(|n|)>><around*|(|x;0|)>=0> for all <math|x>.
+  Otherwise, we can re-define <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>>
+  by <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>-f<rsup|<around*|(|n|)>><around*|(|x;0|)>>.
+  This introduces <math|f<rsup|<around*|(|0|)>><around*|(|x;\<theta\>|)>>, a
+  model without parameter, which is always vanishing:
   <math|f<rsup|<around*|(|0|)>><around*|(|x;\<theta\>|)>\<equiv\>f<rsup|<around*|(|0|)>><around*|(|x;0|)>=0>
   for all <math|x>. So, model family comes to be a set
   <math|<around*|{|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>\|n\<in\>\<bbb-N\>,\<theta\>\<in\>\<bbb-R\><rsup|n>|}>>
@@ -130,13 +130,13 @@
   \;
 
   We wonder how the <math|L<rsup|<around*|(|n|)>><rsub|\<star\>>/L<rsub|0>>
-  changes with <math|n\<rightarrow\>2n>. The point is first train a baseline
-  model with <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>>, which
-  furnishes a residual error. Then, enlarge the
+  changes with <math|n\<rightarrow\>2n>. <with|font-shape|italic|The point is
+  first train a baseline model with <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>>,
+  which furnishes a residual error. Then, enlarge the
   <math|f<rsup|<around*|(|n|)>>> to a model with <math|2n> parameters by
   combining with another <math|<wide|f|~><rsup|<around*|(|n|)>>> which fits
   the residual error. We then estimate the minimum of loss for the combined
-  model.
+  model.>
 
   Explicitly, we enlarge the space of parameters by introducing a new model
   <math|<wide|f|~><rsup|<around*|(|n|)>>\<in\>F> and replacing
@@ -144,12 +144,8 @@
   <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>>, where
   <math|r<rsup|<around*|(|n|)>>\<in\><around*|(|0,+\<infty\>|)>> to be
   determined and <math|<wide|f|~><rsup|<around*|(|n|)>>> has <math|n>
-  parameters. Since there is only one model in a model family for each
-  <math|n>, <math|f<rsup|<around*|(|n|)>>> and
-  <math|<wide|f|~><rsup|<around*|(|n|)>>> share the same functional form, and
-  <math|<wide|f|~><rsup|<around*|(|n|)>><around*|(|x;0|)>=0> for all
-  <math|x>. In this way, we construct a new model with <math|2n> parameters.
-  The loss function now becomes
+  parameters. In this way, we construct a new model with <math|2n>
+  parameters. The loss function now becomes
 
   <\equation*>
     L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>\<assign\><big|int>\<mathd\>x\<mathd\>y
@@ -157,7 +153,10 @@
     <wide|f|~><rsup|<around*|(|n|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>.
   </equation*>
 
-  By inserting a unity, the RHS becomes
+  \;
+
+  It has a regular expression, which we are to calculate. By inserting a
+  unity, the right hand side becomes
 
   <\equation*>
     <big|int>\<mathd\>x\<mathd\>y \ p<around*|(|x,y|)><around*|[|r<rsup|<around*|(|n|)>><big|int>\<mathd\><wide|y|~>
@@ -204,7 +203,7 @@
     <wide|y|~>-y+f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>|)>.
   </equation*>
 
-  Plugging into the RHS, we find
+  Plugging into the right hand side, we find
 
   <\equation*>
     L<rsup|<around*|(|2n|)>><around*|(|\<theta\>,<wide|\<theta\>|~>|)>=r<rsup|<around*|(|n|)>><rsup|2>
@@ -237,14 +236,12 @@
   Comparing with the expression of <math|L<rsup|<around*|(|n|)>>>,
   <math|<wide|L|~><rsup|<around*|(|n|)>>> is formally the same as <math|L>,
   even with <math|<wide|L|~><rsup|<around*|(|n|)>><around*|(|0|)>=L<rsup|><around*|(|0|)>=L<rsub|0>>.
-  The <math|<wide|f|~><rsup|<around*|(|n|)>>> shares the same funcitonal form
-  with <math|f<rsup|<around*|(|n|)>>> since they are in the same model
-  family. Thus, the only difference is that <math|p> is replaced by
+  The only difference is that <math|p> is replaced by
   <math|<wide|p|~><rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\><rsub|\<star\>>|)>>.
 
   The minimum of <math|<wide|L|~><rsup|<around*|(|n|)>>> depends on the
   complexity of <math|<wide|P|~><rsup|<around*|(|n|)>><around*|(|\<theta\><rsub|\<star\>>|)>>,
-  which characterizes the distribution of residual errors of
+  which characterizes the distribution of residual errors furnished by
   <math|f<rsup|<around*|(|n|)>><around*|(|\<ldots\>;\<theta\><rsub|\<star\>>|)>>.
   Denoting <math|<wide|\<theta\>|~><rsub|\<star\>>\<assign\>argmin
   <wide|L|~><rsup|<around*|(|n|)>>> and <math|<wide|L|~><rsub|\<star\>><rsup|<around*|(|n|)>>\<assign\><wide|L|~><rsup|<around*|(|n|)>><around*|(|<wide|\<theta\>|~><rsub|\<star\>>|)>>,
@@ -267,20 +264,21 @@
   optimization by first on <math|\<theta\>> and then on
   <math|<wide|\<theta\>|~>> with <math|\<theta\>> frozen can approximate the
   best-fit, by which the <math|\<theta\>> and <math|<wide|\<theta\>|~>> are
-  optimized synchronously. The reason is that the optimization of
-  <math|\<theta\>> has taken most of the work that minimizes the loss, while
-  optimizing <math|<wide|\<theta\>|~>> in the next step is just fine-tuning.
-  Thus, we may expect that, when optimize <math|\<theta\>> and
+  optimized synchronously. After all, the optimization of <math|\<theta\>>
+  has taken most of the work that minimizes the loss, while optimizing
+  <math|<wide|\<theta\>|~>> in the next step is just fine-tuning. Thus, we
+  may expect that, when optimize <math|\<theta\>> and
   <math|<wide|\<theta\>|~>> synchronously, the change of <math|\<theta\>>
   from <math|\<theta\><rsub|\<star\>>> will be negligible.
 
   <subsection|Recursive Generalization>
 
-  Let <math|P> a distribution of dataset and <math|F> a model family. Denote
-  <math|L<rsub|0>\<assign\><big|int>\<mathd\>x\<mathd\>y p<around*|(|x,y|)>
-  y<rsup|2>>. Initially, given some <math|n\<in\><around*|{|1,2,\<ldots\>|}>>,
-  we use <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>> in <math|F>
-  to \Pfit\Q the dataset <math|P>. The loss is
+  We are to summarize and generalize the previous discussion to arbitrary
+  parameters. Let <math|P> a distribution of dataset and <math|F> a model
+  family. Denote <math|L<rsub|0>\<assign\><big|int>\<mathd\>x\<mathd\>y
+  p<around*|(|x,y|)> y<rsup|2>>. Initially, given some positive integer
+  <math|n>, we use <math|f<rsup|<around*|(|n|)>><around*|(|x;\<theta\>|)>> in
+  <math|F> to \Pfit\Q the dataset <math|P>. The loss is
 
   <\equation>
     L<rsup|<around*|(|n|)>><around*|(|\<theta\>|)>\<assign\><big|int>\<mathd\>x
@@ -310,7 +308,8 @@
   <\equation>
     <wide|L|~><rsup|<around*|(|k|)>><around*|(|<wide|\<theta\>|~>|)>\<assign\><frac|L<rsub|0>|L<rsub|\<star\>><rsup|<around*|(|k|)>>>L<rsup|<around*|(|2k|)>><around*|(|\<theta\><rsub|\<star\>>,<wide|\<theta\>|~>|)>=<big|int>\<mathd\>x
     \<mathd\>y <wide|p|~><rsup|<around*|(|k|)>><around*|(|x,y|)>
-    <around*|(|<wide|f|~><rsup|<around*|(|k|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>,
+    <around*|(|<wide|f|~><rsup|<around*|(|k|)>><around*|(|x;<wide|\<theta\>|~>|)>-y|)><rsup|2>,<label|equation:loss
+    of residual error>
   </equation>
 
   which has <math|<wide|L|~><rsup|<around*|(|k|)>><around*|(|0|)>=L<rsub|0>>.
@@ -345,34 +344,28 @@
     n|)>><rsub|\<star\>>|L<rsub|0>>.<label|equation:L star regression>
   </equation>
 
-  <subsection|Digression: Complete Model Family>
+  <section|Power-Law Arises From Self-Similarity of Complexity>
 
-  You can construct a free vector space based on the model family, thus
-  <math|f<rsup|<around*|(|k|)>>> is an element of this vector space. If, for
-  each model with <math|k> parameters, there exists a linear combinition of
-  elements in the model family that equals to the model, then we say the
-  model family forms a complete basis for the collection of models. How can a
-  model family be complete?
+  We have derived the relation between <math|L<rsup|<around*|(|k|)>><rsub|\<star\>>/L<rsub|0>>
+  and <math|k> which can be factorized as <math|2<rsup|m> n>. We wonder when
+  the power-law relation between <math|L<rsup|<around*|(|k|)>><rsub|\<star\>>/L<rsub|0>>
+  and <math|k> may arise.
 
-  <section|Power-Law>
-
-  <subsection|Power-Law Arises From Self-Similarity of Complexity (TODO)>
-
-  We have derived the relation between <math|L<rsup|<around*|(|2<rsup|m>
-  n|)>><rsub|\<star\>>/L<rsub|0>> and <math|2<rsup|m> n>. We wonder when the
-  power-law relation between <math|L<rsup|<around*|(|2<rsup|m>
-  n|)>><rsub|\<star\>>/L<rsub|0>> and <math|2<rsup|m> n> may arise.
-
-  It is well known that a function <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>>
-  is power-law, which means there is a <math|\<gamma\>\<in\>\<bbb-R\>> such
-  that <math|f<around*|(|x|)>=x<rsup|\<gamma\>>>, if and only if there is a
-  function <math|k:\<bbb-R\><rsub|+>\<rightarrow\>\<bbb-R\><rsub|+>> such
-  that, for <math|\<forall\>s,x>, <math|f<around*|(|s x|)>=k<around*|(|s|)>
-  f<around*|(|x|)>>. Applying to our situation, we find that, given <math|n>,
-  the condition for power-law to arise is that
+  A function <math|f<around*|(|x|)>:\<bbb-R\>\<rightarrow\>\<bbb-R\>> obeys
+  <with|font-series|bold|power-law> if there is a
+  <math|\<gamma\>\<in\>\<bbb-R\>> such that
+  <math|f<around*|(|x|)>\<propto\>x<rsup|\<gamma\>>>. It is well known that
+  <with|font-shape|italic|a function <math|f> is power-law if and only if
+  there is a function <math|k:\<bbb-R\><rsub|+>\<rightarrow\>\<bbb-R\><rsub|+>>
+  such that, for any <math|s\<in\>\<bbb-R\><rsub|+>> and
+  <math|x\<in\>\<bbb-R\>>, <math|f<around*|(|s x|)>=k<around*|(|s|)>
+  f<around*|(|x|)>>>. Applying to our situation, we find that, given
+  <math|n>, the condition for power-law to arise is that
   <math|L<rsup|<around*|(|2<rsup|<around*|(|m+1|)>>
   n|)>><rsub|\<star\>>/L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> is
-  independent of <math|m>. From equation (<reference|equation:L star
+  independent of <math|m> (replacing <math|f<around*|(|x|)>> by
+  <math|L<rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>/L<rsub|0>> and
+  <math|s> by <math|2>). From equation (<reference|equation:L star
   regression>), we have
 
   <\equation*>
@@ -387,15 +380,15 @@
   <math|<wide|L|~><rsup|<around*|(|2<rsup|m>
   n|)>><around*|(|<wide|\<theta\>|~>|)>>, as the loss of residual error of
   <math|f<rsup|<around*|(|2<rsup|m> n|)>><around*|(|x;\<theta\><rsub|\<star\>>|)>>,
-  has a \Pstandard\Q format. Thus, its minimum,
-  <math|<wide|L|~><rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>>, is
-  completely determined by the complexity of
+  has a \Pstandard\Q format (equation <reference|equation:loss of residual
+  error>). Thus, its minimum, <math|<wide|L|~><rsup|<around*|(|2<rsup|m>
+  n|)>><rsub|\<star\>>>, is completely determined by the complexity of
   <math|<wide|P|~><rsup|<around*|(|2<rsup|m>
   n|)>><around*|(|\<theta\><rsub|\<star\>>|)>>. So, that
   <math|<wide|L|~><rsup|<around*|(|2<rsup|m> n|)>><rsub|\<star\>>> is
   independent of <math|m> implies that the complexity of
   <math|<wide|P|~><rsup|<around*|(|2k|)>><around*|(|\<theta\><rsub|\<star\>>|)>>
-  is more complex than <math|<wide|P|~><rsup|<around*|(|k|)>><around*|(|\<theta\><rsub|\<star\>>|)>>
+  is greater than that of <math|<wide|P|~><rsup|<around*|(|k|)>><around*|(|\<theta\><rsub|\<star\>>|)>>
   because, for approaching the same minimum of loss function, we need double
   number of parameters for <math|<wide|P|~><rsup|<around*|(|2k|)>><around*|(|\<theta\><rsub|\<star\>>|)>>
   comparing with <math|<wide|P|~><rsup|<around*|(|k|)>><around*|(|\<theta\><rsub|\<star\>>|)>>.
@@ -412,19 +405,20 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.4.2|4>>
-    <associate|auto-11|<tuple|1.4.3|4>>
-    <associate|auto-12|<tuple|1.5|?>>
-    <associate|auto-13|<tuple|1.5.1|?>>
+    <associate|auto-10|<tuple|1.4.2|3>>
+    <associate|auto-11|<tuple|1.5|4>>
+    <associate|auto-12|<tuple|1.5.1|4>>
+    <associate|auto-13|<tuple|1.5.1|4>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.3|1>>
     <associate|auto-5|<tuple|1.3.1|1>>
-    <associate|auto-6|<tuple|1.3.2|2>>
-    <associate|auto-7|<tuple|1.3.3|2>>
-    <associate|auto-8|<tuple|1.4|3>>
-    <associate|auto-9|<tuple|1.4.1|4>>
+    <associate|auto-6|<tuple|1.3.2|1>>
+    <associate|auto-7|<tuple|1.3.3|1>>
+    <associate|auto-8|<tuple|1.4|2>>
+    <associate|auto-9|<tuple|1.4.1|2>>
     <associate|equation:L star regression|<tuple|1.8|4>>
+    <associate|equation:loss of residual error|<tuple|1.6|?>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnr-1.1|<tuple|1.1|1>>
@@ -439,44 +433,52 @@
       and Power-Law> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Complexity <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      1.1<space|2spc>Model in Perturbation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      <with|par-left|<quote|1tab>|1.1.1<space|2spc>Distribution Is a Data
-      Generator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-3>>
-
-      <with|par-left|<quote|1tab>|1.1.2<space|2spc>Model Family
+      1.2<space|2spc>Dataset and Variance
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>>
+      <no-break><pageref|auto-3>
 
-      <with|par-left|<quote|1tab>|1.1.3<space|2spc>Complexity of Dataset
-      Examined by Model Family <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      1.3<space|2spc>Complexity <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-4>
+
+      <with|par-left|<quote|1tab>|1.3.1<space|2spc>Distribution Is a Data
+      Generator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      1.2<space|2spc>Relation between Minimum of Loss and Number of
-      Parameters: A Simple Example <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>
+      <with|par-left|<quote|1tab>|1.3.2<space|2spc>Model Family
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.2.1<space|2spc>An Extending-Rescaling
-      Process of Loss Function <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.3.3<space|2spc>Complexity of Dataset
+      Examined by Model Family <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|1.2.2<space|2spc>Recursive Generalization
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      1.4<space|2spc>Relation between Minimum of Loss and Number of
+      Parameters: A Simple Example <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>
 
-      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Digression: Complete Model
-      Family <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.4.1<space|2spc>An Extending-Rescaling
+      Process of Loss Function <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      1.3<space|2spc>Power-Law <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>
+      <with|par-left|<quote|1tab>|1.4.2<space|2spc>Recursive Generalization
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|1.3.1<space|2spc>Power-Law Arises From
+      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Digression: Complete Model
+      Family <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>>
+
+      1.5<space|2spc>Power-Law <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12>
+
+      <with|par-left|<quote|1tab>|1.5.1<space|2spc>Power-Law Arises From
       Self-Similarity of Complexity (TODO)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-13>>
     </associate>
   </collection>
 </auxiliary>
