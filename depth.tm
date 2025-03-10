@@ -1,9 +1,87 @@
-<TeXmacs|2.1>
+<TeXmacs|2.1.4>
 
 <style|book>
 
 <\body>
   <chapter|When Neural Network Becomes Deep>
+
+  <section|Enlarging Model Increases Performance (TODO)>
+
+  Consider a model with <math|m> parameters
+  <math|f<around*|(|x;\<theta\>|)>>. In the infinite-dimensional parameter
+  space, it is written as <math|f<around*|(|x;\<theta\><rsup|1>,\<ldots\>,\<theta\><rsup|m>,0,\<ldots\>|)>>.
+  Given a dataset <math|D=<around*|{|<around*|(|x<rsub|i>,y<rsub|i>|)>\|i=1,\<ldots\>,N|}>>,
+  suppose that we have trained the model, resulting in
+  <math|f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,0,\<ldots\>|)>>.
+  After training, we add <math|n> parameters with <math|n\<ll\>m>. For
+  convienence, we re-denote the later <math|n> parameters as
+  <math|\<varphi\>>, thus
+
+  <\align>
+    <tformat|<table|<row|<cell|>|<cell|f<around*|(|x;\<theta\><rsub|\<star\>>|)>=f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,0,\<ldots\>|)>>>|<row|<cell|\<rightarrow\>>|<cell|f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>\<assign\>f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,\<theta\><rsup|m+1>,\<ldots\>,\<theta\><rsup|m+n>,0,\<ldots\>|)>.>>>>
+  </align>
+
+  We further assume that all parameters are small.<\footnote>
+    This is generally true, for several reasons. One is that small parameters
+    increases robustness in generalization. Another may trace to the
+    initialization strategy and optimization algorithm. Temporally, we will
+    not discuss these aspects, but simply assume the fact.
+  </footnote> Then, we can Taylor expand <math|f> by <math|\<varphi\>> as
+
+  <\equation*>
+    f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>=f<around*|(|x;\<theta\><rsub|\<star\>>|)>+\<varphi\><rsup|\<alpha\>><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>+\<omicron\><around*|(|\<varphi\>|)>.
+  </equation*>
+
+  We freeze <math|\<theta\>> to <math|\<theta\><rsub|\<star\>>> and only
+  optimize <math|\<varphi\>>. The reason is that, since <math|\<varphi\>> is
+  small (and <math|n\<ll\>m>), the feedback from <math|\<varphi\>> to
+  <math|\<theta\>> can be negligible. Thus, the loss function is
+
+  <\equation*>
+    L<around*|(|\<varphi\>|)>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|d<around*|(|f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>,y|)>|]>.
+  </equation*>
+
+  Minimizing <math|L<around*|(|\<varphi\>|)>> results in the best-fit
+  <math|\<varphi\><rsub|\<star\>>>. As an example, consider
+  <math|d<around*|(|x,y|)>=<around*|(|x-y|)><rsup|2>/2>. Thus,
+
+  <\equation*>
+    L<around*|(|\<varphi\>|)>=<frac|1|2>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<around*|(|f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>-y|)><rsup|2>|]>=L<around*|(|\<varphi\>|)>=<frac|1|2>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<around*|(|<frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)>\<cdot\>\<varphi\>-\<delta\>y+\<omicron\><around*|(|\<varphi\>|)>|)><rsup|2>|]>,
+  </equation*>
+
+  where <math|\<delta\>y\<assign\>y-f<around*|(|x;\<theta\><rsub|\<star\>>|)>>,
+  the residue left by <math|f<around*|(|x;\<theta\><rsub|\<star\>>|)>>. This
+  can be solved analytically. By omitting the
+  <math|\<omicron\><around*|(|\<varphi\>|)>>, we have
+
+  <\equation*>
+    <frac|\<partial\>L|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|\<varphi\>|)>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<beta\>>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>\<varphi\><rsup|\<beta\>>-\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>.
+  </equation*>
+
+  As long as
+
+  <\equation*>
+    \<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<beta\>>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>
+  </equation*>
+
+  is not degenerate, <math|\<partial\>L/\<partial\>\<varphi\><rsup|\<alpha\>>=0>
+  gives
+
+  <\equation*>
+    \<varphi\><rsub|\<star\>><rsup|\<beta\>>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]><around*|{|\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]><rsup|-1>|}><rsup|\<alpha\>\<beta\>>.
+  </equation*>
+
+  Thus, <math|\<varphi\><rsub|\<star\>>=0> if and only if
+
+  <\equation*>
+    \<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>=0,
+  </equation*>
+
+  indicating that either the residue <math|\<delta\>y> vanishes or
+  <math|<around*|(|\<partial\>f/\<partial\>\<varphi\>|)><around*|(|x;\<theta\><rsub|\<star\>>|)>>
+  vanishes. Generally, both of these are invalid. So, we conclude, except for
+  some specific situation, enlarging the model (using more parameters) will
+  surely increase its performance.
 
   <section|(TODO)>
 
@@ -654,28 +732,29 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.5|3>>
+    <associate|auto-10|<tuple|1.5.4|3>>
     <associate|auto-11|<tuple|1.6|4>>
-    <associate|auto-12|<tuple|1.6.1|4>>
-    <associate|auto-13|<tuple|1.6.2|5>>
-    <associate|auto-14|<tuple|1.6.3|5>>
-    <associate|auto-15|<tuple|1.6.4|5>>
-    <associate|auto-16|<tuple|1.7|6>>
-    <associate|auto-17|<tuple|1.7.1|6>>
-    <associate|auto-18|<tuple|1.7.2|6>>
-    <associate|auto-19|<tuple|1.7.3|6>>
+    <associate|auto-12|<tuple|1.7|4>>
+    <associate|auto-13|<tuple|1.7.1|5>>
+    <associate|auto-14|<tuple|1.7.2|5>>
+    <associate|auto-15|<tuple|1.7.3|5>>
+    <associate|auto-16|<tuple|1.7.4|6>>
+    <associate|auto-17|<tuple|1.8|6>>
+    <associate|auto-18|<tuple|1.8.1|6>>
+    <associate|auto-19|<tuple|1.8.2|6>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-20|<tuple|1.7.4|6>>
-    <associate|auto-21|<tuple|1.7.5|7>>
-    <associate|auto-22|<tuple|1.7.6|7>>
-    <associate|auto-23|<tuple|1.7.7|7>>
+    <associate|auto-20|<tuple|1.8.3|6>>
+    <associate|auto-21|<tuple|1.8.4|7>>
+    <associate|auto-22|<tuple|1.8.5|7>>
+    <associate|auto-23|<tuple|1.8.6|7>>
+    <associate|auto-24|<tuple|1.8.7|?>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.3|2>>
     <associate|auto-5|<tuple|1.4|2>>
-    <associate|auto-6|<tuple|1.4.1|2>>
-    <associate|auto-7|<tuple|1.4.2|2>>
-    <associate|auto-8|<tuple|1.4.3|3>>
-    <associate|auto-9|<tuple|1.4.4|3>>
+    <associate|auto-6|<tuple|1.5|2>>
+    <associate|auto-7|<tuple|1.5.1|2>>
+    <associate|auto-8|<tuple|1.5.2|3>>
+    <associate|auto-9|<tuple|1.5.3|3>>
     <associate|equation:batch normalization|<tuple|1.3|7>>
     <associate|equation:gradient chain-rule|<tuple|1.2|3>>
     <associate|footnote-1.1|<tuple|1.1|4>>
@@ -683,16 +762,18 @@
     <associate|footnote-1.3|<tuple|1.3|6>>
     <associate|footnote-1.4|<tuple|1.4|7>>
     <associate|footnote-1.5|<tuple|1.5|7>>
+    <associate|footnote-1.6|<tuple|1.6|?>>
     <associate|footnr-1.1|<tuple|1.1|4>>
     <associate|footnr-1.2|<tuple|1.2|5>>
     <associate|footnr-1.3|<tuple|1.3|6>>
     <associate|footnr-1.4|<tuple|1.4|7>>
     <associate|footnr-1.5|<tuple|1.5|7>>
-    <associate|section: Normalization|<tuple|1.6.3|5>>
-    <associate|section: Residual Structure|<tuple|1.6.1|?>>
-    <associate|section: Simple Baseline Model|<tuple|1.4.1|2>>
+    <associate|footnr-1.6|<tuple|1.6|?>>
+    <associate|section: Normalization|<tuple|1.7.3|5>>
+    <associate|section: Residual Structure|<tuple|1.7.1|4>>
+    <associate|section: Simple Baseline Model|<tuple|1.5.1|2>>
     <associate|section: Techniques Are Combined for Controlling the
-    Gradients|<tuple|1.6|4>>
+    Gradients|<tuple|1.7|4>>
   </collection>
 </references>
 
