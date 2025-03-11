@@ -120,7 +120,7 @@
 
   <\equation>
     x<rsup|\<alpha\>><around*|(|t+1|)>=\<Theta\><around*|(|<big|sum><rsub|\<beta\>=1><rsup|n>W<rsup|\<alpha\>><rsub|\<beta\>>
-    x<rsup|\<beta\>><around*|(|t|)>+b<rsup|\<alpha\>>|)>,<label|perceptron>
+    x<rsup|\<beta\>><around*|(|t|)>+b<rsup|\<alpha\>>|)>,<label|equation:perceptron>
   </equation>
 
   where <math|t> represents for the current time step and <math|t+1> the
@@ -128,9 +128,11 @@
   function>, represents the step function:
   <math|\<Theta\><around*|(|x\<less\>0|)>\<equiv\>0> and
   <math|\<Theta\><around*|(|x\<geqslant\>0|)>\<equiv\>1>. This model is
-  called <with|font-shape|italic|perceptron>.
+  called <with|font-shape|italic|perceptron>.<label|section: Perceptron
+  Cannot Simulate XOR>
 
-  <section|Perceptron Has Not Sufficient Capacity>
+  <section|Perceptron Should Be Used as Inter-layer><label|Perceptron Should
+  Be Used as Interlayer>
 
   After building up the model, let us use it to simulate a real neural
   network, such as a brain. Suppose we are given a sequence of observed
@@ -155,6 +157,54 @@
   </footnote> So, we cannot have <math|x<rsup|1><around*|(|t+1|)>=XOR<around*|(|x<rsup|1><around*|(|t|)>,x<rsup|2><around*|(|t|)>|)>>,
   thus we cannot hope <math|x<around*|(|t|)>\<equiv\><wide|x|^><around*|(|t|)>>.
 
+  From 1989 to 1991, researchers found that if we compose a perceptron with a
+  linear transformation, it then obtains the ability to simulate any binary
+  process.<\footnote>
+    A brief history can be found <hlink|here|https://en.wikipedia.org/wiki/Universal_approximation_theorem#Arbitrary_width>.
+  </footnote> Explicitly, let
+
+  <\equation>
+    z<rsup|\<alpha\>>=\<Theta\><around*|(|<big|sum><rsub|\<beta\>=1><rsup|m>U<rsup|\<alpha\>><rsub|\<beta\>>
+    x<rsup|\<beta\>>+a<rsup|\<alpha\>>|)><infix-and>y<rsup|\<alpha\>>=\<Theta\><around*|(|<big|sum><rsub|\<beta\>=1><rsup|n>W<rsup|\<alpha\>><rsub|\<beta\>>
+    z<rsup|\<beta\>>+b<rsup|\<alpha\>>|)>.<label|equation:perceptrons>
+  </equation>
+
+  The first equation represents a perceptron with input <math|x>; the second
+  also a perceptron that takes the output of the previous perceptron (namely,
+  the <math|z>) as input. Altogether, it becomes a model that accepts
+  <math|x> as input and outputs <math|y>. The first perceptron is not used
+  for output, but as an inter-layer. The dimension of <math|z> (namely, the
+  <math|m>) is a hyper-parameter. When <math|m> increases, the model has more
+  adaptive components of parameter. Model capacity has benefit from the
+  extensible parameter space (characterized by <math|m>). It was proven that
+  this model can simulate any process, including <math|XOR> function, as long
+  as the <math|m> is large enough.<\footnote>
+    A wonderful visual proof is given by Michael Nielsen in his book
+    <with|font-shape|italic|Neural Networks and Deep Learning>,
+    <hlink|chapter 4|http://neuralnetworksanddeeplearning.com/chap4.html>.
+  </footnote>
+
+  For simulating any process, which may not be binary, we have to generalize
+  perceptron from dealing with binary value to manipulate real number. This
+  means, the activation function of the perceptron (at least for the second
+  perceptron that gives the final output) shall output a continuous spectrum
+  on the real number field. For this purpose, we shall generalize the
+  activation function to be continuous and monotonically increasing.
+  Frequently used activation functions include <math|tanh>,
+  <math|sigmoid><\footnote>
+    Sigmoid function is a \Psoft\Q version of <math|\<Theta\>>. We have
+    <math|sigmoid<around*|(|x|)>\<assign\>1/<around*|(|1+exp<around*|(|-x|)>|)>>.
+  </footnote>, <math|ReLU><\footnote>
+    We have <math|ReLU<around*|(|x|)>\<assign\>0> if <math|x\<less\>0> and
+    <math|ReLU<around*|(|x|)>\<assign\>x> if <math|x\<geqslant\>0>.
+  </footnote>, <math|softplus><\footnote>
+    We have <math|softplus<around*|(|x|)>\<assign\>ln<around*|(|1+exp<around*|(|x|)>|)>>.
+    It is the smooth version <math|ReLU>.
+  </footnote>, and even identity function<\footnote>
+    Namely, <math|id<around*|(|x|)>=x>.
+  </footnote>. In the subsequent, the word perceptron refers to that with the
+  generalized activation function.
+
   <section|Simulation Is a Kind of Data-Fitting><label|section: Simulation Is
   a Kind of Data-Fitting>
 
@@ -175,8 +225,9 @@
   handwriting image) and predicts the output (what is number on the
   handwriting image) successfully.
 
-  Now, what is a model? Shortly, a model is a parameterized function in a
-  truncated parameter space. As an example, consider the polynormial
+  Now, what is a model (we have used this word several times without
+  declaration)? Shortly, a model is a parameterized function in a truncated
+  parameter space. As an example, consider the polynomial
   <math|f<around*|(|x;\<theta\>|)>=\<theta\><rsub|0>+\<theta\><rsub|1>x+\<theta\><rsub|2>x<rsup|2>+\<cdots\>>.
   It is an infinite series. Regarding <math|x> as variable and
   <math|\<theta\>> as coefficients (or parameter),
@@ -184,7 +235,7 @@
   <math|x=0>, and it can represent any smooth function within the convergence
   domain. But such parameterized function with infinitely many parameter
   components is impractical, because computer cannot process infinity. We
-  should truncate the parameter to some finite <math|m>, namely
+  shall truncate the parameter to some finite <math|m>, namely
   <math|\<theta\><rsub|n>=0> for any <math|n\<gtr\>m>. So, a model is a
   truncated parameterized function in an infinite-dimensional parameter
   space.
@@ -209,74 +260,15 @@
   </equation>
 
   In the previous Taylor expansion example, we have known from calculus that
-  the error (residue) decreases when we increase the truncation <math|m>. So,
-  we can say the capacity of the model <math|f<around*|(|x;\<theta\>|)>>
+  the error (residue) decreases when we increase the truncation <math|m>.
+  Intuitively, the capacity of the model <math|f<around*|(|x;\<theta\>|)>>
   increases with the increment of <math|m>.
 
-  Going back to perceptron, the parameter is <math|<around*|(|W,b|)>>, and
-  the model is <math|f<rsup|\<alpha\>><around*|(|x;<around*|(|W,b|)>|)>=<big|sum><rsub|\<beta\>=1><rsup|n>\<Theta\><around*|(|W<rsup|\<alpha\>><rsub|\<beta\>>x<rsup|\<beta\>>+b<rsup|\<alpha\>>|)>>.
-  Here, <math|n> serves as the truncation. No matter how large the truncation
-  is, we cannot find a parameter <math|<around*|(|W,b|)>> such that
-  <reference|equation:capacity of data-fitting> holds for any given
-  <math|\<varepsilon\>>. That is, perceptron cannot fit the dataset generated
-  by XOR function (the dataset is the truth table of XOR), let alone the
-  dataset generated by an arbitrary function.
-
-  <section|With Hidden Layers, Model Can Fit Any Dataset><label|section: With
-  Hidden Layers, Model Can Fit Any Dataset>
-
-  <subsection|Activation Function>
-
-  To fit any dataset, we have to generalize perceptron from dealing with
-  binary value to manipulate real number. This means, the activation function
-  of perceptron can output a continuous spectrum on the real number field.
-  For this purpose, we shall generalize the activation function to be
-  continuous and monotonically increasing. Frequently used activation
-  functions include <math|tanh>, <math|sigmoid><\footnote>
-    Sigmoid function can be seen as a shifted <math|tanh>. We have
-    <math|sigmoid<around*|(|x|)>\<assign\>1/<around*|(|1+exp<around*|(|-x|)>|)>>.
-  </footnote>, <math|ReLU><\footnote>
-    We have <math|ReLU<around*|(|x|)>\<assign\>0> if <math|x\<less\>0> and
-    <math|ReLU<around*|(|x|)>\<assign\>x> if <math|x\<geqslant\>0>.
-  </footnote>, <math|softplus><\footnote>
-    We have <math|softplus<around*|(|x|)>\<assign\>ln<around*|(|1+exp<around*|(|x|)>|)>>.
-    It is the smooth version <math|ReLU>.
-  </footnote>, and even identity function<\footnote>
-    Namely, <math|id<around*|(|x|)>=x>.
-  </footnote>. In the subsequent, the word perceptron refers to that with the
-  generalized activation function.
-
-  <subsection|Hidden Layer>
-
-  From 1989 to 1991, researchers found that if we compose multiple
-  perceptrons (with arbitrary activation function) together, it then obtains
-  the ability to fit any dataset.<\footnote>
-    A brief history can be found <hlink|here|https://en.wikipedia.org/wiki/Universal_approximation_theorem#Arbitrary_width>.
-  </footnote> Explicitly, we use more than one perceptron, and use the output
-  of a perceptron as the input of another perceptron. For example, let
-  <math|z<rsup|\<alpha\>>=f<around*|(|<big|sum><rsub|\<beta\>=1><rsup|n>U<rsup|\<alpha\>><rsub|\<beta\>>
-  x<rsup|\<beta\>>+c<rsup|\<alpha\>>|)>> and
-  <math|y<rsup|\<alpha\>>=g<around*|(|<big|sum><rsub|\<beta\>=1><rsup|m>W<rsup|\<alpha\>><rsub|\<beta\>>
-  z<rsup|\<beta\>>+b<rsup|\<alpha\>>|)>>, where <math|f> and <math|g>
-  represents the (generalized) activation function. The first equation
-  represents a perceptron with input <math|x>; the second another perceptron
-  that takes the output of the previous perceptron, <math|z>, as input.
-  Altogether, it becomes a model with <math|x> as input and <math|y> as
-  output. This composed model is named as
-  <with|font-shape|italic|feed-forward neural network> or
-  <with|font-shape|italic|multi-layer perceptron>, and each perceptron inside
-  is called a <with|font-shape|italic|layer>. The layer that furnishes model
-  output is called <with|font-shape|italic|output layer>; while other layers
-  are named as <with|font-shape|italic|hidden layers>. In our example, we
-  have a neural network with two layers, one of which is hidden layer.
-
-  In fact, as it was proven, when <math|g> is identity function, feed-forward
-  neural network can fit any dataset.<\footnote>
-    A wonderful visual proof is given by Michael Nielsen in his book
-    <with|font-shape|italic|Neural Networks and Deep Learning>,
-    <hlink|chapter 4|http://neuralnetworksanddeeplearning.com/chap4.html>.
-  </footnote> This is true even it has only one hidden layer. So, hidden
-  layer is the key to success.
+  Going back to perceptrons, the parameter is <math|<around*|(|U,W,a,b|)>>,
+  and the model is given by equation <reference|equation:perceptrons>. Here,
+  <math|m> serves as the truncation. The single perceptron
+  <reference|equation:perceptron> does not fit this definition, since its
+  parameter space has been bounded by the input and output dimensions.
 </body>
 
 <\initial>
@@ -287,37 +279,35 @@
 
 <\references>
   <\collection>
+    <associate|Perceptron Should Be Used as Interlayer|<tuple|1.2|3>>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.4.2|4>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1|2>>
     <associate|auto-5|<tuple|1.1.2|2>>
     <associate|auto-6|<tuple|1.2|3>>
     <associate|auto-7|<tuple|1.3|3>>
-    <associate|auto-8|<tuple|1.4|4>>
-    <associate|auto-9|<tuple|1.4.1|4>>
-    <associate|equation:capacity of data-fitting|<tuple|1.2|?>>
+    <associate|equation:capacity of data-fitting|<tuple|1.3|4>>
+    <associate|equation:perceptron|<tuple|1.1|2>>
+    <associate|equation:perceptrons|<tuple|1.2|3>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|3>>
-    <associate|footnote-1.3|<tuple|1.3|4>>
-    <associate|footnote-1.4|<tuple|1.4|4>>
-    <associate|footnote-1.5|<tuple|1.5|4>>
-    <associate|footnote-1.6|<tuple|1.6|4>>
-    <associate|footnote-1.7|<tuple|1.7|4>>
-    <associate|footnote-1.8|<tuple|1.8|4>>
+    <associate|footnote-1.3|<tuple|1.3|3>>
+    <associate|footnote-1.4|<tuple|1.4|3>>
+    <associate|footnote-1.5|<tuple|1.5|3>>
+    <associate|footnote-1.6|<tuple|1.6|3>>
+    <associate|footnote-1.7|<tuple|1.7|3>>
+    <associate|footnote-1.8|<tuple|1.8|3>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|3>>
-    <associate|footnr-1.3|<tuple|1.3|4>>
-    <associate|footnr-1.4|<tuple|1.4|4>>
-    <associate|footnr-1.5|<tuple|1.5|4>>
-    <associate|footnr-1.6|<tuple|1.6|4>>
-    <associate|footnr-1.7|<tuple|1.7|4>>
-    <associate|footnr-1.8|<tuple|1.8|4>>
-    <associate|perceptron|<tuple|1.1|2>>
+    <associate|footnr-1.3|<tuple|1.3|3>>
+    <associate|footnr-1.4|<tuple|1.4|3>>
+    <associate|footnr-1.5|<tuple|1.5|3>>
+    <associate|footnr-1.6|<tuple|1.6|3>>
+    <associate|footnr-1.7|<tuple|1.7|3>>
+    <associate|footnr-1.8|<tuple|1.8|3>>
+    <associate|section: Perceptron Cannot Simulate XOR|<tuple|1.1|3>>
     <associate|section: Simulation Is a Kind of Data-Fitting|<tuple|1.3|3>>
-    <associate|section: With Hidden Layers, Model Can Fit Any
-    Dataset|<tuple|1.4|4>>
   </collection>
 </references>
 
@@ -325,7 +315,7 @@
   <\collection>
     <\associate|figure>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
-        <locus|<id|%3FAAC858-41031CE0>|<link|hyperlink|<id|%3FAAC858-41031CE0>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
+        <locus|<id|%3CBBC2B8-3C4D9A28>|<link|hyperlink|<id|%3CBBC2B8-3C4D9A28>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
         figure> illustrates the shape of a neuron, and how impulses propagate
         from one neuron to another.
       </surround>|<pageref|auto-4>>
@@ -348,25 +338,13 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      1.2<space|2spc>Perceptron Has Not Sufficient Capacity
+      1.2<space|2spc>Perceptron Should Be Used as Interlayer
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>
 
       1.3<space|2spc>Simulation Is a Kind of Data-Fitting
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>
-
-      1.4<space|2spc>With Hidden Layers, Model Can Fit Any Dataset
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
-
-      <with|par-left|<quote|1tab>|1.4.1<space|2spc>Activation Function
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
-      <with|par-left|<quote|1tab>|1.4.2<space|2spc>Hidden Layer
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
     </associate>
   </collection>
 </auxiliary>
