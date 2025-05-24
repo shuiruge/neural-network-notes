@@ -7,7 +7,7 @@
 
   <section|Enlarging Model Increases Performance>
 
-  In this section, we investigate how the model performance benefit from
+  In this section, we investigate how the model performance benefits from
   increasing the number of adaptive parameters. We are to show that this
   almost always results in an increment of performance.
 
@@ -15,26 +15,26 @@
   (or components of parameter). In the infinite-dimensional parameter space
   (section <reference|section: Simulation Is a Kind of Data-Fitting>), it is
   written as <math|f<around*|(|x;<around*|(|\<theta\><rsup|1>,\<ldots\>,\<theta\><rsup|m>,0,\<ldots\>|)>|)>>.
-  For convienence, we omit the innermost parentheses, so it is
+  For convienence, we omit the innermost parentheses, so it is denoted by
   <math|f<around*|(|x;\<theta\><rsup|1>,\<ldots\>,\<theta\><rsup|m>,0,\<ldots\>|)>>.
   Given a dataset <math|D=<around*|{|<around*|(|x<rsub|i>,y<rsub|i>|)>\|i=1,\<ldots\>,N|}>>,
   suppose that we have trained the model, resulting in the best-fit model
   <math|f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,0,\<ldots\>|)>>.
-  After training, we add <math|n> parameters with <math|n\<ll\>m>. For
-  convienence, we re-denote the later <math|n> parameters as
-  <math|\<varphi\>>, thus the model changes from
+  <em|After> the training, we append <math|n> adaptive parameters, with
+  <math|n\<ll\>m>. For convienence, we denote the later <math|n> parameters
+  by <math|\<varphi\>>, thus the model changes from <math|m> parameters
 
   <\equation*>
     f<around*|(|x;\<theta\><rsub|\<star\>>|)>=f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,0,\<ldots\>|)>
   </equation*>
 
-  to
+  to <math|<around*|(|m+n|)>> parameters
 
   <\equation*>
     f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>=f<around*|(|x;\<theta\><rsub|\<star\>><rsup|1>,\<ldots\>,\<theta\><rsub|\<star\>><rsup|m>,\<theta\><rsup|m+1>,\<ldots\>,\<theta\><rsup|m+n>,0,\<ldots\>|)>.
   </equation*>
 
-  Practically, we can assume that all the best-fit parameters are
+  Practically, we can safely suppose that all the best-fit parameters are
   small.<\footnote>
     This is generally true, for several reasons. One is that small parameters
     increases robustness in generalization. Another may trace to the
@@ -44,25 +44,27 @@
   the training, we can freeze <math|\<theta\>> to
   <math|\<theta\><rsub|\<star\>>> and only optimize <math|\<varphi\>>, since
   the feedback from <math|\<varphi\>> to <math|\<theta\>> can be negligible.
-  So, the loss function becomes
+  So, the loss function used for fine-tuning the model becomes
 
   <\equation*>
     L<around*|(|\<varphi\>|)>=\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|d<around*|(|f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>,y|)>|]>.
   </equation*>
 
-  Minimizing <math|L<around*|(|\<varphi\>|)>> results in the best-fit
-  <math|\<varphi\><rsub|\<star\>>>.
-
-  \;
+  Minimizing <math|L<around*|(|\<varphi\>|)>> results in a best-fit
+  <math|\<varphi\><rsub|\<star\>>>. Then we find the best-fit of the model as
+  <math|<around*|(|\<theta\><rsub|\<star\>>,\<varphi\><rsub|\<star\>>|)>>. We
+  are to show that the fine-tuning always decrease the loss. That is,
+  enlarging model always benefits its performance.
 
   As an example, consider <math|d<around*|(|x,y|)>=<around*|(|x-y|)><rsup|2>/2>.
-  We Taylor expand <math|f> by <math|\<varphi\>> at <math|\<varphi\>=0> as
+  Thus, the output is a real number. We Taylor expand <math|f> by
+  <math|\<varphi\>> at <math|\<varphi\>=0>, as
 
   <\equation*>
     f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>=f<around*|(|x;\<theta\><rsub|\<star\>>|)>+<big|sum><rsub|\<alpha\>=1><rsup|n>\<varphi\><rsup|\<alpha\>><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>+\<omicron\><around*|(|\<varphi\>|)>.
   </equation*>
 
-  Thus,
+  Inserting into the loss function gives
 
   <\equation*>
     L<around*|(|\<varphi\>|)>=<frac|1|2>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<around*|(|f<around*|(|x;\<theta\><rsub|\<star\>>,\<varphi\>|)>-y|)><rsup|2>|]>=L<around*|(|\<varphi\>|)>=<frac|1|2>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<around*|(|<big|sum><rsub|\<alpha\>=1><rsup|n>\<varphi\><rsup|\<alpha\>><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>-\<delta\>y+\<omicron\><around*|(|\<varphi\>|)>|)><rsup|2>|]>,
@@ -82,25 +84,39 @@
     <frac|\<partial\>L|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|\<varphi\>|)>=<big|sum><rsub|\<beta\>=1><rsup|n>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<beta\>>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>\<varphi\><rsup|\<beta\>>-\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>.
   </equation*>
 
-  As long as
+  The matrix
 
   <\equation*>
     \<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<beta\>>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>
   </equation*>
 
-  is not degenerate, <math|<around*|(|\<partial\>L/\<partial\>\<varphi\><rsup|\<alpha\>>|)><around*|(|\<varphi\><rsub|\<star\>>|)>=0>
+  is the covariance of random variable <math|<around*|(|\<partial\>f/\<partial\>\<varphi\><rsup|\<alpha\>>|)><around*|(|X;\<theta\><rsub|\<star\>>|)>>,
+  where we use capital character <math|X> for indicating randomness. Thus it
+  is positive definite unless for component <math|\<alpha\>>,
+  <math|<around*|(|\<partial\>f/\<partial\>\<varphi\><rsup|\<alpha\>>|)><around*|(|x;\<theta\><rsub|\<star\>>|)>>
+  vanishes for all <math|x>, meaning that <math|\<varphi\><rsup|\<alpha\>>>
+  is a useless parameter (this shall not happen). So, it has inverse and
+  <math|<around*|(|\<partial\>L/\<partial\>\<varphi\><rsup|\<alpha\>>|)><around*|(|\<varphi\><rsub|\<star\>>|)>=0>
   gives
 
   <\equation*>
     \<varphi\><rsub|\<star\>><rsup|\<beta\>>=<big|sum><rsub|\<alpha\>=1><rsup|n>\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]><around*|{|\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|<frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)><frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]><rsup|-1>|}><rsup|\<alpha\>\<beta\>>.
   </equation*>
 
-  So, enlarging the model (introducing in the <math|\<varphi\>>) will always
-  increase the performance except for a very specific situation where
+  And <math|\<varphi\><rsub|\<star\>>=0> only when
 
   <\equation*>
-    \<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>=0.
+    \<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>=0
   </equation*>
+
+  for any <math|\<alpha\>>. Notice that
+
+  <\equation*>
+    <frac|\<partial\>L|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|0|)>=-\<bbb-E\><rsub|<around*|(|x,y|)>\<sim\>D><around*|[|\<delta\>y<frac|\<partial\>f|\<partial\>\<varphi\><rsup|\<alpha\>>><around*|(|x;\<theta\><rsub|\<star\>>|)>|]>.
+  </equation*>
+
+  It means <math|\<varphi\><rsub|\<star\>>=0> has been the best-fit of
+  <math|\<varphi\>>.
 
   In this situation <math|\<varphi\><rsub|\<star\>>=0>, indicating that
   introducing <math|\<varphi\>> does not increase the performance, even
@@ -750,6 +766,7 @@
 
 <\initial>
   <\collection>
+    <associate|bg-color|#c7edcc>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -758,7 +775,7 @@
   <\collection>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|1.5.4|4>>
-    <associate|auto-11|<tuple|1.6|4>>
+    <associate|auto-11|<tuple|1.6|5>>
     <associate|auto-12|<tuple|1.7|5>>
     <associate|auto-13|<tuple|1.7.1|5>>
     <associate|auto-14|<tuple|1.7.2|6>>
@@ -769,31 +786,31 @@
     <associate|auto-19|<tuple|1.8.2|7>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-20|<tuple|1.8.3|7>>
-    <associate|auto-21|<tuple|1.8.4|7>>
+    <associate|auto-21|<tuple|1.8.4|8>>
     <associate|auto-22|<tuple|1.8.5|8>>
     <associate|auto-23|<tuple|1.8.6|8>>
     <associate|auto-24|<tuple|1.8.7|8>>
     <associate|auto-3|<tuple|1.2|2>>
-    <associate|auto-4|<tuple|1.3|2>>
+    <associate|auto-4|<tuple|1.3|3>>
     <associate|auto-5|<tuple|1.4|3>>
     <associate|auto-6|<tuple|1.5|3>>
     <associate|auto-7|<tuple|1.5.1|3>>
-    <associate|auto-8|<tuple|1.5.2|3>>
+    <associate|auto-8|<tuple|1.5.2|4>>
     <associate|auto-9|<tuple|1.5.3|4>>
     <associate|equation:batch normalization|<tuple|1.3|8>>
-    <associate|equation:gradient chain-rule|<tuple|1.2|4>>
+    <associate|equation:gradient chain-rule|<tuple|1.2|5>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|1>>
     <associate|footnote-1.3|<tuple|1.3|5>>
-    <associate|footnote-1.4|<tuple|1.4|6>>
-    <associate|footnote-1.5|<tuple|1.5|7>>
+    <associate|footnote-1.4|<tuple|1.4|7>>
+    <associate|footnote-1.5|<tuple|1.5|8>>
     <associate|footnote-1.6|<tuple|1.6|8>>
     <associate|footnote-1.7|<tuple|1.7|8>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|1>>
     <associate|footnr-1.3|<tuple|1.3|5>>
-    <associate|footnr-1.4|<tuple|1.4|6>>
-    <associate|footnr-1.5|<tuple|1.5|7>>
+    <associate|footnr-1.4|<tuple|1.4|7>>
+    <associate|footnr-1.5|<tuple|1.5|8>>
     <associate|footnr-1.6|<tuple|1.6|8>>
     <associate|footnr-1.7|<tuple|1.7|8>>
     <associate|section: Normalization|<tuple|1.7.3|6>>
@@ -811,7 +828,7 @@
       Neural Network Becomes Deep> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Enlarging Model Increases Performance (TODO)
+      1.1<space|2spc>Enlarging Model Increases Performance
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
