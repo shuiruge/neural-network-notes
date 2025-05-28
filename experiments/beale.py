@@ -3,7 +3,6 @@ import numpy as np
 import jax.numpy as jnp
 import optax
 import matplotlib.pyplot as plt
-from soma_jax import soma
 
 
 class Beale:
@@ -142,7 +141,6 @@ class Optimizer:
 
 #optimizer = Optimizer(optax.sgd(1e-3))
 optimizer = Optimizer(optax.adam(1e-3))
-#optimizer = Optimizer(soma(1e-3))
 
 test_fn = Beale()
 #test_fn = Booth()
