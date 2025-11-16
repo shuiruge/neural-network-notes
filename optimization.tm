@@ -689,9 +689,9 @@
   vector-Jacobian products forwardly, and then applying the functions given
   by vector-Jacobian products to derivatives backwardly.
 
-  <chapter|Drafts>
+  <section|TODO>
 
-  <section|Initialization>
+  <subsection|Initialization>
 
   Let us consider a single layer, for each component
   <math|\<alpha\>=1,\<ldots\>,M>,
@@ -763,7 +763,7 @@
   proportional to <math|\<omega\>> and <math|L<rsub|2>>-norm of <math|v>. The
   smaller <math|\<omega\>>, the smaller backward information progagation.
 
-  <section|Normalized Vector-Jacobian Product>
+  <subsection|Normalized Vector-Jacobian Product>
 
   We find the optimized model has the property that, in the backward
   propagation, <math|Var<around*|[|<big|sum><rsub|\<alpha\>=1><rsup|N<rsub|l+1>>v<rsub|\<alpha\>><around*|(|\<partial\>z<rsup|\<alpha\>><rsub|l+1>/\<partial\>z<rsup|\<beta\>><rsub|l>|)><around*|(|z<rsub|l>|)>|]>=Const>
@@ -838,7 +838,7 @@
   <big|sum><rsub|\<alpha\>=1><rsup|N><around*|(|u<rsup|\<alpha\>>|)><rsup|2>=<around*|(|1/N|)>
   <big|sum><rsub|\<alpha\>=1><rsup|N><around*|(|<wide|u|~><rsup|\<alpha\>>|)><rsup|2>>.
 
-  <section|Criticality>
+  <subsection|Criticality>
 
   Remind of the criticality in Ising model. An improper parameter (<math|T>
   that away from critical <math|T<rsub|c>>) blocks the propagation of
@@ -881,100 +881,6 @@
   \<delta\>z<rsub|l>|\<\|\|\>>=<around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>
   characterizes the criticality, which is the same as the bifurcation of
   <hlink|logistic map|https://en.wikipedia.org/wiki/Logistic_map>.
-
-  <subsection|Global Perturbation>
-
-  Consider two inputs <math|x> and <math|x<rprime|'>>, which correspond to
-  different outputs <math|y> and <math|y<rprime|'>>. Thus, we have a
-  \Pglobal\Q perturbation to the model input <math|x> which is
-  <math|x<rprime|'>=x+\<delta\>x>, if <math|x\<approx\>x<rprime|'>>. The
-  perturbation then propagates toward the model output. The depth of neural
-  network plays the role of time in the Ising model. The perturbation makes
-  <math|f<around*|(|x;\<theta\>|)>> be <math|f<around*|(|x<rprime|'>;\<theta\>|)>\<sim\>f<around*|(|x;\<theta\>|)>+<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-  \<delta\>x>, changing from <math|y> to <math|y<rprime|'>>. For propagating
-  the perturbation without being blocked, we shall expect that
-
-  <\equation*>
-    <around*|\<\|\|\>|<big|sum><rsub|\<beta\>=1><rsup|N<rsub|0>><frac|\<partial\>f<rsup|\<alpha\>>|\<partial\>x<rsup|\<beta\>>><around*|(|x;\<theta\>|)>
-    \<delta\>x<rsup|\<beta\>>|\<\|\|\>>\<sim\><around*|\<\|\|\>|f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>|\<\|\|\>>,
-  </equation*>
-
-  indicating that the norms share the same order. Otherwise, if
-  <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-  \<delta\>x|\<\|\|\>>\<ll\><around*|\<\|\|\>|\<delta\>x|\<\|\|\>>>, then the
-  perturbation will diminish along the propagation, causing
-  <math|y<rprime|'>\<rightarrow\>y>. This is like the <math|T\<ll\>T<rsub|c>>
-  in Ising model. And if <math|<around*|\<\|\|\>|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-  \<delta\>x|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<delta\>x|\<\|\|\>>>, then the
-  perturbation will \Pwash out\Q the information of
-  <math|f<around*|(|x;\<theta\>|)>> (function like <math|x+y> is not
-  monomorphic). In addition, this will make the system unstable. This is a
-  little like the <math|T\<gg\>T<rsub|c>> where the randomness is so large
-  that ???
-
-  \;
-
-  <math|<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-  \<delta\>x\<gg\>f<around*|(|x;\<theta\>|)>>
-
-  <\equation*>
-    <frac|<around*|\||f<around*|(|x+\<delta\>x;\<theta\>|)>-f<around*|(|x;\<theta\>|)>-<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-    \<delta\>x|\|>|<around*|\||f<around*|(|x+\<delta\>x;\<theta\>|)>-f<around*|(|x;\<theta\>|)>|\|>+<around*|\||<around*|(|\<partial\>f/\<partial\>x|)><around*|(|x;\<theta\>|)>
-    \<delta\>x|\|>>\<ll\>1.
-  </equation*>
-
-  <\equation>
-    f<rsup|\<alpha\>><around*|(|x+\<delta\>x;\<theta\>|)>\<approx\>f<rsup|\<alpha\>><around*|(|x;\<theta\>|)>+<frac|\<partial\>f<rsup|\<alpha\>>|\<partial\>x<rsup|\<beta\>>><around*|(|*x;\<theta\>|)>
-    \<delta\>x<rsup|\<beta\>>.
-  </equation>
-
-  \;
-
-  <subsection|Local Perturbation>
-
-  What is the source of local perturbation? Since <math|f<rsub|l>> has two
-  variables, the local perturbation comes from either
-  <math|z<rsub|l-1>\<rightarrow\>z<rsub|l-1>+\<delta\>z<rsub|l-1>> or
-  <math|\<theta\><rsub|l>\<rightarrow\>\<theta\><rsub|l>+\<delta\>\<theta\><rsub|l>>.
-  The first comes from the perburbation of input
-  <math|x\<rightarrow\>x+\<delta\>x>, and the later as a virtual variation
-  may come from the stochastic gradient descent optimization. Now, suppose
-  the perturbation <math|><math|z<rsub|l>\<rightarrow\>z<rsub|l>+\<delta\>z<rsub|l>>,
-  which may be trace back to <math|\<delta\>z<rsub|l-1>>, or to
-  <math|\<delta\>\<theta\><rsub|l>>. It leads to
-  <math|z<rsub|l+1>\<rightarrow\>z<rsub|l+1>+<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
-  \<delta\>z<rsub|l>>. We shall demand that
-
-  <\equation*>
-    <around*|\<\|\|\>|<big|sum><rsub|\<beta\>=1><rsup|N<rsub|l>><frac|\<partial\>z<rsup|\<alpha\>><rsub|l+1>|\<partial\>z<rsup|\<beta\>><rsub|l><rsub|>>
-    \<delta\>z<rsub|l><rsup|\<beta\>>|\<\|\|\>>\<sim\><around*|\<\|\|\>|\<delta\>z<rsub|l><rsup|\<alpha\>>|\<\|\|\>>.
-  </equation*>
-
-  Otherwise, if <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
-  \<delta\>z<rsub|l>|\<\|\|\>>\<gg\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
-  the <math|\<delta\>z<rsub|l+1>> will \Pwash out\Q the information of
-  <math|z<rsub|l+1>>. Conversely, if <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
-  \<delta\>z<rsub|l>|\<\|\|\>>\<ll\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>,
-  the <math|\<delta\>z<rsub|l+1>> will diminish and \Pwashed out\Q by the
-  information of <math|z<rsub|l+1>>. Since both the information from
-  <math|\<delta\>z<rsub|l+1>> (information from a virtual variation
-  <math|\<delta\>\<theta\><rsub|l<rprime|'>>> for
-  <math|\<forall\>l<rprime|'>\<leqslant\>l>) and that from <math|z<rsub|l+1>>
-  (information sourcing from <math|x>) are important, we shall expect a
-  balance, which implies <math|<around*|\<\|\|\>|<around*|(|\<partial\>z<rsub|l+1>/\<partial\>z<rsub|l>|)>
-  \<delta\>z<rsub|l>|\<\|\|\>>\<sim\><around*|\<\|\|\>|\<delta\>z<rsub|l>|\<\|\|\>>>.
-
-  <section|Experiment Results>
-
-  It seems that <samp|adam> optimizer <with|font-shape|italic|just> makes the
-  difference of weights, <math|\<Delta\>W<rsub|l>\<assign\><around*|(|W<rsub|l>|)><rsub|\<star\>>-<around*|(|W<rsub|l>|)><rsub|0>>,
-  obeys the same distribution for all <math|l> and the same thing for biases.
-  But the distribution for weights and biases are different.
-  <math|\<rightarrow\>> No, this is not true. When the initialization
-  <math|Var<around*|[|<around*|(|W<rsub|l>|)><rsub|0>|]>> is larger (e.g. 5
-  times), then the <verbatim|adam> will not work. But, if it is smaller (e.g.
-  100 times), the <verbatim|adam> works well and the model is trained toward
-  its criticality.
 </body>
 
 <\initial>
@@ -1001,15 +907,15 @@
     <associate|auto-20|<tuple|1.5.2|6>>
     <associate|auto-21|<tuple|1.5.3|7>>
     <associate|auto-22|<tuple|1.5.4|7>>
-    <associate|auto-23|<tuple|2|9>>
-    <associate|auto-24|<tuple|2.1|9>>
-    <associate|auto-25|<tuple|2.2|9>>
-    <associate|auto-26|<tuple|2.3|10>>
-    <associate|auto-27|<tuple|2.3.1|10>>
-    <associate|auto-28|<tuple|2.3.2|11>>
-    <associate|auto-29|<tuple|2.3.3|11>>
+    <associate|auto-23|<tuple|1.6|9>>
+    <associate|auto-24|<tuple|1.6.1|9>>
+    <associate|auto-25|<tuple|1.6.2|9>>
+    <associate|auto-26|<tuple|1.6.3|10>>
+    <associate|auto-27|<tuple|1.6.4|10>>
+    <associate|auto-28|<tuple|1.6.5|11>>
+    <associate|auto-29|<tuple|1.6.6|11>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-30|<tuple|2.4|11>>
+    <associate|auto-30|<tuple|1.7|11>>
     <associate|auto-4|<tuple|1.2.1|1>>
     <associate|auto-5|<tuple|1.2.2|2>>
     <associate|auto-6|<tuple|1.2.3|2>>
@@ -1025,11 +931,13 @@
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnote-1.3|<tuple|1.3|4>>
     <associate|footnote-1.4|<tuple|1.4|6>>
+    <associate|footnote-1.5|<tuple|1.5|?>>
     <associate|footnote-2.1|<tuple|2.1|9>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|3>>
     <associate|footnr-1.3|<tuple|1.3|4>>
     <associate|footnr-1.4|<tuple|1.4|6>>
+    <associate|footnr-1.5|<tuple|1.5|?>>
     <associate|footnr-2.1|<tuple|2.1|9>>
     <associate|section: loss function|<tuple|1.1|1>>
   </collection>

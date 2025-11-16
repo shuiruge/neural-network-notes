@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|2.1.4>
 
 <style|book>
 
@@ -284,7 +284,7 @@
   done by sending the context-dependent vector representation to a
   feed-forward neural network appended by a softmax function.
 
-  <section|Representation of Sentences (TODO)>
+  <section|Representation of Sentences>
 
   <subsection|From Words to Sentences: Firth's Idea Continued>
 
@@ -306,6 +306,7 @@
 
 <\initial>
   <\collection>
+    <associate|bg-color|#c7edcc>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -316,35 +317,26 @@
     <associate|auto-10|<tuple|1.2.3|4>>
     <associate|auto-11|<tuple|1.2.4|4>>
     <associate|auto-12|<tuple|1.3|4>>
-    <associate|auto-13|<tuple|1.4.1|4>>
-    <associate|auto-14|<tuple|1.4.2|5>>
-    <associate|auto-15|<tuple|1.4.3|5>>
-    <associate|auto-16|<tuple|1.5|5>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1.2|1>>
-    <associate|auto-5|<tuple|1.1.3|3>>
+    <associate|auto-5|<tuple|1.1.3|2>>
     <associate|auto-6|<tuple|1.1.4|3>>
-    <associate|auto-7|<tuple|1.2|3>>
-    <associate|auto-8|<tuple|1.2.1|3>>
+    <associate|auto-7|<tuple|1.2|4>>
+    <associate|auto-8|<tuple|1.2.1|4>>
     <associate|auto-9|<tuple|1.2.2|4>>
-    <associate|equation:firth idea|<tuple|1.1|2>>
+    <associate|equation:firth idea|<tuple|1.1|1>>
     <associate|equation:vector representation|<tuple|1.2|2>>
-    <associate|equation:word2vec|<tuple|1.5|4>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|2>>
     <associate|footnote-1.3|<tuple|1.3|3>>
     <associate|footnote-1.4|<tuple|1.4|3>>
     <associate|footnote-1.5|<tuple|1.5|4>>
-    <associate|footnote-1.6|<tuple|1.6|4>>
-    <associate|footnote-1.7|<tuple|1.7|?>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|2>>
     <associate|footnr-1.3|<tuple|1.3|3>>
     <associate|footnr-1.4|<tuple|1.4|3>>
     <associate|footnr-1.5|<tuple|1.5|4>>
-    <associate|footnr-1.6|<tuple|1.6|4>>
-    <associate|footnr-1.7|<tuple|1.7|?>>
   </collection>
 </references>
 
@@ -368,7 +360,7 @@
       <no-break><pageref|auto-4>>
 
       <with|par-left|<quote|1tab>|1.1.3<space|2spc>Example: Bidirectional
-      Encoder Representations from Transformers
+      Encoder Representations from Transformers (BERT)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
@@ -376,7 +368,7 @@
       Recognition <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      1.2<space|2spc>Representation of Sentences
+      1.2<space|2spc>Representation of Sentences (TODO)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>
 
@@ -388,32 +380,16 @@
       Recursive (Maybe) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Application: Machine
-      Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Application: Textual
+      Similarity <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
+      <with|par-left|<quote|1tab>|1.2.4<space|2spc>Application: Machine
+      Translation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>>
+
       1.3<space|2spc>Language Modeling <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>
-
-      1.4<space|2spc>Drafts <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>
-
-      <with|par-left|<quote|1tab>|1.4.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
-      Is a Simple Model that Implements the Firth's Idea
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
-
-      <with|par-left|<quote|1tab>|1.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Word2vec>
-      in Practice <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
-
-      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Lost and Found
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15>>
-
-      1.5<space|2spc>The Second Example: People in a Park
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>
     </associate>
   </collection>
 </auxiliary>
