@@ -138,11 +138,11 @@
   network, such as a brain. Suppose we are given a sequence of observed
   states of a real neural network, <math|<around*|{|<wide|x|^><around*|(|t|)>\|t=0,\<ldots\>,T|}>>,
   as dataset. Our aim is to simulate this sequence with the
-  <math|x<around*|(|t|)>> in equation (<reference|perceptron>) by adjusting
-  the parameters <math|W> and <math|b>. The <math|x<around*|(|t|)>> has
-  initial value <math|<wide|x|^><around*|(|0|)>>. From
+  <math|x<around*|(|t|)>> in equation (<reference|equation:perceptron>) by
+  adjusting the parameters <math|W> and <math|b>. The <math|x<around*|(|t|)>>
+  has initial value <math|<wide|x|^><around*|(|0|)>>. From
   <math|x<around*|(|0|)>>, we compute <math|x<around*|(|1|)>> by equation
-  (<reference|perceptron>), then <math|x<around*|(|2|)>>, and then
+  (<reference|equation:perceptron>), then <math|x<around*|(|2|)>>, and then
   <math|x<around*|(|3|)>>, etc. We hope that, there exists proper parameters
   <math|W> and <math|b>, such that <math|x<around*|(|t|)>\<equiv\><wide|x|^><around*|(|t|)>>
   for all time steps.
@@ -273,6 +273,7 @@
 
 <\initial>
   <\collection>
+    <associate|bg-color|#c7edcc>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -315,7 +316,7 @@
   <\collection>
     <\associate|figure>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
-        <locus|<id|%3CBBC2B8-3C4D9A28>|<link|hyperlink|<id|%3CBBC2B8-3C4D9A28>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
+        <locus|<id|%2BC0AE18-2E041DD8>|<link|hyperlink|<id|%2BC0AE18-2E041DD8>|<url|https://en.wikipedia.org/wiki/Neuron#/media/File:Chemical_synapse_schema_cropped.jpg>>|This
         figure> illustrates the shape of a neuron, and how impulses propagate
         from one neuron to another.
       </surround>|<pageref|auto-4>>
@@ -338,7 +339,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      1.2<space|2spc>Perceptron Should Be Used as Interlayer
+      1.2<space|2spc>Perceptron Should Be Used as Inter-layer
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>
 

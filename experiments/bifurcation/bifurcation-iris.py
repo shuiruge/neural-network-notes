@@ -100,10 +100,10 @@ def plot_difference(x, y, precision=1e-2):
 
 init_params = model.init(random.key(42), X_train[:10])
 #init_params = jax.tree_map(add_noise(1e-1), init_params)
-params = fit(init_params, epochs=10)
+params = fit(init_params, epochs=0)
 
 perturbed_init_params = jax.tree_map(add_noise(1e-2), init_params)
-perturbed_params = fit(perturbed_init_params, epochs=10)
+perturbed_params = fit(perturbed_init_params, epochs=0)
 
 print(training_loss(params))
 print(training_loss(perturbed_params))
@@ -111,7 +111,7 @@ print(training_loss(perturbed_params))
 print(training_accuracy(params))
 print(training_accuracy(perturbed_params))
 
-if False:
+if True:
   plot_difference(params['params']['Dense_0']['kernel'],
                   perturbed_params['params']['Dense_0']['kernel'])
   plot_difference(params['params']['Dense_0']['bias'],
@@ -132,5 +132,5 @@ grads['params']['Dense_0']['bias'][:]
 
 for i in range(100):
   grads2 = jax.grad(lambda x: jax.grad(loss_fn)(x)['params']['Dense_0']['bias'][i])(params)
-  if grads2['params']['Dense_0']['bias'][i] > 0:
+  if grads2['params']['Dense_0']['bias'][i] < 0:
     print(grads['params']['Dense_0']['bias'][i], grads2['params']['Dense_0']['bias'][i])

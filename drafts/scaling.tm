@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|2.1.4>
 
 <style|book>
 
@@ -398,6 +398,7 @@
 
 <\initial>
   <\collection>
+    <associate|bg-color|#c7edcc>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -407,8 +408,6 @@
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|1.4.2|3>>
     <associate|auto-11|<tuple|1.5|4>>
-    <associate|auto-12|<tuple|1.5.1|4>>
-    <associate|auto-13|<tuple|1.5.1|4>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.2|1>>
     <associate|auto-4|<tuple|1.3|1>>
@@ -418,7 +417,7 @@
     <associate|auto-8|<tuple|1.4|2>>
     <associate|auto-9|<tuple|1.4.1|2>>
     <associate|equation:L star regression|<tuple|1.8|4>>
-    <associate|equation:loss of residual error|<tuple|1.6|?>>
+    <associate|equation:loss of residual error|<tuple|1.6|4>>
     <associate|footnote-1.1|<tuple|1.1|1>>
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnr-1.1|<tuple|1.1|1>>
@@ -468,17 +467,9 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|1.4.3<space|2spc>Digression: Complete Model
-      Family <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      1.5<space|2spc>Power-Law <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>
-
-      <with|par-left|<quote|1tab>|1.5.1<space|2spc>Power-Law Arises From
-      Self-Similarity of Complexity (TODO)
+      1.5<space|2spc>Power-Law Arises From Self-Similarity of Complexity
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
+      <no-break><pageref|auto-11>
     </associate>
   </collection>
 </auxiliary>

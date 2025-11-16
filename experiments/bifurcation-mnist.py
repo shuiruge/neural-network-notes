@@ -9,7 +9,7 @@ import jax.numpy as jnp
 from jax import random
 from jax.tree_util import tree_map
 from torch.utils.data import DataLoader, default_collate
-from torchvision.datasets import FashionMNIST
+from torchvision.datasets import MNIST
 
 batch_size = 32
 
@@ -25,11 +25,9 @@ def reshape_cast(pic):
   return np.expand_dims(np.array(pic, dtype=jnp.float32), axis=-1)
 
 # Define our dataset, using torch datasets
-mnist_dataset = FashionMNIST('/tmp/fashion-mnist/', download=True,
-                             transform=reshape_cast)
+mnist_dataset = MNIST('/tmp/mnist/', download=True, transform=reshape_cast)
 # Create pytorch data loader with custom collate function
-data_generator = DataLoader(mnist_dataset, batch_size=batch_size,
-                            collate_fn=numpy_collate)
+data_generator = DataLoader(mnist_dataset, batch_size=batch_size, collate_fn=numpy_collate)
 X_train = np.expand_dims(np.array(mnist_dataset.train_data), axis=-1)
 y_train = np.array(mnist_dataset.train_labels)
 
@@ -73,8 +71,8 @@ class FFD(nn.Module):
     x = nn.Dense(features=10)(x)
     return x
 
-#model = CNN()
-model = FFD()
+model = CNN()
+#model = FFD()
 #optimizer = optax.sgd(1e-3)
 optimizer = optax.adam(1e-3)
 #optimizer = optax.adamw(1e-3, weight_decay=1e-1)
@@ -94,41 +92,37 @@ def train_step(params, state, batch):
 
 def fit(params, epochs=3, max_step=None):
   state = optimizer.init(params)
-  step = 0
+  step = 1
   for epoch in range(epochs):
     for images, labels in data_generator:
-      if max_step and step > max_step:
-          return params
       batch = {'images': images, 'labels': labels}
       params, state, *_ = train_step(params, state, batch)
       step += 1
+      if max_step and step > max_step:
+          return params
   return params
 
 def training_loss(params):
-  X = X_train
-  y = y_train
-  logits = model.apply(params, X)
+  logits = model.apply(params, X_train[:batch_size*100])
   loss = optax.softmax_cross_entropy_with_integer_labels(
-    logits=logits, labels=y).mean()
+    logits=logits, labels=y_train[:batch_size*100]).mean()
   return loss
 
 def training_accuracy(params):
-  X = X_train
-  y = y_train
-  predicted_class = jnp.argmax(model.apply(params, X), axis=1)
-  return jnp.mean(predicted_class == y)
+  predicted_class = jnp.argmax(model.apply(params, X_train[:batch_size*100]), axis=1)
+  return jnp.mean(predicted_class == y_train[:batch_size*100])
 
 
 # -------- Bifurcation --------- #
 
 import matplotlib.pyplot as plt
 
-def add_noise(params, scale):
-  # 3-sigma truncation.
+def add_noise(scale):
   def add(x):
+    # 3-sigma truncation.
     std_normal = random.truncated_normal(random.key(42), -3, 3, x.shape)
     return x * (1 + scale * std_normal)
-  return jax.tree_util.tree_map(add, params)
+  return add
 
 def relative_diff(x, y, precision):
   sum_ = jnp.abs(x) + jnp.abs(y)
@@ -147,10 +141,10 @@ def plot_difference(x, y, precision=1e-2):
 
 init_params = model.init(random.key(42), X_train[:10])
 #init_params = jax.tree_map(add_noise(1e-1), init_params)
-params = fit(init_params, epochs=10, max_step=None)
+params = fit(init_params, epochs=2, max_step=None)
 
-perturbed_init_params = add_noise(init_params, 1e-3)
-perturbed_params = fit(perturbed_init_params, epochs=10, max_step=None)
+perturbed_init_params = jax.tree_map(add_noise(1e-2), init_params)
+perturbed_params = fit(perturbed_init_params, epochs=2, max_step=None)
 
 print(training_loss(params))
 print(training_loss(perturbed_params))
@@ -205,7 +199,7 @@ elif isinstance(model, FFD):
   grads = jax.grad(loss_fn)(params)
   for i in range(100):
     grads2 = jax.grad(
-        lambda x: jax.grad(loss_fn)(x)['params']['Dense_1']['bias'][i]
+        lambda x: jax.grad(loss_fn)(x)['params']['Dense_1']['kernel'][1,1]
     )(params)
     if grads2['params']['Dense_1']['bias'][i] > 0:
       print(grads['params']['Dense_1']['bias'][i],

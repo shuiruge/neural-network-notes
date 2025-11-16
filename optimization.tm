@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|2.1.4>
 
 <style|<tuple|book|python|literate>>
 
@@ -979,6 +979,7 @@
 
 <\initial>
   <\collection>
+    <associate|bg-color|#c7edcc>
     <associate|page-medium|paper>
   </collection>
 </initial>
@@ -1000,15 +1001,15 @@
     <associate|auto-20|<tuple|1.5.2|6>>
     <associate|auto-21|<tuple|1.5.3|7>>
     <associate|auto-22|<tuple|1.5.4|7>>
-    <associate|auto-23|<tuple|2|?>>
-    <associate|auto-24|<tuple|2.1|?>>
-    <associate|auto-25|<tuple|2.2|?>>
-    <associate|auto-26|<tuple|2.3|?>>
-    <associate|auto-27|<tuple|2.3.1|?>>
-    <associate|auto-28|<tuple|2.3.2|?>>
-    <associate|auto-29|<tuple|2.3.3|?>>
+    <associate|auto-23|<tuple|2|9>>
+    <associate|auto-24|<tuple|2.1|9>>
+    <associate|auto-25|<tuple|2.2|9>>
+    <associate|auto-26|<tuple|2.3|10>>
+    <associate|auto-27|<tuple|2.3.1|10>>
+    <associate|auto-28|<tuple|2.3.2|11>>
+    <associate|auto-29|<tuple|2.3.3|11>>
     <associate|auto-3|<tuple|1.2|1>>
-    <associate|auto-30|<tuple|2.4|?>>
+    <associate|auto-30|<tuple|2.4|11>>
     <associate|auto-4|<tuple|1.2.1|1>>
     <associate|auto-5|<tuple|1.2.2|2>>
     <associate|auto-6|<tuple|1.2.3|2>>
@@ -1024,12 +1025,12 @@
     <associate|footnote-1.2|<tuple|1.2|3>>
     <associate|footnote-1.3|<tuple|1.3|4>>
     <associate|footnote-1.4|<tuple|1.4|6>>
-    <associate|footnote-2.1|<tuple|2.1|?>>
+    <associate|footnote-2.1|<tuple|2.1|9>>
     <associate|footnr-1.1|<tuple|1.1|1>>
     <associate|footnr-1.2|<tuple|1.2|3>>
     <associate|footnr-1.3|<tuple|1.3|4>>
     <associate|footnr-1.4|<tuple|1.4|6>>
-    <associate|footnr-2.1|<tuple|2.1|?>>
+    <associate|footnr-2.1|<tuple|2.1|9>>
     <associate|section: loss function|<tuple|1.1|1>>
   </collection>
 </references>
@@ -1125,6 +1126,35 @@
       <with|par-left|<quote|1tab>|1.5.4<space|2spc>Backward Propagation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Drafts>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-23><vspace|0.5fn>
+
+      2.1<space|2spc>Initialization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-24>
+
+      2.2<space|2spc>Normalized Vector-Jacobian Product
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-25>
+
+      2.3<space|2spc>Criticality <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-26>
+
+      <with|par-left|<quote|1tab>|2.3.1<space|2spc>RNN: Boundary between
+      Order and Chaos <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-27>>
+
+      <with|par-left|<quote|1tab>|2.3.2<space|2spc>Global Perturbation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-28>>
+
+      <with|par-left|<quote|1tab>|2.3.3<space|2spc>Local Perturbation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-29>>
+
+      2.4<space|2spc>Experiment Results <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-30>
     </associate>
   </collection>
 </auxiliary>
